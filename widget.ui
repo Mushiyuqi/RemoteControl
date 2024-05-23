@@ -29,8 +29,8 @@
   <widget class="QPushButton" name="shareBtn">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>190</y>
+     <x>30</x>
+     <y>220</y>
      <width>80</width>
      <height>18</height>
     </rect>
@@ -83,6 +83,19 @@
      <width>151</width>
      <height>20</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="closeShareBtn">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>220</y>
+     <width>80</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>关闭共享</string>
    </property>
   </widget>
  </widget>

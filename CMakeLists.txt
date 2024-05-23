@@ -10,12 +10,16 @@ qt_add_executable(remoteControl
     widget.h widget.cpp
     widget.ui
     main.cpp
-    CServer.h CServer.cpp
-    CSession.h CSession.cpp
-    MsgNode.h MsgNode.cpp
+
+
+    msgnode.h msgnode.cpp
     centercontrol.h centercontrol.cpp
     viewwindow.h viewwindow.cpp viewwindow.ui
     viewcontrol.h viewcontrol.cpp
+
+    csessionthread.h csessionthread.cpp
+    cmanagement.h cmanagement.cpp
+    data.h data.cpp
 
 )
 
