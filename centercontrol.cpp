@@ -27,7 +27,7 @@ void CenterControl::show()
 
 void CenterControl::linkPc()
 {
-    std::shared_ptr<CSessionThread> session = _cmg->startConnect("10.252.178.72", 10086);
+    //std::shared_ptr<CSessionThread> session = _cmg->startConnect("10.252.178.72", 10086);
 }
 
 void CenterControl::sharePc()

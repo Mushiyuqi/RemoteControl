@@ -14,4 +14,4 @@ bool Data::getSendData(std::shared_ptr<std::array<char, MAX_LENGTH>> sendData)
     return true;
 }
 
-bool Data::transData(std::shared_ptr<std::array<char, MAX_LENGTH>> recvData) {}
+bool Data::transData(std::shared_ptr<std::array<char, MAX_LENGTH>> recvData) {return true;}
