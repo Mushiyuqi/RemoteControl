@@ -24,7 +24,7 @@ private slots:
     void on_linkBtn_clicked();
 
 private:
-    Ui::Widget *ui;
+    Ui::Widget *_ui;
     CenterControl *_cctrl;
 };
 #endif // WIDGET_H

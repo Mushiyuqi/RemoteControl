@@ -5,6 +5,7 @@
 
 class CManagement;
 class Widget;
+class ViewWindow;
 class CenterControl : public QObject
 {
     Q_OBJECT
@@ -22,6 +23,7 @@ private:
 
 private:
     Widget *_widget;
+    ViewWindow *_viewWindow;
     CManagement *_cmg;
 
 signals:

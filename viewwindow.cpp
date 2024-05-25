@@ -5,7 +5,7 @@
 #include <QResizeEvent>
 #include <QScreen>
 
-ViewWindow::ViewWindow(QWidget* parent)
+ViewWindow::ViewWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::ViewWindow)
 {

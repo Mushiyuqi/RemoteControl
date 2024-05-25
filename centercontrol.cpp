@@ -1,6 +1,7 @@
 #include "centercontrol.h"
 #include "cmanagement.h"
 #include "csessionthread.h"
+#include "viewwindow.h"
 #include "widget.h"
 
 CenterControl::CenterControl(QObject *parent)
@@ -28,6 +29,9 @@ void CenterControl::show()
 void CenterControl::linkPc()
 {
     //std::shared_ptr<CSessionThread> session = _cmg->startConnect("10.252.178.72", 10086);
+    _viewWindow = new ViewWindow();
+    _viewWindow->show();
+    _widget->hide();
 }
 
 void CenterControl::sharePc()
