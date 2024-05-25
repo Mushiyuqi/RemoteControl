@@ -22,6 +22,7 @@ qt_add_executable(remoteControl
     data.h data.cpp
     centerview.h centerview.cpp
 
+
 )
 
 target_compile_features(remoteControl PRIVATE cxx_std_20)

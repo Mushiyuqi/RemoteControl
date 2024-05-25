@@ -1,7 +1,7 @@
 #include "widget.h"
 #include "./ui_widget.h"
 #include "centercontrol.h"
-
+#include "viewwindow.h"
 Widget::Widget(CenterControl *cctrl, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget)
@@ -23,4 +23,7 @@ void Widget::on_shareBtn_clicked()
 void Widget::on_linkBtn_clicked()
 {
     _cctrl->linkPc();
+    ViewWindow* viewwindow = new ViewWindow();
+    viewwindow->show();
+    this->hide();
 }

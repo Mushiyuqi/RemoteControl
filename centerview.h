@@ -1,16 +1,13 @@
-#ifndef CENTERVIEW_H
-#define CENTERVIEW_H
+// #ifndef CENTERVIEW_H
+// #define CENTERVIEW_H
 
-#include <QLabel>
-#include <QThread>
+// #include <QLabel>
+// #include <QThread>
 
-// class CenterView : public QLabel, public QThread
-// {
+// class CenterView : virtual public QLabel, virtual public QThread {
 //     Q_OBJECT
 // public:
-//     explicit CenterView(QObject *parent = nullptr);
-
-// signals:
+//     CenterView();
 // };
 
-#endif // CENTERVIEW_H
+// #endif // CENTERVIEW_H
