@@ -16,8 +16,9 @@ ViewWindow::ViewWindow(ViewControl* ctrl, QWidget* parent)
     _ctrl->_centerView = (CenterView*)&ui->label;
     QScreen* screen = QGuiApplication::primaryScreen();
     QPixmap pixmap = screen->grabWindow(0);
-    ui->label->setPixmap(pixmap);
     setCentralWidget(ui->label);
+    ui->label->setScaledContents(true);
+    ui->label->setPixmap(pixmap);
 }
 
 void ViewWindow::updatePixmap(const QPixmap& pixmap)
