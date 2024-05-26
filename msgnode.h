@@ -17,8 +17,11 @@ public:
         memcpy(m_data+ HEAD_LENGTH, msg, max_len);// 将消息内容写入m_data
         m_data[m_total_len] = '\0';// 给m_data添加结束符
     }
-    // 什么都没做的node
-    MsgNode(std::size_t max_len):m_total_len(max_len),m_cur_len(0) {
+    // 什么都没做的node(创建空的node)
+    MsgNode(std::size_t max_len)
+        : m_total_len(max_len)
+        , m_cur_len(0)
+    {
         m_data = new char[m_total_len +1]();
     }
     ~MsgNode() {

@@ -70,9 +70,12 @@ void CSessionThread::run()
         m_sSLock.lock();
         while (m_socketStatus == SocketState::Ok) {
             m_sSLock.unlock();
-            _data->getSendData(_sendData);
-            send(_sendData->data(), strlen(_sendData->data()));
-            memset(_sendData->data(), 0, _sendData->size()); //重置m_sendData;
+            size_t sendLen = _data->getSendData(_sendData);
+            if (sendLen != -1) {
+                std::cout << sendLen << std::endl;
+                send(_sendData->data(), sendLen);
+            }
+            memset(_sendData->data(), 0, sendLen); //重置m_sendData;
             //等待每2ms发送一次
             msleep(2);
             m_sSLock.lock();
@@ -83,7 +86,7 @@ void CSessionThread::run()
     quit();
 }
 
-void CSessionThread::send(char *msg, std::size_t max_length)
+void CSessionThread::send(char *msg, std::size_t sendLen)
 {
     //对队列的增减，取元素加锁
     QMutexLocker<QMutex> locker(&m_sendLock); // QMutexLocker 构造时加锁，析构时解锁
@@ -94,7 +97,8 @@ void CSessionThread::send(char *msg, std::size_t max_length)
     }
 
     //if (_sendQue.size() < 10)
-    _sendQue.push(std::make_shared<MsgNode>(msg, max_length));
+    std::shared_ptr<MsgNode> sendNode = std::make_shared<MsgNode>(msg, sendLen);
+    _sendQue.push(sendNode);
 
     if (pending)
         return;

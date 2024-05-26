@@ -8,7 +8,7 @@ Data::Data(QObject *parent)
     //  QScreen* screen = QGuiApplication::primaryScreen();
 }
 
-bool Data::getSendData(std::shared_ptr<std::array<char, MAX_LENGTH>> sendData)
+size_t Data::getSendData(std::shared_ptr<std::array<char, MAX_LENGTH>> sendData)
 {
     QScreen* screen = QGuiApplication::primaryScreen();
     QPixmap pixmap = screen->grabWindow(0);
@@ -21,10 +21,10 @@ bool Data::getSendData(std::shared_ptr<std::array<char, MAX_LENGTH>> sendData)
     if (byteArray.size() > MAX_LENGTH) {
         qDebug() << "Failed to trans screen to data";
         byteArray.clear();
-        return false;
+        return -1;
     }
-    std::copy(byteArray.constBegin(), byteArray.constEnd(), sendData->begin());
-    return true;
+    memcpy(sendData->data(), byteArray.data(), byteArray.size());
+    return byteArray.size();
 }
 
 QPixmap Data::transData(std::shared_ptr<std::array<char, MAX_LENGTH>> recvData)
