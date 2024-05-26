@@ -1,16 +1,19 @@
 #include "viewwindow.h"
 #include "ui_viewwindow.h"
+#include "viewcontrol.h"
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QScreen>
 
-ViewWindow::ViewWindow(QWidget *parent)
+ViewWindow::ViewWindow(ViewControl* ctrl, QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::ViewWindow)
+    , _ctrl(ctrl)
 {
     ui->setupUi(this);
-    setWindowTitle("远程控制系统主界面");
+    // 暂时用ui->label替代centerview
+    _ctrl->_centerView = (CenterView*)&ui->label;
     QScreen* screen = QGuiApplication::primaryScreen();
     QPixmap pixmap = screen->grabWindow(0);
     ui->label->setPixmap(pixmap);

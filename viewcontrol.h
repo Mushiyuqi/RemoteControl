@@ -1,15 +1,25 @@
 #ifndef VIEWCONTROL_H
 #define VIEWCONTROL_H
 
-#include <QObject>
+class ViewWindow;
+class CenterView;
+class CenterControl;
 
-class ViewControl : public QObject
-{
-    Q_OBJECT
+class ViewControl {
+    friend CenterControl;
+    friend ViewWindow;
+
 public:
-    explicit ViewControl(QObject *parent = nullptr);
+    static ViewControl& singleton();
+    void resize();
 
-signals:
+private:
+    ViewControl();
+    ~ViewControl() noexcept;
+    // Todo:将viewwindow里刷新图片大小的方法放到这里
+
+    ViewWindow* _viewWindow;
+    CenterView* _centerView;
 };
 
 #endif // VIEWCONTROL_H

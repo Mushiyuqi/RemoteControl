@@ -1,6 +1,5 @@
-// #include "centerview.h"
+#include "centerview.h"
 
-// CenterView::CenterView()
-// {
-//     setFixedSize();
-// }
+CenterView::CenterView()
+{
+}

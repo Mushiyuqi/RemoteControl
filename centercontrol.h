@@ -5,11 +5,13 @@
 
 class CManagement;
 class Widget;
-class ViewWindow;
+// class ViewWindow;
+class ViewControl;
 class CenterControl : public QObject
 {
     Q_OBJECT
     friend Widget;
+    friend ViewControl;
 
 public:
     static CenterControl &instance();
@@ -23,7 +25,8 @@ private:
 
 private:
     Widget *_widget;
-    ViewWindow *_viewWindow;
+    // ViewWindow *_viewWindow;
+    ViewControl* _viewControl;
     CManagement *_cmg;
 
 signals:

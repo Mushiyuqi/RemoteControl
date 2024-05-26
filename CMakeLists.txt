@@ -15,12 +15,14 @@ qt_add_executable(remoteControl
     msgnode.h msgnode.cpp
     centercontrol.h centercontrol.cpp
     viewwindow.h viewwindow.cpp viewwindow.ui
-    viewcontrol.h viewcontrol.cpp
+
 
     csessionthread.h csessionthread.cpp
     cmanagement.h cmanagement.cpp
     data.h data.cpp
     centerview.h centerview.cpp
+    viewcontrol.h viewcontrol.cpp
+
 
 
 )

@@ -1,13 +1,14 @@
-// #ifndef CENTERVIEW_H
-// #define CENTERVIEW_H
+#ifndef CENTERVIEW_H
+#define CENTERVIEW_H
 
-// #include <QLabel>
-// #include <QThread>
+#include <QLabel>
 
-// class CenterView : virtual public QLabel, virtual public QThread {
-//     Q_OBJECT
-// public:
-//     CenterView();
-// };
+// Todo:
 
-// #endif // CENTERVIEW_H
+class CenterView : public QLabel {
+    Q_OBJECT
+public:
+    CenterView();
+};
+
+#endif // CENTERVIEW_H
