@@ -1,33 +1,38 @@
 #ifndef VIEWCONTROL_H
 #define VIEWCONTROL_H
 #include <QSize>
+#include <QThread>
 #include <memory>
 class ViewWindow;
-class CenterView;
+class View;
 class CenterControl;
 class CSessionThread;
-class ViewControl {
-    friend CenterControl;
-    friend ViewWindow;
-
+class Data;
+class ViewControl : public QThread
+{
 public:
-    static ViewControl& singleton();
-    void resize();
+    ViewControl(std::shared_ptr<CSessionThread> session, CenterControl *cctrl);
+    ~ViewControl() noexcept;
 
-    // 计算窗口适合的比例并返回
-    QSize prefferdSize();
+    void resize();
 
     // Todo:将viewwindow里刷新图片大小的方法放到这里
     // 根据label大小比例决定如何缩放图片
     // void updatePixmap(const QPixmap& pixmap);
-
 private:
-    ViewControl();
-    ~ViewControl() noexcept;
+    //顶级控件
+    CenterControl *_cctrl;
 
-    ViewWindow* _viewWindow;
-    CenterView* _centerView;
-    std::shared_ptr<CSessionThread> _session;
+    //显示组件
+    ViewWindow *_viewWindow;
+    View *_view;
+
+    //工具组件
+    std::shared_ptr<CSessionThread> _session; //用于获取数据
+    std::shared_ptr<Data> _data;              //用于做数据处理
+
+protected:
+    virtual void run() override;
 };
 
 #endif // VIEWCONTROL_H

@@ -6,24 +6,26 @@
 #include <QResizeEvent>
 #include <QScreen>
 
-ViewWindow::ViewWindow(ViewControl* ctrl, QWidget* parent)
+ViewWindow::ViewWindow(ViewControl *ctrl, QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::ViewWindow)
-    , _ctrl(ctrl)
+    , _ui(new Ui::ViewWindow)
+    , _vctrl(ctrl)
 {
-    ui->setupUi(this);
+    _ui->setupUi(this);
+    setFixedSize(prefferdSize());
+}
 
-    _ctrl->_centerView = ui->centralwidget;
-    setFixedSize(_ctrl->prefferdSize());
+ViewWindow::~ViewWindow()
+{
+    delete _ui;
 }
 
 void ViewWindow::updatePixmap(const QPixmap& pixmap)
 {
-
-    // QSize labelSize = ui->label->size();
+    // QSize labelSize = _ui->label->size();
     // QPixmap scaledPixmap = pixmap.scaled(labelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    // ui->label->setAlignment(Qt::AlignCenter);
-    // ui->label->setPixmap(scaledPixmap);
+    // _ui->label->setAlignment(Qt::AlignCenter);
+    // _ui->label->setPixmap(scaledPixmap);
 }
 
 void ViewWindow::resizeEvent(QResizeEvent* event)
@@ -36,7 +38,13 @@ void ViewWindow::resizeEvent(QResizeEvent* event)
     QMainWindow::resizeEvent(event);
 }
 
-ViewWindow::~ViewWindow()
+QSize ViewWindow::prefferdSize()
 {
-    delete ui;
+    QSize prefferdsize(_ui->centralwidget->width() * 0.6, _ui->centralwidget->height() * 0.6 + 25);
+    return prefferdsize;
+}
+
+View *ViewWindow::centralWidget()
+{
+    return _ui->centralwidget;
 }

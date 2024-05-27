@@ -20,7 +20,7 @@ qt_add_executable(remoteControl
     csessionthread.h csessionthread.cpp
     cmanagement.h cmanagement.cpp
     data.h data.cpp
-    centerview.h centerview.cpp
+    view.h view.cpp
     viewcontrol.h viewcontrol.cpp
 
 

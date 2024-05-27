@@ -27,7 +27,10 @@ public:
     //线程安全
     size_t getRecvData(std::shared_ptr<std::array<char, MAX_LENGTH>> data);
 
-    boost::asio::ip::tcp::socket &socket();
+    //socket数据
+    enum SocketStatus { Ok = 0, Err = -1 }; //连接的状态
+    boost::asio::ip::tcp::socket &socket(); //获取socket
+    int status();                           //获取session的状态
 
 signals:
     //接收的远端操作数据准备好了
@@ -62,7 +65,6 @@ private:
 
     //socket数据结构
     QMutex m_sSLock;                       //管理socket状态的改变
-    enum SocketState { Ok = 0, Err = -1 }; //连接的状态
     int m_socketStatus = Ok;               //为Err时就不能发送数据了
     boost::asio::ip::tcp::socket m_socket; // 自己管理的socket
 

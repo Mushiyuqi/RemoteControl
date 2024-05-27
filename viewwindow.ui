@@ -19,7 +19,7 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="CenterView" name="centralwidget">
+  <widget class="View" name="centralwidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
      <horstretch>0</horstretch>
@@ -34,7 +34,7 @@
      <x>0</x>
      <y>0</y>
      <width>960</width>
-     <height>25</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSetting">
@@ -73,7 +73,7 @@
   <customwidget>
    <class>CenterView</class>
    <extends>QLabel</extends>
-   <header location="global">centerview.h</header>
+   <header>centerview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

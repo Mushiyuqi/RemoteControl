@@ -2,10 +2,10 @@
 #define CENTERCONTROL_H
 
 #include <QObject>
+#include <memory.h>
 
 class CManagement;
 class Widget;
-// class ViewWindow;
 class ViewControl;
 class CenterControl : public QObject
 {
@@ -28,6 +28,8 @@ private:
     ViewControl* _viewControl;
     CManagement *_cmg;
 
+    //没想好vctrl怎么管理先放到智能指针里
+    std::shared_ptr<ViewControl> _vctrl;
 signals:
 };
 

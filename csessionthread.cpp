@@ -43,6 +43,8 @@ void CSessionThread::clientStart()
 {
     if (m_roleStatus != Role::Client)
         return;
+    //初始化socket的状态
+    m_socketStatus = SocketStatus::Err;
     boost::asio::ip::tcp::endpoint remoteEp{boost::asio::ip::address::from_string(
                                                 m_ip.toStdString()),
                                             m_port};
@@ -53,6 +55,12 @@ void CSessionThread::clientStart()
 boost::asio::ip::tcp::socket &CSessionThread::socket()
 {
     return m_socket;
+}
+
+int CSessionThread::status()
+{
+    QMutexLocker locker(&m_sSLock);
+    return m_socketStatus;
 }
 
 void CSessionThread::run()
@@ -70,7 +78,7 @@ void CSessionThread::run()
         // 循环发送数据
         //对socket的状态变量加锁
         m_sSLock.lock();
-        while (m_socketStatus == SocketState::Ok) {
+        while (m_socketStatus == SocketStatus::Ok) {
             m_sSLock.unlock();
             size_t sendLen = _data->getSendData(_sendData);
             if (sendLen != -1) {
@@ -287,7 +295,7 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
                   << ec.message() << std::endl;
         {
             QMutexLocker locker(&m_sSLock);
-            m_socketStatus = SocketState::Err;
+            m_socketStatus = SocketStatus::Err;
         }
     }
 }
@@ -312,7 +320,7 @@ void CSessionThread::handleWrite(const boost::system::error_code &ec, size_t byt
                   << ec.message() << std::endl;
         {
             QMutexLocker locker(&m_sSLock);
-            m_socketStatus = SocketState::Err;
+            m_socketStatus = SocketStatus::Err;
         }
     }
 }
@@ -320,13 +328,17 @@ void CSessionThread::handleWrite(const boost::system::error_code &ec, size_t byt
 void CSessionThread::handleConnect(const boost::system::error_code &ec)
 {
     if (!ec) {
+        {
+            QMutexLocker locker(&m_sSLock);
+            m_socketStatus = SocketStatus::Ok;
+        }
         start(); //开启线程接收数据
     } else {
         std::cerr << "connect failed, error code is " << ec.value() << " error message is "
                   << ec.message() << std::endl;
         {
             QMutexLocker locker(&m_sSLock);
-            m_socketStatus = SocketState::Err;
+            m_socketStatus = SocketStatus::Err;
         }
     }
 }
