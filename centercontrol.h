@@ -25,7 +25,6 @@ private:
 
 private:
     Widget *_widget;
-    // ViewWindow *_viewWindow;
     ViewControl* _viewControl;
     CManagement *_cmg;
 

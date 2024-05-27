@@ -23,10 +23,16 @@ public:
     //发送数据
     void send(char *msg, std::size_t max_length);
 
+    //获取服务端发送的数据 返回数据长度
+    //线程安全
+    size_t getRecvData(std::shared_ptr<std::array<char, MAX_LENGTH>> data);
+
     boost::asio::ip::tcp::socket &socket();
 
 signals:
-    void readyForLocation(int x, int y);
+    //接收的远端操作数据准备好了
+    void readyForEvent();
+    //显示数据准备好了
     void readyForDisplay();
 
 protected:
@@ -74,8 +80,13 @@ private:
     QMutex m_displayNodeLock;
     std::array<char, MAX_LENGTH> m_data;      // 接收的原始数据
     bool _b_head_parse;                       // 消息头部（数据长度）是否处理
-    std::shared_ptr<MsgNode> _recvMsgNode;    // 收到的消息体信息
+    std::shared_ptr<MsgNode> _recvMsgNode; // 收到的消息体信息 里面的数据可能不是完整的
     std::shared_ptr<MsgNode> _recvHeadNode;   // 收到的头部结构
+
+    //提供给外面的完整数据
+    QMutex m_dataLock;
+    std::shared_ptr<std::array<char, MAX_LENGTH>> m_recvData;
+    size_t m_dataLen;
 
     // todo 接收的鼠标事件信息
     int x, y; // 收到的鼠标位置信息

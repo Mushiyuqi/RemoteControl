@@ -12,6 +12,7 @@ CSessionThread::CSessionThread(boost::asio::io_context &ioc)
     m_roleStatus = Role::Server;
     _recvHeadNode = std::make_shared<MsgNode>(HEAD_LENGTH);
     _sendData = std::make_shared<std::array<char, MAX_LENGTH>>();
+    m_recvData = std::make_shared<std::array<char, MAX_LENGTH>>();
     _data = new Data(this);
 }
 
@@ -25,6 +26,7 @@ CSessionThread::CSessionThread(boost::asio::io_context &ioc, QString ip, unsigne
     m_roleStatus = Role::Client;
     _recvHeadNode = std::make_shared<MsgNode>(HEAD_LENGTH);
     _sendData = std::make_shared<std::array<char, MAX_LENGTH>>();
+    m_recvData = std::make_shared<std::array<char, MAX_LENGTH>>();
     _data = new Data(this);
 }
 
@@ -72,7 +74,7 @@ void CSessionThread::run()
             m_sSLock.unlock();
             size_t sendLen = _data->getSendData(_sendData);
             if (sendLen != -1) {
-                std::cout << sendLen << std::endl;
+                std::cout << "sendLen is " << sendLen << std::endl;
                 send(_sendData->data(), sendLen);
             }
             memset(_sendData->data(), 0, sendLen); //重置m_sendData;
@@ -82,6 +84,12 @@ void CSessionThread::run()
         }
         m_sSLock.unlock();
     } else {
+        // 开启接收数据的监听
+        m_socket.async_read_some(boost::asio::buffer(m_data.data(), MAX_LENGTH),
+                                 std::bind(&CSessionThread::handleRead,
+                                           this,
+                                           std::placeholders::_1,
+                                           std::placeholders::_2));
     }
     quit();
 }
@@ -110,6 +118,13 @@ void CSessionThread::send(char *msg, std::size_t sendLen)
                                        this,
                                        std::placeholders::_1,
                                        std::placeholders::_2));
+}
+
+size_t CSessionThread::getRecvData(std::shared_ptr<std::array<char, MAX_LENGTH>> data)
+{
+    QMutexLocker locker(&m_dataLock);
+    memcpy(data->data(), m_recvData->data(), m_dataLen);
+    return m_dataLen;
 }
 
 void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_transferred)
@@ -153,7 +168,7 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
                 // 获取头部数据
                 std::size_t data_len = 0;
                 memcpy(&data_len, _recvHeadNode->m_data, HEAD_LENGTH);
-                std::cout << "data_len is " << data_len << std::endl;
+                //std::cout << "data_len is " << data_len << std::endl;
                 // 头部长度非法
                 if (data_len > MAX_LENGTH) {
                     std::cerr << "invalid data length is" << data_len << std::endl;
@@ -194,9 +209,9 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
                  * 接收到完整的数据
                  */
                 if (m_roleStatus == Role::Server) {
-                    handleReadFromServer();
-                } else {
                     handleReadFromClient();
+                } else {
+                    handleReadFromServer();
                 }
 
                 // 继续轮询剩余未处理的数据
@@ -246,9 +261,9 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
                  * 接收到完整的数据
                  */
                 if (m_roleStatus == Role::Server) {
-                    handleReadFromServer();
-                } else {
                     handleReadFromClient();
+                } else {
+                    handleReadFromServer();
                 }
 
                 // 继续轮询剩余未处理的数据
@@ -318,10 +333,18 @@ void CSessionThread::handleConnect(const boost::system::error_code &ec)
 
 void CSessionThread::handleReadFromClient()
 {
-    std::cout << "I am Server, receive data is " << _recvMsgNode->m_data << std::endl;
+    std::cout << "I am Server, receive data is " << std::endl;
+    QMutexLocker locker(&m_dataLock);
+    memcpy(&m_dataLen, _recvHeadNode->m_data, HEAD_LENGTH);
+    std::cout << "recvLen is " << m_dataLen << std::endl;
+    memcpy(m_recvData->data(), _recvMsgNode->m_data, m_dataLen);
 }
 
 void CSessionThread::handleReadFromServer()
 {
-    std::cout << "I am Client, receive data is " << _recvMsgNode->m_data << std::endl;
+    std::cout << "I am Client, receive data is " << std::endl;
+    QMutexLocker locker(&m_dataLock);
+    memcpy(&m_dataLen, _recvHeadNode->m_data, HEAD_LENGTH);
+    memcpy(m_recvData->data(), _recvMsgNode->m_data, m_dataLen);
+    emit readyForDisplay();
 }
