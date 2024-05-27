@@ -27,6 +27,8 @@ qt_add_executable(remoteControl
 
 )
 
+target_include_directories( remoteControl PRIVATE .)
+
 target_compile_features(remoteControl PRIVATE cxx_std_20)
 
 target_link_libraries(remoteControl 

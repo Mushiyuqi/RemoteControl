@@ -2,7 +2,6 @@
 
 #include "centerview.h"
 #include "viewwindow.h"
-
 ViewControl::ViewControl()
     : _viewWindow { new ViewWindow(this) }
 // , _centerView { new CenterView() }
@@ -22,3 +21,13 @@ ViewControl& ViewControl::singleton()
     static ViewControl viewControl;
     return viewControl;
 }
+
+QSize ViewControl::prefferdSize()
+{
+    QSize prefferdsize(_centerView->width() * 0.6, _centerView->height() * 0.6 + 25);
+    return prefferdsize;
+}
+
+// void ViewControl::updatePixmap(const QPixmap& pixmap)
+// {
+// }

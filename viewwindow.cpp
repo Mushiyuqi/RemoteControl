@@ -12,22 +12,18 @@ ViewWindow::ViewWindow(ViewControl* ctrl, QWidget* parent)
     , _ctrl(ctrl)
 {
     ui->setupUi(this);
-    // 暂时用ui->label替代centerview
-    _ctrl->_centerView = (CenterView*)&ui->label;
-    QScreen* screen = QGuiApplication::primaryScreen();
-    QPixmap pixmap = screen->grabWindow(0);
-    setCentralWidget(ui->label);
-    ui->label->setScaledContents(true);
-    ui->label->setPixmap(pixmap);
+
+    _ctrl->_centerView = ui->centralwidget;
+    setFixedSize(_ctrl->prefferdSize());
 }
 
 void ViewWindow::updatePixmap(const QPixmap& pixmap)
 {
 
-    QSize labelSize = ui->label->size();
-    QPixmap scaledPixmap = pixmap.scaled(labelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    ui->label->setAlignment(Qt::AlignCenter);
-    ui->label->setPixmap(scaledPixmap);
+    // QSize labelSize = ui->label->size();
+    // QPixmap scaledPixmap = pixmap.scaled(labelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    // ui->label->setAlignment(Qt::AlignCenter);
+    // ui->label->setPixmap(scaledPixmap);
 }
 
 void ViewWindow::resizeEvent(QResizeEvent* event)
