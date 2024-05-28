@@ -71,9 +71,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CenterView</class>
-   <extends>QLabel</extends>
-   <header>centerview.h</header>
+   <class>View</class>
+   <extends>QWidget</extends>
+   <header>view.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
