@@ -39,8 +39,8 @@ void View::mouseReleaseEvent(QMouseEvent *event)
     if (_session->status() == CSessionThread::SocketStatus::Err)
         return;
 
-    //QString str("x:1 y:2");
-    //_session->send(str.toStdString().data(), str.length());
+    QString str("x:1 y:2");
+    _session->send(str.toStdString().data(), str.length());
 }
 
 void View::mouseMoveEvent(QMouseEvent *event) {}
