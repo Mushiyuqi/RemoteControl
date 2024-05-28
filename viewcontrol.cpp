@@ -19,6 +19,14 @@ ViewControl::ViewControl(std::shared_ptr<CSessionThread> session, CenterControl 
 
 ViewControl::~ViewControl() noexcept{}
 
-void ViewControl::run() {}
+void ViewControl::updatePixmap()
+{ // 获取data
+    std::shared_ptr<std::array<char, MAX_LENGTH>> data;
+    _session->getRecvData(data);
+    // 转换为图片
+    QPixmap pixmap = _data->transData(data);
+    // 更新图片
+    _view->setPixmap(pixmap);
+}
 
-// void ViewControl::updatePixmap(const QPixmap& pixmap){}
+void ViewControl::run() {}

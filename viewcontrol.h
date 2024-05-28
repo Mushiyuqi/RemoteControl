@@ -16,9 +16,9 @@ public:
 
     void resize();
 
-    // Todo:将viewwindow里刷新图片大小的方法放到这里
-    // 根据label大小比例决定如何缩放图片
-    // void updatePixmap(const QPixmap& pixmap);
+    // 接收图片用来改变view显示的图片
+    void updatePixmap();
+
 private:
     //顶级控件
     CenterControl *_cctrl;
