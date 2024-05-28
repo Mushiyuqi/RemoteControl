@@ -40,7 +40,7 @@ void ViewWindow::resizeEvent(QResizeEvent* event)
 
 QSize ViewWindow::prefferdSize()
 {
-    QSize prefferdsize(_ui->centralwidget->width() * 0.6, _ui->centralwidget->height() * 0.6 + 25);
+    QSize prefferdsize(_ui->centralwidget->width() * 0.4, _ui->centralwidget->height() * 0.4 + 25);
     return prefferdsize;
 }
 
