@@ -27,9 +27,9 @@ size_t Data::getSendData(std::shared_ptr<std::array<char, MAX_LENGTH>> sendData)
     return byteArray.size();
 }
 
-QPixmap Data::transData(std::shared_ptr<std::array<char, MAX_LENGTH>> recvData)
+QPixmap Data::transData(std::shared_ptr<std::array<char, MAX_LENGTH>> recvData, size_t recvLen)
 {
-    QByteArray byteArray(recvData->data(), recvData->size());
+    QByteArray byteArray(recvData->data(), recvLen);
     QImage image;
     if (!image.loadFromData(byteArray, "PNG")) {
         qDebug() << "Failed to load image from data";
