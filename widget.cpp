@@ -17,9 +17,11 @@ Widget::~Widget()
 void Widget::on_shareBtn_clicked()
 {
     _cctrl->sharePc();
+    _ui->shareBtn->setEnabled(false);
 }
 
 void Widget::on_linkBtn_clicked()
 {
     _cctrl->linkPc();
+    _ui->linkBtn->setEnabled(false);
 }

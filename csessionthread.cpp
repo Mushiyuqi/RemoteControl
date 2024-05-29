@@ -87,7 +87,7 @@ void CSessionThread::run()
             }
             memset(_sendData->data(), 0, sendLen); //重置m_sendData;
             //等待每2ms发送一次
-            msleep(2);
+            //msleep(2);
             m_sSLock.lock();
         }
         m_sSLock.unlock();
