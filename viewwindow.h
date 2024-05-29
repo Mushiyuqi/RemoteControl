@@ -19,14 +19,6 @@ public:
     explicit ViewWindow(ViewControl* ctrl, QWidget* parent = nullptr);
     ~ViewWindow();
 
-    // 根据label大小比例决定如何缩放图片
-    void updatePixmap(const QPixmap& pixmap);
-    // 计算窗口适合的比例并返回
-    QSize prefferdSize();
-
-    // 当窗口缩放时，图片跟着缩放
-    void resizeEvent(QResizeEvent* event);
-
 private:
     View *centralWidget();
 

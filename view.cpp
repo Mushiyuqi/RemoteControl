@@ -9,22 +9,9 @@ View::View(QWidget *parent)
     : QLabel(parent)
 {
     setScaledContents(true);
-
     QScreen* screen = QGuiApplication::primaryScreen();
     QPixmap pixmap = screen->grabWindow(0);
-    setPixmap(pixmap);
-    _width = pixmap.width();
-    _height = pixmap.height();
-}
-
-int View::width()
-{
-    return _width;
-}
-
-int View::height()
-{
-    return _height;
+    setPixmap(pixmap.scaled(pixmap.size(), Qt::IgnoreAspectRatio));
 }
 
 void View::setSession(std::shared_ptr<CSessionThread> session)

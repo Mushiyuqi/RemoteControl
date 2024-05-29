@@ -2,8 +2,10 @@
 #define DATA_H
 
 #include "msgnode.h"
+
 #include <QObject>
 #include <QPixmap>
+
 class Data : public QObject
 {
     Q_OBJECT
@@ -16,6 +18,7 @@ public:
     QPixmap transData(std::shared_ptr<std::array<char, MAX_LENGTH>> recvData, size_t recvLen);
 
 signals:
+private:
 };
 
 #endif // DATA_H

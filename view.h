@@ -14,19 +14,9 @@ class View : public QLabel
 public:
     View(QWidget *parent = nullptr);
 
-public:
-    // 用于获得CenterView的宽高
-    int width();
-    int height();
-
 private:
     void setSession(std::shared_ptr<CSessionThread> session);
-
-private:
     std::shared_ptr<CSessionThread> _session;
-    // 屏幕的宽高
-    int _width;
-    int _height;
 
 protected:
     //鼠标释放事件
