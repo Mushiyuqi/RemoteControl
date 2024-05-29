@@ -128,13 +128,6 @@ void CSessionThread::send(char *msg, std::size_t sendLen)
                                        std::placeholders::_2));
 }
 
-size_t CSessionThread::getRecvData(std::shared_ptr<std::array<char, MAX_LENGTH>> data)
-{
-    QMutexLocker locker(&m_dataLock);
-    memcpy(data->data(), m_recvData->data(), m_dataLen);
-    return m_dataLen;
-}
-
 void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_transferred)
 {
     if (!ec) {
@@ -346,17 +339,17 @@ void CSessionThread::handleConnect(const boost::system::error_code &ec)
 void CSessionThread::handleReadFromClient()
 {
     std::cout << "I am Server, receive data is " << std::endl;
-    QMutexLocker locker(&m_dataLock);
-    memcpy(&m_dataLen, _recvHeadNode->m_data, HEAD_LENGTH);
-    std::cout << "recvLen is " << m_dataLen << std::endl;
-    memcpy(m_recvData->data(), _recvMsgNode->m_data, m_dataLen);
+    QMutexLocker locker(&m_recvDataLock);
+    memcpy(&m_recvDataLen, _recvHeadNode->m_data, HEAD_LENGTH);
+    std::cout << "recvLen is " << m_recvDataLen << std::endl;
+    memcpy(m_recvData->data(), _recvMsgNode->m_data, m_recvDataLen);
 }
 
 void CSessionThread::handleReadFromServer()
 {
     std::cout << "I am Client, receive data is " << std::endl;
-    QMutexLocker locker(&m_dataLock);
-    memcpy(&m_dataLen, _recvHeadNode->m_data, HEAD_LENGTH);
-    memcpy(m_recvData->data(), _recvMsgNode->m_data, m_dataLen);
-    emit readyForDisplay();
+    QMutexLocker locker(&m_recvDataLock);
+    memcpy(&m_recvDataLen, _recvHeadNode->m_data, HEAD_LENGTH);
+    memcpy(m_recvData->data(), _recvMsgNode->m_data, m_recvDataLen);
+    m_waiter.wakeAll();
 }

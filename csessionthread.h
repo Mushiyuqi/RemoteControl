@@ -3,6 +3,7 @@
 
 #include <QMutex>
 #include <QThread>
+#include <QWaitCondition>
 #include "msgnode.h"
 #include <boost/asio.hpp>
 #include <queue>
@@ -23,14 +24,16 @@ public:
     //发送数据
     void send(char *msg, std::size_t max_length);
 
-    //获取服务端发送的数据 返回数据长度
-    //线程安全
-    size_t getRecvData(std::shared_ptr<std::array<char, MAX_LENGTH>> data);
-
     //socket数据
     enum SocketStatus { Ok = 0, Err = -1 }; //连接的状态
     boost::asio::ip::tcp::socket &socket(); //获取socket
     int status();                           //获取session的状态
+
+    //提供给外面的完整数据
+    QMutex m_recvDataLock;
+    QWaitCondition m_waiter;
+    std::shared_ptr<std::array<char, MAX_LENGTH>> m_recvData;
+    size_t m_recvDataLen;
 
 signals:
     //接收的远端操作数据准备好了
@@ -84,11 +87,6 @@ private:
     bool _b_head_parse;                       // 消息头部（数据长度）是否处理
     std::shared_ptr<MsgNode> _recvMsgNode; // 收到的消息体信息 里面的数据可能不是完整的
     std::shared_ptr<MsgNode> _recvHeadNode;   // 收到的头部结构
-
-    //提供给外面的完整数据
-    QMutex m_dataLock;
-    std::shared_ptr<std::array<char, MAX_LENGTH>> m_recvData;
-    size_t m_dataLen;
 
     // todo 接收的鼠标事件信息
     int x, y; // 收到的鼠标位置信息

@@ -1,4 +1,6 @@
 #include "viewcontrol.h"
+#include <QMutex>
+#include <QMutexLocker>
 #include "centercontrol.h"
 #include "csessionthread.h"
 #include "data.h"
@@ -23,15 +25,19 @@ ViewControl::~ViewControl() noexcept{}
 
 void ViewControl::updatePixmap()
 {
-    size_t dataLen = _data->getSendData(m_dataBuffer);
+    //size_t dataLen = _data->getSendData(m_dataBuffer);
     // 转换为图片
     // 更新图片
-    _view->setPixmap(_data->transData(m_dataBuffer, dataLen));
+    _view->setPixmap(_data->transData(m_dataBuffer, m_dataLen));
 }
 
 void ViewControl::run()
 {
     while (m_threadStatus == TStatus::Ok) {
+        QMutexLocker<QMutex> locker(&(_session->m_recvDataLock));
+        _session->m_waiter.wait(&(_session->m_recvDataLock));
+        memcpy(m_dataBuffer->data(), _session->m_recvData->data(), _session->m_recvDataLen);
+        m_dataLen = _session->m_recvDataLen;
         updatePixmap();
     }
     quit();

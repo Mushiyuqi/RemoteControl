@@ -28,6 +28,7 @@ private:
 
     //缓存数据
     std::shared_ptr<std::array<char, MAX_LENGTH>> m_dataBuffer;
+    size_t m_dataLen;
 
     //显示组件
     ViewWindow *_viewWindow;
