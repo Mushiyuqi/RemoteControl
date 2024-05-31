@@ -10,8 +10,20 @@ CSessionThread::CSessionThread(boost::asio::io_context &ioc)
     , _ioc(ioc)
 {
     m_roleStatus = Role::Server;
+
+    _recvMsgNode = std::make_shared<MsgNode>(MAX_LENGTH);
     _recvHeadNode = std::make_shared<MsgNode>(HEAD_LENGTH);
+
+    _currentSendingQueLen = 0;
     _sendData = std::make_shared<std::array<char, MAX_LENGTH>>();
+    for(int i = 0; i != SEND_QUEUE_LEN; ++i)
+    {
+        _sendQue.push_back(std::make_shared<MsgNode>(HEAD_LENGTH + MAX_LENGTH));
+    }
+    _sendFront = 0;
+    _sendBack = 0;
+
+
     m_recvData = std::make_shared<std::array<char, MAX_LENGTH>>();
     _data = new Data(this);
 }
@@ -24,6 +36,7 @@ CSessionThread::CSessionThread(boost::asio::io_context &ioc, QString ip, unsigne
 
 {
     m_roleStatus = Role::Client;
+    _recvMsgNode = std::make_shared<MsgNode>(MAX_LENGTH);
     _recvHeadNode = std::make_shared<MsgNode>(HEAD_LENGTH);
     _sendData = std::make_shared<std::array<char, MAX_LENGTH>>();
     m_recvData = std::make_shared<std::array<char, MAX_LENGTH>>();
@@ -108,20 +121,28 @@ void CSessionThread::send(char *msg, std::size_t sendLen)
     QMutexLocker<QMutex> locker(&m_sendLock); // QMutexLocker 构造时加锁，析构时解锁
     bool pending = false;                      // 队列中是否有数据正在发送
 
-    if (_sendQue.size() > 0) {
+    //有数据正在发送
+    _currentSendingQueLen = (_sendBack - _sendFront + SEND_QUEUE_LEN) % SEND_QUEUE_LEN;
+    if (_currentSendingQueLen > 0) {
         pending = true;
     }
 
-    //if (_sendQue.size() < 10)
-    std::shared_ptr<MsgNode> sendNode = std::make_shared<MsgNode>(msg, sendLen);
-    _sendQue.push(sendNode);
+    //允许将数据放入发送队列
+    if (_currentSendingQueLen < SEND_QUEUE_LEN - 1)
+    {
+        _sendQue[_sendBack]->Clear();
+        _sendQue[_sendBack]->m_total_len = HEAD_LENGTH + sendLen;
+        memcpy(_sendQue[_sendBack]->m_data, &sendLen, HEAD_LENGTH);// 将消息长度写入m_data
+        memcpy(_sendQue[_sendBack]->m_data+ HEAD_LENGTH, msg, sendLen);// 将消息内容写入m_data
+        _sendBack = (_sendBack + 1) % SEND_QUEUE_LEN;
+    }
 
     if (pending)
         return;
 
     boost::asio::async_write(m_socket,
-                             boost::asio::buffer(_sendQue.front()->m_data,
-                                                 _sendQue.front()->m_total_len),
+                             boost::asio::buffer(_sendQue[_sendFront]->m_data,
+                                                 _sendQue[_sendFront]->m_total_len),
                              std::bind(&CSessionThread::handleWrite,
                                        this,
                                        std::placeholders::_1,
@@ -175,7 +196,10 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
                     std::cerr << "invalid data length is" << data_len << std::endl;
                     return;
                 }
-                _recvMsgNode = std::make_shared<MsgNode>(data_len);
+
+                //重置接收缓冲区
+                _recvMsgNode->Clear();
+                _recvMsgNode->m_total_len = data_len;
 
                 // 消息的长度小于头部规定的长度，说明数据未收全，则先将部分消息放到接收节点里
                 if (byt_transferred < data_len) {
@@ -298,12 +322,12 @@ void CSessionThread::handleWrite(const boost::system::error_code &ec, size_t byt
     if (!ec) {
         //对队列的增减，取元素加锁
         QMutexLocker<QMutex> locker(&m_sendLock);
-        _sendQue.pop();
-        if (_sendQue.empty())
+        _sendFront = (_sendFront + 1) % SEND_QUEUE_LEN;
+        _currentSendingQueLen = (_sendBack - _sendFront + SEND_QUEUE_LEN) % SEND_QUEUE_LEN;
+        if (_currentSendingQueLen <= 0)
             return;
-        auto &msgNode = _sendQue.front();
         boost::asio::async_write(m_socket,
-                                 boost::asio::buffer(msgNode->m_data, msgNode->m_total_len),
+                                 boost::asio::buffer(_sendQue[_sendFront]->m_data, _sendQue[_sendFront]->m_total_len),
                                  std::bind(&CSessionThread::handleWrite,
                                            this,
                                            std::placeholders::_1,

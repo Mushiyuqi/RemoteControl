@@ -30,7 +30,7 @@ void CenterControl::show()
 
 void CenterControl::linkPc()
 {
-    std::shared_ptr<CSessionThread> session = _cmg->startConnect("127.0.0.1", 10086);
+    std::shared_ptr<CSessionThread> session = _cmg->startConnect("10.252.106.97", 10086);
     _vctrl = std::make_shared<ViewControl>(session, this);
     _widget->hide();
 }

@@ -23,6 +23,7 @@ public:
         , m_cur_len(0)
     {
         m_data = new char[m_total_len +1]();
+        m_data[m_total_len] = '\0';// 给m_data添加结束符
     }
     ~MsgNode() {
         delete[] m_data;
