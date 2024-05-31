@@ -1,14 +1,16 @@
 #include "centercontrol.h"
 #include "cmanagement.h"
 #include "csessionthread.h"
+#include "pevent.h"
 #include "viewcontrol.h"
 #include "widget.h"
 
 CenterControl::CenterControl(QObject *parent)
-    : QObject{parent}
+    : QThread{parent}
 {
     _widget = new Widget(this);
     _cmg = new CManagement(this);
+    _event = new PEvent(this);
 }
 
 CenterControl::~CenterControl()
@@ -37,3 +39,5 @@ void CenterControl::sharePc()
 {
     _cmg->startAccept();
 }
+
+void CenterControl::run() {}

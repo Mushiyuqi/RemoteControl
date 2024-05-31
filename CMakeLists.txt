@@ -22,6 +22,7 @@ qt_add_executable(remoteControl
     data.h data.cpp
     view.h view.cpp
     viewcontrol.h viewcontrol.cpp
+    pevent.h pevent.cpp
 
 
 

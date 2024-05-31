@@ -35,12 +35,6 @@ public:
     std::shared_ptr<std::array<char, MAX_LENGTH>> m_recvData;
     size_t m_recvDataLen;
 
-signals:
-    //接收的远端操作数据准备好了
-    void readyForEvent();
-    //显示数据准备好了
-    void readyForDisplay();
-
 protected:
     virtual void run() override;
 

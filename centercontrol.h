@@ -1,13 +1,14 @@
 #ifndef CENTERCONTROL_H
 #define CENTERCONTROL_H
 
-#include <QObject>
+#include <QThread>
 #include <memory.h>
 
 class CManagement;
 class Widget;
 class ViewControl;
-class CenterControl : public QObject
+class PEvent;
+class CenterControl : public QThread
 {
     Q_OBJECT
     friend Widget;
@@ -27,10 +28,13 @@ private:
     Widget *_widget;
     ViewControl* _viewControl;
     CManagement *_cmg;
+    PEvent *_event;
 
     //没想好vctrl怎么管理先放到智能指针里
     std::shared_ptr<ViewControl> _vctrl;
-signals:
+
+protected:
+    virtual void run() override;
 };
 
 #endif // CENTERCONTROL_H
