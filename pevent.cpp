@@ -1,4 +1,9 @@
 #include "pevent.h"
+#include <QCursor>
+#include <QEvent>
+#include <QGuiApplication>
+#include <QMouseEvent>
+#include <QString>
 #include <iostream>
 PositionNode::PositionNode(int x, int y, double px, double py, int type)
     : m_x(x)
@@ -31,13 +36,33 @@ PositionNode PositionNode::fromJson(const QJsonObject &obj)
 
 PEvent::PEvent(QObject *parent)
     : QObject{parent}
-{}
+{
+    //获得全局缩放
+    m_globalScaleRatio = QGuiApplication::primaryScreen()->devicePixelRatio();
+    //获取屏幕大小
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect screenGeometry = screen->geometry();
+    m_screenWidth = screenGeometry.width();
+    m_screenHeight = screenGeometry.height();
+}
 
 bool PEvent::toDo(PositionNode &pNode)
 {
-    std::cout << "pNode" << std::endl
-              << "x : " << pNode.m_x << "  y : " << pNode.m_y << std::endl
-              << "px : " << pNode.m_px << "  Wpy : " << pNode.m_py << std::endl
-              << "type : " << pNode.m_type << std::endl;
+    //std::cout << "x : " << m_screenWidth << " y : " << m_screenHeight << std::endl;
+
+    if (pNode.m_type == PositionNode::Type::mousePress) {
+        std::cout << "service to click" << std::endl;
+        QString xdotoolPath = "/usr/bin/xdotool";
+        int x = m_screenWidth * pNode.m_px * m_globalScaleRatio;
+        int y = m_screenHeight * pNode.m_py * m_globalScaleRatio;
+        //移动
+        m_process.start(xdotoolPath,
+                        QStringList() << "mousemove" << QString::number(x) << QString::number(y));
+        m_process.waitForFinished(); // 等待命令完成
+        m_process.start(xdotoolPath,
+                        QStringList() << "click"
+                                      << "3");
+        m_process.waitForFinished(); // 等待命令完成
+    }
     return true;
 }

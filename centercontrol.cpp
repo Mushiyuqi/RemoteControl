@@ -5,14 +5,12 @@
 #include "pevent.h"
 #include "viewcontrol.h"
 #include "widget.h"
-#include <iostream>
 
 CenterControl::CenterControl(QObject *parent)
     : QThread{parent}
 {
     _widget = new Widget(this);
     _cmg = new CManagement(this);
-    _event = new PEvent(this);
 }
 
 CenterControl::~CenterControl()
@@ -45,6 +43,8 @@ void CenterControl::sharePc()
 
 void CenterControl::run()
 {
+    //创建事件处理器 确保start创建的线程和pEvent在一起
+    PEvent pEvent;
     while (m_threadStatus == TStatus::Ok) {
         QMutexLocker<QMutex> locker(&(_session->m_recvDataLock));
         _session->m_waiter.wait(&(_session->m_recvDataLock));
@@ -60,7 +60,7 @@ void CenterControl::run()
         PositionNode pNode = PositionNode::fromJson(jsonObject);
 
         //做事件处理
-        _event->toDo(pNode);
+        pEvent.toDo(pNode);
     }
     quit();
 }

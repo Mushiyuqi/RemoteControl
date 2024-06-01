@@ -21,22 +21,22 @@ void View::setSession(std::shared_ptr<CSessionThread> session)
     _session = session;
 }
 
-void View::mouseReleaseEvent(QMouseEvent *event)
+void View::mousePressEvent(QMouseEvent *event)
 {
-    // std::cout << "label is clicked. x:" << event->pos().x() << " y:" << event->pos().y()
-    //           << std::endl;
     if (_session->status() == CSessionThread::SocketStatus::Err)
         return;
     PositionNode pNode(event->pos().x(),
                        event->pos().y(),
                        (double) event->pos().x() / QLabel::width(),
                        (double) event->pos().y() / QLabel::height(),
-                       PositionNode::Type::mouseRelease);
+                       PositionNode::Type::mousePress);
     //转换为json字符串
     QJsonDocument jsonDocument(pNode.toJson());
     QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
     _session->send(jsonString.toStdString().data(), jsonString.length());
 }
+
+void View::mouseReleaseEvent(QMouseEvent *event){}
 
 void View::mouseMoveEvent(QMouseEvent *event) {}
 

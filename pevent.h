@@ -1,6 +1,8 @@
 #pragma once
 #include <QJsonObject>
 #include <QObject>
+#include <QPoint>
+#include <QProcess>
 
 class PositionNode
 {
@@ -16,11 +18,12 @@ public:
     //事件类型
     enum Type {
         nullEvent = 0,
-        mouseRelease = 1,
-        mouseMove = 2,
-        mouseDouble = 3,
-        keyPress = 4,
-        keyRelease = 5
+        mousePress = 1,
+        mouseRelease = 2,
+        mouseMove = 3,
+        mouseDouble = 4,
+        keyPress = 5,
+        keyRelease = 6
     };
     int m_type;
 
@@ -37,4 +40,8 @@ class PEvent : public QObject
 public:
     explicit PEvent(QObject *parent = nullptr);
     bool toDo(PositionNode &pNode);
+    qreal m_globalScaleRatio; //全局缩放率
+    int m_screenWidth;
+    int m_screenHeight;
+    QProcess m_process;
 };

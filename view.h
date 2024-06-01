@@ -19,14 +19,18 @@ private:
     std::shared_ptr<CSessionThread> _session;
 
 protected:
-    //鼠标释放事件
+    //鼠标事件
     virtual void mouseReleaseEvent(QMouseEvent *event) override;
-    //鼠标移动事件
-    virtual void mouseMoveEvent(QMouseEvent *event) override;
-    //键盘输入事件
-    virtual void keyPressEvent(QKeyEvent *event) override;
     virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
+    virtual void mouseMoveEvent(QMouseEvent *event) override;
+
+    //键盘事件
+    virtual void keyPressEvent(QKeyEvent *event) override;
     virtual void keyReleaseEvent(QKeyEvent *event) override;
+
+    // QWidget interface
+protected:
+    virtual void mousePressEvent(QMouseEvent *event) override;
 };
 
 #endif // VIEW_H

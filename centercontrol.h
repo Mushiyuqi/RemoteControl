@@ -29,7 +29,6 @@ private:
     Widget *_widget;
     ViewControl* _viewControl;
     CManagement *_cmg;
-    PEvent *_event;
     std::shared_ptr<CSessionThread> _session;
 
     //线程状态
