@@ -10,10 +10,10 @@ CSessionThread::CSessionThread(boost::asio::io_context &ioc)
     , _ioc(ioc)
 {
     m_roleStatus = Role::Server;
-
     _recvMsgNode = std::make_shared<MsgNode>(MAX_LENGTH);
     _recvHeadNode = std::make_shared<MsgNode>(HEAD_LENGTH);
 
+    //发送队列的初始化
     _currentSendingQueLen = 0;
     _sendData = std::make_shared<std::array<char, MAX_LENGTH>>();
     for(int i = 0; i != SEND_QUEUE_LEN; ++i)
@@ -22,7 +22,6 @@ CSessionThread::CSessionThread(boost::asio::io_context &ioc)
     }
     _sendFront = 0;
     _sendBack = 0;
-
 
     m_recvData = std::make_shared<std::array<char, MAX_LENGTH>>();
     _data = new Data(this);
@@ -38,7 +37,17 @@ CSessionThread::CSessionThread(boost::asio::io_context &ioc, QString ip, unsigne
     m_roleStatus = Role::Client;
     _recvMsgNode = std::make_shared<MsgNode>(MAX_LENGTH);
     _recvHeadNode = std::make_shared<MsgNode>(HEAD_LENGTH);
+
+    //发送队列的初始化
+    _currentSendingQueLen = 0;
     _sendData = std::make_shared<std::array<char, MAX_LENGTH>>();
+    for(int i = 0; i != SEND_QUEUE_LEN; ++i)
+    {
+        _sendQue.push_back(std::make_shared<MsgNode>(HEAD_LENGTH + MAX_LENGTH));
+    }
+    _sendFront = 0;
+    _sendBack = 0;
+
     m_recvData = std::make_shared<std::array<char, MAX_LENGTH>>();
     _data = new Data(this);
 }
@@ -79,7 +88,6 @@ int CSessionThread::status()
 void CSessionThread::run()
 {
     //全双工的收发
-
     if (m_roleStatus == Role::Server) {
         // 开启接收数据的监听
         m_socket.async_read_some(boost::asio::buffer(m_data.data(), MAX_LENGTH),
@@ -104,13 +112,6 @@ void CSessionThread::run()
             m_sSLock.lock();
         }
         m_sSLock.unlock();
-    } else {
-        // 开启接收数据的监听
-        m_socket.async_read_some(boost::asio::buffer(m_data.data(), MAX_LENGTH),
-                                 std::bind(&CSessionThread::handleRead,
-                                           this,
-                                           std::placeholders::_1,
-                                           std::placeholders::_2));
     }
     quit();
 }
@@ -130,8 +131,9 @@ void CSessionThread::send(char *msg, std::size_t sendLen)
     //允许将数据放入发送队列
     if (_currentSendingQueLen < SEND_QUEUE_LEN - 1)
     {
-        _sendQue[_sendBack]->Clear();
+        //直接做覆盖 不需要clear
         _sendQue[_sendBack]->m_total_len = HEAD_LENGTH + sendLen;
+        _sendQue[_sendBack]->m_cur_len = 0;
         memcpy(_sendQue[_sendBack]->m_data, &sendLen, HEAD_LENGTH);// 将消息长度写入m_data
         memcpy(_sendQue[_sendBack]->m_data+ HEAD_LENGTH, msg, sendLen);// 将消息内容写入m_data
         _sendBack = (_sendBack + 1) % SEND_QUEUE_LEN;
@@ -198,8 +200,8 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
                 }
 
                 //重置接收缓冲区
-                _recvMsgNode->Clear();
                 _recvMsgNode->m_total_len = data_len;
+                _recvMsgNode->m_cur_len = 0;
 
                 // 消息的长度小于头部规定的长度，说明数据未收全，则先将部分消息放到接收节点里
                 if (byt_transferred < data_len) {
@@ -241,7 +243,7 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
 
                 // 继续轮询剩余未处理的数据
                 _b_head_parse = false;
-                _recvHeadNode->Clear();
+                _recvHeadNode->clear();
                 // 恰好收完
                 if (byt_transferred <= 0) {
                     ::memset(m_data.data(), 0, MAX_LENGTH);
@@ -293,7 +295,7 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
 
                 // 继续轮询剩余未处理的数据
                 _b_head_parse = false;
-                _recvHeadNode->Clear();
+                _recvHeadNode->clear();
                 // 如果 byt_transferred 恰好等于 remain_msg 调用回调函数
                 if (byt_transferred <= 0) {
                     ::memset(m_data.data(), 0, MAX_LENGTH);
@@ -349,7 +351,12 @@ void CSessionThread::handleConnect(const boost::system::error_code &ec)
             QMutexLocker locker(&m_sSLock);
             m_socketStatus = SocketStatus::Ok;
         }
-        start(); //开启线程接收数据
+        // 开启接收数据的监听
+        m_socket.async_read_some(boost::asio::buffer(m_data.data(), MAX_LENGTH),
+                                 std::bind(&CSessionThread::handleRead,
+                                           this,
+                                           std::placeholders::_1,
+                                           std::placeholders::_2));
     } else {
         std::cerr << "connect failed, error code is " << ec.value() << " error message is "
                   << ec.message() << std::endl;

@@ -30,7 +30,7 @@ public:
     }
 
     // 重置 m_data 就不用再去开辟 m_data 了
-    void Clear() {
+    void clear() {
         ::memset(m_data, 0, m_total_len);
         m_cur_len = 0;
     }
