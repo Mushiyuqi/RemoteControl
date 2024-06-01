@@ -235,11 +235,7 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
                 /**
                  * 接收到完整的数据
                  */
-                if (m_roleStatus == Role::Server) {
-                    handleReadFromClient();
-                } else {
-                    handleReadFromServer();
-                }
+                handleData();
 
                 // 继续轮询剩余未处理的数据
                 _b_head_parse = false;
@@ -287,11 +283,7 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
                 /**
                  * 接收到完整的数据
                  */
-                if (m_roleStatus == Role::Server) {
-                    handleReadFromClient();
-                } else {
-                    handleReadFromServer();
-                }
+                handleData();
 
                 // 继续轮询剩余未处理的数据
                 _b_head_parse = false;
@@ -367,18 +359,9 @@ void CSessionThread::handleConnect(const boost::system::error_code &ec)
     }
 }
 
-void CSessionThread::handleReadFromClient()
+void CSessionThread::handleData()
 {
-    std::cout << "I am Server, receive data is " << std::endl;
-    QMutexLocker locker(&m_recvDataLock);
-    memcpy(&m_recvDataLen, _recvHeadNode->m_data, HEAD_LENGTH);
-    std::cout << "recvLen is " << m_recvDataLen << std::endl;
-    memcpy(m_recvData->data(), _recvMsgNode->m_data, m_recvDataLen);
-}
-
-void CSessionThread::handleReadFromServer()
-{
-    std::cout << "I am Client, receive data is " << std::endl;
+    std::cout << "receive data is " << std::endl;
     QMutexLocker locker(&m_recvDataLock);
     memcpy(&m_recvDataLen, _recvHeadNode->m_data, HEAD_LENGTH);
     memcpy(m_recvData->data(), _recvMsgNode->m_data, m_recvDataLen);

@@ -10,7 +10,7 @@ class CManagement : public QThread
     Q_OBJECT
 public:
     explicit CManagement(QObject *parent = nullptr);
-    void startAccept();
+    std::shared_ptr<CSessionThread> startAccept();
     std::shared_ptr<CSessionThread> startConnect(QString ip, unsigned short port);
 
 private:

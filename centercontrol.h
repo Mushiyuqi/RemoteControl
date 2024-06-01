@@ -4,6 +4,7 @@
 #include <QThread>
 #include <memory.h>
 
+class CSessionThread;
 class CManagement;
 class Widget;
 class ViewControl;
@@ -29,6 +30,11 @@ private:
     ViewControl* _viewControl;
     CManagement *_cmg;
     PEvent *_event;
+    std::shared_ptr<CSessionThread> _session;
+
+    //线程状态
+    enum TStatus { Ok = 0, Err = -1 };
+    int m_threadStatus = Ok;
 
     //没想好vctrl怎么管理先放到智能指针里
     std::shared_ptr<ViewControl> _vctrl;

@@ -1,9 +1,11 @@
 #include "centercontrol.h"
+#include <QJsonDocument>
 #include "cmanagement.h"
 #include "csessionthread.h"
 #include "pevent.h"
 #include "viewcontrol.h"
 #include "widget.h"
+#include <iostream>
 
 CenterControl::CenterControl(QObject *parent)
     : QThread{parent}
@@ -37,7 +39,28 @@ void CenterControl::linkPc()
 
 void CenterControl::sharePc()
 {
-    _cmg->startAccept();
+    _session = _cmg->startAccept();
+    start();
 }
 
-void CenterControl::run() {}
+void CenterControl::run()
+{
+    while (m_threadStatus == TStatus::Ok) {
+        QMutexLocker<QMutex> locker(&(_session->m_recvDataLock));
+        _session->m_waiter.wait(&(_session->m_recvDataLock));
+        QByteArray byteArray(_session->m_recvData->data(), _session->m_recvDataLen);
+        QString jsonString = QString::fromUtf8(byteArray);
+        //std::cout << jsonString.toStdString() << std::endl;
+
+        // 将JSON字符串解析为QJsonObject
+        QJsonDocument jsonDocument = QJsonDocument::fromJson(jsonString.toUtf8());
+        QJsonObject jsonObject = jsonDocument.object();
+
+        // 从QJsonObject构造PositionNode实例
+        PositionNode pNode = PositionNode::fromJson(jsonObject);
+
+        //做事件处理
+        _event->toDo(pNode);
+    }
+    quit();
+}

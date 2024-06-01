@@ -47,10 +47,8 @@ private:
     // 连接回调
     void handleConnect(const boost::system::error_code &ec);
 
-    // 作为服务端的接收操作
-    void handleReadFromClient();
-    // 作为客户端的接收操作
-    void handleReadFromServer();
+    // 作为接收了完整数据之后的操作
+    void handleData();
 
 private:
     boost::asio::io_context &_ioc;

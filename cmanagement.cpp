@@ -26,7 +26,7 @@ CManagement::CManagement(QObject *parent)
     start();
 }
 
-void CManagement::startAccept()
+std::shared_ptr<CSessionThread> CManagement::startAccept()
 {
     //session只是一种资源可以传给任何一个对象，不用对象树管理
     _session = std::make_shared<CSessionThread>(m_ioc);
@@ -41,10 +41,7 @@ void CManagement::startAccept()
                                        this,
                                        _session,
                                        std::placeholders::_1));
-
-    // m_acceptor
-    //     .async_accept(_session->socket(),
-    //                   std::bind(&CManagement::handleAccept, this, _session, std::placeholders::_1));
+    return _session;
 }
 
 void CManagement::handleAccept(std::shared_ptr<CSessionThread> session,
