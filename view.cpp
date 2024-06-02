@@ -21,26 +21,25 @@ void View::setSession(std::shared_ptr<CSessionThread> session)
     _session = session;
 }
 
-void View::mousePressEvent(QMouseEvent *event)
+void View::mouseReleaseEvent(QMouseEvent *event)
 {
     if (_session->status() == CSessionThread::SocketStatus::Err)
         return;
     PositionNode pNode(event->pos().x(),
                        event->pos().y(),
                        (double) event->pos().x() / QLabel::width(),
-                       (double) event->pos().y() / QLabel::height(),
-                       PositionNode::Type::mousePress);
+                       (double) event->pos().y() / QLabel::height());
+    if (event->button() == Qt::LeftButton)
+        pNode.m_type = PositionNode::Type::mouseLeftRelease;
+    else if (event->button() == Qt::RightButton)
+        pNode.m_type = PositionNode::Type::mouseRightRelease;
     //转换为json字符串
     QJsonDocument jsonDocument(pNode.toJson());
     QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
     _session->send(jsonString.toStdString().data(), jsonString.length());
 }
 
-void View::mouseReleaseEvent(QMouseEvent *event){}
-
 void View::mouseMoveEvent(QMouseEvent *event) {}
-
-void View::keyPressEvent(QKeyEvent *event) {}
 
 void View::mouseDoubleClickEvent(QMouseEvent *event) {}
 

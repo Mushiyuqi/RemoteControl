@@ -18,8 +18,8 @@ public:
     //事件类型
     enum Type {
         nullEvent = 0,
-        mousePress = 1,
-        mouseRelease = 2,
+        mouseLeftRelease = 1,
+        mouseRightRelease = 2,
         mouseMove = 3,
         mouseDouble = 4,
         keyPress = 5,

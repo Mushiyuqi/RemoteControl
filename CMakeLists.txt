@@ -7,6 +7,7 @@ project(
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Gui)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
 qt_standard_project_setup()
 
@@ -42,6 +43,7 @@ target_compile_features(remoteControl PRIVATE cxx_std_20)
 
 target_link_libraries(remoteControl PRIVATE Qt6::Widgets)
 target_link_libraries(remoteControl PRIVATE Qt6::Gui)
+target_link_libraries(remoteControl PRIVATE Qt6::Core)
 
 set_target_properties(
   remoteControl

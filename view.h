@@ -25,12 +25,7 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *event) override;
 
     //键盘事件
-    virtual void keyPressEvent(QKeyEvent *event) override;
     virtual void keyReleaseEvent(QKeyEvent *event) override;
-
-    // QWidget interface
-protected:
-    virtual void mousePressEvent(QMouseEvent *event) override;
 };
 
 #endif // VIEW_H

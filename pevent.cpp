@@ -48,21 +48,26 @@ PEvent::PEvent(QObject *parent)
 
 bool PEvent::toDo(PositionNode &pNode)
 {
-    //std::cout << "x : " << m_screenWidth << " y : " << m_screenHeight << std::endl;
-
-    if (pNode.m_type == PositionNode::Type::mousePress) {
-        std::cout << "service to click" << std::endl;
-        QString xdotoolPath = "/usr/bin/xdotool";
+    if (pNode.m_type == PositionNode::Type::mouseLeftRelease
+        || pNode.m_type == PositionNode::Type::mouseRightRelease) {
+        //计算坐标
         int x = m_screenWidth * pNode.m_px * m_globalScaleRatio;
         int y = m_screenHeight * pNode.m_py * m_globalScaleRatio;
-        //移动
-        m_process.start(xdotoolPath,
-                        QStringList() << "mousemove" << QString::number(x) << QString::number(y));
+        //移动并点击 左键 右键
+        if (pNode.m_type == PositionNode::Type::mouseLeftRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "mousemove" << QString::number(x) << QString::number(y)
+                                          << "click"
+                                          << "1");
+        } else if (pNode.m_type == PositionNode::Type::mouseRightRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "mousemove" << QString::number(x) << QString::number(y)
+                                          << "click"
+                                          << "3");
+        }
         m_process.waitForFinished(); // 等待命令完成
-        m_process.start(xdotoolPath,
-                        QStringList() << "click"
-                                      << "3");
-        m_process.waitForFinished(); // 等待命令完成
+
+    } else if (pNode.m_type == PositionNode::Type::mouseDouble) {
     }
     return true;
 }
