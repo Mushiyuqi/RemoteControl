@@ -15,7 +15,7 @@ size_t Data::getSendData(std::shared_ptr<std::array<char, MAX_LENGTH>> sendData)
     QBuffer buffer(&byteArray);
     buffer.open(QIODevice::WriteOnly);
     // 将QPixmap直接保存到QByteArray中，使用JPEG格式
-    if (!pixmap.save(&buffer, "JPG")) {
+    if (!pixmap.save(&buffer, "JPG", 0.25)) {
         qDebug() << "Failed to save pixmap to JPG";
         byteArray.clear();
         return -1;
