@@ -5,6 +5,8 @@
 
 #include <QObject>
 #include <QPixmap>
+//压缩比0 - 100  -1（默认值）
+#define SHRINKAGE_RATE 25
 
 class Data : public QObject
 {

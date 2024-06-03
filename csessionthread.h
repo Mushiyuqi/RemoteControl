@@ -6,7 +6,6 @@
 #include <QWaitCondition>
 #include "msgnode.h"
 #include <boost/asio.hpp>
-#include <queue>
 #define SEND_QUEUE_LEN 30 //长度必须大于等于2
 
 class Data;
@@ -75,7 +74,6 @@ private:
     int _sendFront; //队列的头部
     int _sendBack; //队列的尾部
     std::vector<std::shared_ptr<MsgNode>> _sendQue;       //发送队列
-
     std::shared_ptr<std::array<char, MAX_LENGTH>> _sendData; //发送的原始数据
 
     //接收数据结构

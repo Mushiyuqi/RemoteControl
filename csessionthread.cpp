@@ -361,9 +361,9 @@ void CSessionThread::handleConnect(const boost::system::error_code &ec)
 
 void CSessionThread::handleData()
 {
-    std::cout << "receive data is " << std::endl;
     QMutexLocker locker(&m_recvDataLock);
     memcpy(&m_recvDataLen, _recvHeadNode->m_data, HEAD_LENGTH);
+    std::cout << "receive dataLen is " << m_recvDataLen << std::endl;
     memcpy(m_recvData->data(), _recvMsgNode->m_data, m_recvDataLen);
     m_waiter.wakeAll();
 }

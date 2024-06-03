@@ -1,7 +1,7 @@
 #pragma once
 #include <cstring>
 // 整个包的长度是 HEAD_LENGTH + MAX_LENGTH
-#define MAX_LENGTH 1024 * 1024 //数据的最大长度
+#define MAX_LENGTH 8 * 1024 * 128   //数据的最大长度
 #define HEAD_LENGTH sizeof (size_t) //头部的长度
 
 class MsgNode {
