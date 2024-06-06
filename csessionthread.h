@@ -6,7 +6,7 @@
 #include <QWaitCondition>
 #include "msgnode.h"
 #include <boost/asio.hpp>
-#define SEND_QUEUE_LEN 3 //长度必须大于等于2
+#define SEND_QUEUE_LEN 2 //长度必须大于等于2
 
 class Data;
 class CManagement;

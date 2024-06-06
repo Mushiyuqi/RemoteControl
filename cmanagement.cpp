@@ -50,7 +50,8 @@ void CManagement::handleAccept(std::shared_ptr<CSessionThread> session,
     if (!ec) {
         session->serverStart();
     } else {
-        std::cout << "accept error " << std::endl;
+        std::cerr << "accept error, error code is " << ec.value() << " error message is "
+                  << ec.message() << std::endl;
     }
 }
 
