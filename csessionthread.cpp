@@ -10,6 +10,8 @@ CSessionThread::CSessionThread(boost::asio::io_context &ioc)
     , _ioc(ioc)
 {
     m_roleStatus = Role::Server;
+
+    //接收缓冲区初始化
     _recvMsgNode = std::make_shared<MsgNode>(MAX_LENGTH);
     _recvHeadNode = std::make_shared<MsgNode>(HEAD_LENGTH);
 
@@ -35,6 +37,8 @@ CSessionThread::CSessionThread(boost::asio::io_context &ioc, QString ip, unsigne
 
 {
     m_roleStatus = Role::Client;
+
+    //接收缓冲区初始化
     _recvMsgNode = std::make_shared<MsgNode>(MAX_LENGTH);
     _recvHeadNode = std::make_shared<MsgNode>(HEAD_LENGTH);
 
@@ -74,6 +78,24 @@ void CSessionThread::clientStart()
                            std::bind(&CSessionThread::handleConnect, this, std::placeholders::_1));
 }
 
+bool CSessionThread::setSocket()
+{
+    //只能在open后设置所以要单独拿出来
+    //socket设置
+    boost::system::error_code ec;
+    m_socket.set_option(boost::asio::ip::tcp::no_delay(true), ec); //设置立即发送
+    m_socket.set_option(boost::asio::socket_base::receive_buffer_size(SOCKET_BUF_SIZE),
+                        ec); //接收缓冲区
+    m_socket.set_option(boost::asio::socket_base::send_buffer_size(SOCKET_BUF_SIZE),
+                        ec); //发送缓冲区
+    if (ec) {
+        std::cerr << "socket setting failed, error code is " << ec.value() << ", message is "
+                  << ec.message() << std::endl;
+        return false;
+    }
+    return true;
+}
+
 boost::asio::ip::tcp::socket &CSessionThread::socket()
 {
     return m_socket;
@@ -103,7 +125,6 @@ void CSessionThread::run()
             m_sSLock.unlock();
             size_t sendLen = _data->getSendData(_sendData);
             if (sendLen != -1) {
-                std::cout << "sendLen is " << sendLen << std::endl;
                 send(_sendData->data(), sendLen);
             }
             memset(_sendData->data(), 0, sendLen); //重置m_sendData;
@@ -137,6 +158,7 @@ void CSessionThread::send(char *msg, std::size_t sendLen)
         memcpy(_sendQue[_sendBack]->m_data, &sendLen, HEAD_LENGTH);// 将消息长度写入m_data
         memcpy(_sendQue[_sendBack]->m_data+ HEAD_LENGTH, msg, sendLen);// 将消息内容写入m_data
         _sendBack = (_sendBack + 1) % SEND_QUEUE_LEN;
+        std::cout << "sendLen is " << sendLen << std::endl;
     }
 
     if (pending)
@@ -315,6 +337,7 @@ void CSessionThread::handleWrite(const boost::system::error_code &ec, size_t byt
 {
     if (!ec) {
         //对队列的增减，取元素加锁
+        std::cout << "handleWrite byt_transferred is " << byt_transferred << std::endl;
         QMutexLocker<QMutex> locker(&m_sendLock);
         _sendFront = (_sendFront + 1) % SEND_QUEUE_LEN;
         _currentSendingQueLen = (_sendBack - _sendFront + SEND_QUEUE_LEN) % SEND_QUEUE_LEN;
@@ -340,9 +363,11 @@ void CSessionThread::handleConnect(const boost::system::error_code &ec)
 {
     if (!ec) {
         {
+            setSocket();
             QMutexLocker locker(&m_sSLock);
             m_socketStatus = SocketStatus::Ok;
         }
+        std::cout << "Connect success " << std::endl;
         // 开启接收数据的监听
         m_socket.async_read_some(boost::asio::buffer(m_data.data(), MAX_LENGTH),
                                  std::bind(&CSessionThread::handleRead,

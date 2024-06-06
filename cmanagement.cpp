@@ -48,9 +48,13 @@ void CManagement::handleAccept(std::shared_ptr<CSessionThread> session,
                                const boost::system::error_code &ec)
 {
     if (!ec) {
+        //socket设置
+        session->setSocket();
+        //开启服务器
         session->serverStart();
     } else {
-        std::cout << "accept error " << std::endl;
+        std::cerr << "accept error, error code is " << ec.value() << " error message is "
+                  << ec.message() << std::endl;
     }
 }
 

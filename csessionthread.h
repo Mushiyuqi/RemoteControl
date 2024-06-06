@@ -6,7 +6,8 @@
 #include <QWaitCondition>
 #include "msgnode.h"
 #include <boost/asio.hpp>
-#define SEND_QUEUE_LEN 3 //长度必须大于等于2
+#define SEND_QUEUE_LEN 2 //长度必须大于等于2
+#define SOCKET_BUF_SIZE 1024 * 1024 //socket内部的buf
 
 class Data;
 class CManagement;
@@ -20,6 +21,7 @@ public:
 
     void serverStart();
     void clientStart();
+    bool setSocket();
 
     //发送数据
     void send(char *msg, std::size_t max_length);
