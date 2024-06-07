@@ -7,7 +7,7 @@
 #include "msgnode.h"
 #include <boost/asio.hpp>
 #define SEND_QUEUE_LEN 2 //长度必须大于等于2
-#define SOCKET_BUF_SIZE 1024 * 1024 //socket内部的buf
+#define SOCKET_BUF_SIZE 1024 * 1024 * 2 //socket内部的buf
 
 class Data;
 class CManagement;

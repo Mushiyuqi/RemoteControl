@@ -36,6 +36,7 @@ void View::mouseReleaseEvent(QMouseEvent *event)
     //转换为json字符串
     QJsonDocument jsonDocument(pNode.toJson());
     QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
+    // QThread::msleep(200);
     _session->send(jsonString.toStdString().data(), jsonString.length());
 }
 
