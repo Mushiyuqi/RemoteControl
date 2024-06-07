@@ -9,6 +9,14 @@ CSessionThread::CSessionThread(boost::asio::io_context &ioc)
     : m_socket(ioc)
     , _ioc(ioc)
 {
+    boost::system::error_code errCode;
+    //m_socket.open(boost::asio::ip::tcp::v4());                          //设置option要先开启
+    m_socket.set_option(boost::asio::ip::tcp::no_delay(true), errCode); //设置立即发送
+    m_socket.set_option(boost::asio::socket_base::receive_buffer_size(MAX_LENGTH),
+                        errCode); //接收缓冲区
+    m_socket.set_option(boost::asio::socket_base::send_buffer_size(MAX_LENGTH),
+                        errCode); //发送缓冲区
+
     m_roleStatus = Role::Server;
 
     //接收缓冲区初始化
@@ -36,6 +44,14 @@ CSessionThread::CSessionThread(boost::asio::io_context &ioc, QString ip, unsigne
     , m_port(port)
 
 {
+    boost::system::error_code errCode;
+    m_socket.open(boost::asio::ip::tcp::v4());                          //设置option要先开启
+    m_socket.set_option(boost::asio::ip::tcp::no_delay(true), errCode); //设置立即发送
+    m_socket.set_option(boost::asio::socket_base::receive_buffer_size(MAX_LENGTH),
+                        errCode); //接收缓冲区
+    m_socket.set_option(boost::asio::socket_base::send_buffer_size(MAX_LENGTH),
+                        errCode); //发送缓冲区
+
     m_roleStatus = Role::Client;
 
     //接收缓冲区初始化
