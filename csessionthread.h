@@ -21,7 +21,7 @@ public:
 
     void serverStart();
     void clientStart();
-    bool CSessionThread::setSocket();
+    bool setSocket();
 
     //发送数据
     void send(char *msg, std::size_t max_length);
