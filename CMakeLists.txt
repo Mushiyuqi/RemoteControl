@@ -12,7 +12,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
 qt_standard_project_setup()
 
 qt_add_executable(
-  remoteControl
+  RemoteControl
   widget.h
   widget.cpp
   widget.ui
@@ -37,16 +37,16 @@ qt_add_executable(
   pevent.h
   pevent.cpp)
 
-target_include_directories(remoteControl PRIVATE .)
+target_include_directories(RemoteControl PRIVATE .)
 
-target_compile_features(remoteControl PRIVATE cxx_std_20)
+target_compile_features(RemoteControl PRIVATE cxx_std_20)
 
-target_link_libraries(remoteControl PRIVATE Qt6::Widgets)
-target_link_libraries(remoteControl PRIVATE Qt6::Gui)
-target_link_libraries(remoteControl PRIVATE Qt6::Core)
+target_link_libraries(RemoteControl PRIVATE Qt6::Widgets)
+target_link_libraries(RemoteControl PRIVATE Qt6::Gui)
+target_link_libraries(RemoteControl PRIVATE Qt6::Core)
 
 set_target_properties(
-  remoteControl
+  RemoteControl
   PROPERTIES AUTORCC TRUE
              MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
              MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
@@ -57,19 +57,19 @@ set_target_properties(
 
 include(GNUInstallDirs)
 install(
-  TARGETS remoteControl
+  TARGETS RemoteControl
   BUNDLE DESTINATION .
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-qt_finalize_executable(remoteControl)
+qt_finalize_executable(RemoteControl)
 
 # Define target properties for Android with Qt 6 as: set_property(TARGET
-# remoteControl APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+# RemoteControl APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 # ${CMAKE_CURRENT_SOURCE_DIR}/android) For more information, see
 # https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 
-# target_sources(remoteControl PRIVATE main.cpp widget.cpp widget.h @if true
+# target_sources(RemoteControl PRIVATE main.cpp widget.cpp widget.h @if true
 # widget.ui @endif @if false
 #
 # @endif
@@ -79,18 +79,18 @@ qt_finalize_executable(remoteControl)
 # )
 
 # qt_standard_project_setup()     #set(CMAKE_AUTOUIC ON)  set(CMAKE_AUTOMOC ON)
-# set_target_properties(remoteControl PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER
+# set_target_properties(RemoteControl PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER
 # my.example.com MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
 # MACOSX_BUNDLE_SHORT_VERSION_STRING
 # ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR} MACOSX_BUNDLE TRUE
 # WIN32_EXECUTABLE TRUE )
 #
-# install(TARGETS remoteControl BUNDLE DESTINATION . LIBRARY DESTINATION
+# install(TARGETS RemoteControl BUNDLE DESTINATION . LIBRARY DESTINATION
 # ${CMAKE_INSTALL_LIBDIR} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} )
 #
-# if(QT_VERSION_MAJOR EQUAL 6) qt_finalize_executable(remoteControl) endif()
+# if(QT_VERSION_MAJOR EQUAL 6) qt_finalize_executable(RemoteControl) endif()
 
-# qt_add_executable(remoteControl)  //Creates and finalizes an application
+# qt_add_executable(RemoteControl)  //Creates and finalizes an application
 # target of a platform-specific type. This command performs the following tasks:
 
 # 1. Create a CMake target of the appropriate type for the target platform.
@@ -99,7 +99,7 @@ qt_finalize_executable(remoteControl)
 
 # cmake_minimum_required(VERSION 3.5)
 #
-# project(remoteControl VERSION 0.1 LANGUAGES CXX)
+# project(RemoteControl VERSION 0.1 LANGUAGES CXX)
 #
 # set(CMAKE_AUTOUIC ON) set(CMAKE_AUTOMOC ON) set(CMAKE_AUTORCC ON)
 #
@@ -116,36 +116,36 @@ qt_finalize_executable(remoteControl)
 # set(PROJECT_SOURCES main.cpp widget.cpp widget.h @if true widget.ui @endif @if
 # false ${TS_FILES} @endif )
 #
-# if(${QT_VERSION_MAJOR} GREATER_EQUAL 6) qt_add_executable(remoteControl
+# if(${QT_VERSION_MAJOR} GREATER_EQUAL 6) qt_add_executable(RemoteControl
 # MANUAL_FINALIZATION ${PROJECT_SOURCES} ) # Define target properties for
-# Android with Qt 6 as: #    set_property(TARGET remoteControl APPEND PROPERTY
+# Android with Qt 6 as: #    set_property(TARGET RemoteControl APPEND PROPERTY
 # QT_ANDROID_PACKAGE_SOURCE_DIR # ${CMAKE_CURRENT_SOURCE_DIR}/android) # For
 # more information, see
 # https://doc.qt.io/qt-6/qt-add-executable.html#target-creation @if false
 #
 # qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES}) @endif else()
-# if(ANDROID) add_library(remoteControl SHARED ${PROJECT_SOURCES} ) # Define
+# if(ANDROID) add_library(RemoteControl SHARED ${PROJECT_SOURCES} ) # Define
 # properties for Android with Qt 5 after find_package() calls as: #
 # set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android") else()
-# add_executable(remoteControl ${PROJECT_SOURCES} ) endif() @if false
+# add_executable(RemoteControl ${PROJECT_SOURCES} ) endif() @if false
 #
 # qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES}) @endif
 # endif()
 #
-# target_link_libraries(remoteControl PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+# target_link_libraries(RemoteControl PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 #
 # # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1. #
 # If you are developing for iOS or macOS you should consider setting an #
 # explicit, fixed bundle identifier manually though. if(${QT_VERSION}
 # VERSION_LESS 6.1.0) set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER
-# com.example.remoteControl) endif() set_target_properties(remoteControl
+# com.example.RemoteControl) endif() set_target_properties(RemoteControl
 # PROPERTIES ${BUNDLE_ID_OPTION} MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
 # MACOSX_BUNDLE_SHORT_VERSION_STRING
 # ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR} MACOSX_BUNDLE TRUE
 # WIN32_EXECUTABLE TRUE )
 #
-# include(GNUInstallDirs) install(TARGETS remoteControl BUNDLE DESTINATION .
+# include(GNUInstallDirs) install(TARGETS RemoteControl BUNDLE DESTINATION .
 # LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} RUNTIME DESTINATION
 # ${CMAKE_INSTALL_BINDIR} )
 #
-# if(QT_VERSION_MAJOR EQUAL 6) qt_finalize_executable(remoteControl) endif()
+# if(QT_VERSION_MAJOR EQUAL 6) qt_finalize_executable(RemoteControl) endif()
