@@ -19,11 +19,16 @@ public:
     static CenterControl &instance();
     void show();
 
+private slots:
+    void on_viewcontrol_over(bool info);
+
 private:
     explicit CenterControl(QObject *parent = nullptr);
     ~CenterControl();
-    void linkPc();
+    void linkPc(QString &ip, unsigned short port);
     void sharePc();
+    //此函数返回一个 StandardButton 值
+    int messageBox(QString title = "", QString text = "");
 
 private:
     Widget *_widget;

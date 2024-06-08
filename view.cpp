@@ -6,7 +6,7 @@
 #include <QScreen>
 #include "csessionthread.h"
 #include "pevent.h"
-#include <iostream>
+#include "viewcontrol.h"
 View::View(QWidget *parent)
     : QLabel(parent)
 {
@@ -16,14 +16,14 @@ View::View(QWidget *parent)
     setPixmap(pixmap.scaled(pixmap.size(), Qt::IgnoreAspectRatio));
 }
 
-void View::setSession(std::shared_ptr<CSessionThread> session)
+void View::setControl(ViewControl *vctrl)
 {
-    _session = session;
+    _vctrl = vctrl;
 }
 
 void View::mouseReleaseEvent(QMouseEvent *event)
 {
-    if (_session->status() == CSessionThread::SocketStatus::Err)
+    if (_vctrl->_session->status() == CSessionThread::SocketStatus::Err)
         return;
     PositionNode pNode(event->pos().x(),
                        event->pos().y(),
@@ -36,8 +36,7 @@ void View::mouseReleaseEvent(QMouseEvent *event)
     //转换为json字符串
     QJsonDocument jsonDocument(pNode.toJson());
     QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
-    // QThread::msleep(200);
-    _session->send(jsonString.toStdString().data(), jsonString.length());
+    _vctrl->_session->send(jsonString.toStdString().data(), jsonString.length());
 }
 
 void View::mouseMoveEvent(QMouseEvent *event) {}

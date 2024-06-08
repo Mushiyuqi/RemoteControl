@@ -2,16 +2,22 @@
 #define CMANAGEMENT_H
 #include <QThread>
 #include <boost/asio.hpp>
+#include <boost/thread.hpp>
 #define ServerPort 10086
+#define THREADS_NUM 10
 
 class CSessionThread;
-class CManagement : public QThread
+class CManagement : public QObject
 {
     Q_OBJECT
 public:
     explicit CManagement(QObject *parent = nullptr);
+    ~CManagement();
     std::shared_ptr<CSessionThread> startAccept();
     std::shared_ptr<CSessionThread> startConnect(QString ip, unsigned short port);
+
+signals:
+    void acceptInfo(bool info);
 
 private:
     void handleAccept(std::shared_ptr<CSessionThread> new_session,
@@ -26,8 +32,8 @@ private:
     //因为想在一个电脑上运行两个网络程序就不能在初始化的时候分配端口
     std::shared_ptr<boost::asio::ip::tcp::acceptor> m_acceptor; //用于测试的acceptor
 
-protected:
-    virtual void run() override;
+    //线程池
+    boost::thread_group m_threads;
 };
 
 #endif // CMANAGEMENT_H

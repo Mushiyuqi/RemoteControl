@@ -8,6 +8,7 @@ project(
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Gui)
 find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Boost REQUIRED COMPONENTS system filesystem thread)
 
 qt_standard_project_setup()
 
@@ -44,6 +45,8 @@ target_compile_features(RemoteControl PRIVATE cxx_std_20)
 target_link_libraries(RemoteControl PRIVATE Qt6::Widgets)
 target_link_libraries(RemoteControl PRIVATE Qt6::Gui)
 target_link_libraries(RemoteControl PRIVATE Qt6::Core)
+target_link_libraries(RemoteControl PRIVATE Boost::system Boost::filesystem
+                                            Boost::thread)
 
 set_target_properties(
   RemoteControl

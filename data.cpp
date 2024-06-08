@@ -41,5 +41,5 @@ QPixmap Data::transData(std::shared_ptr<std::array<char, MAX_LENGTH>> recvData, 
         qDebug() << "Failed to load image from data";
         return QPixmap();
     }
-    return QPixmap::fromImage(image);
+    return std::move(QPixmap::fromImage(image));
 }

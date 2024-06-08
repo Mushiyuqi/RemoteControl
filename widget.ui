@@ -74,6 +74,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="text">
+    <string>10.252.49.40</string>
+   </property>
   </widget>
   <widget class="QLineEdit" name="portEdit">
    <property name="geometry">
@@ -83,6 +86,9 @@
      <width>151</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="text">
+    <string>10086</string>
    </property>
   </widget>
   <widget class="QPushButton" name="closeShareBtn">

@@ -11,16 +11,20 @@ class CSessionThread;
 class Data;
 class ViewControl : public QThread
 {
+    Q_OBJECT
+    friend CenterControl;
+    friend View;
+
 public:
     ViewControl(std::shared_ptr<CSessionThread> session, CenterControl *cctrl);
     ~ViewControl() noexcept;
-
-    void resize();
-
-    // 接收图片用来改变view显示的图片
-    void updatePixmap();
+    //本端关闭
+    void closeConnect();
 
     enum TStatus { Ok = 0, Err = -1 };
+signals:
+    //本端关闭用true 对端关闭用false
+    void connectOver(bool info);
 
 private:
     //顶级控件
@@ -42,6 +46,7 @@ private:
     std::shared_ptr<Data> _data;              //用于做数据处理
 
 protected:
+    //接收图片用来改变view
     virtual void run() override;
 };
 

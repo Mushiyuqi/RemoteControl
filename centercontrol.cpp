@@ -1,10 +1,13 @@
 #include "centercontrol.h"
 #include <QJsonDocument>
+#include <QMessageBox>
 #include "cmanagement.h"
 #include "csessionthread.h"
 #include "pevent.h"
 #include "viewcontrol.h"
+#include "viewwindow.h"
 #include "widget.h"
+#include <iostream>
 
 CenterControl::CenterControl(QObject *parent)
     : QThread{parent}
@@ -28,17 +31,55 @@ void CenterControl::show()
     _widget->show();
 }
 
-void CenterControl::linkPc()
+void CenterControl::on_viewcontrol_over(bool info)
 {
-    std::shared_ptr<CSessionThread> session = _cmg->startConnect("10.252.106.97", 10086);
+    //删除connect数据
+    _vctrl = nullptr;
+    _widget->show();
+    if (!info)
+        messageBox("ERROR", "Connect Error !\n 对方已经关闭连接.");
+    else
+        messageBox("MESSAGE", "Connect Error !\n 连接以断开.");
+}
+
+void CenterControl::linkPc(QString &ip, unsigned short port)
+{
+    std::shared_ptr<CSessionThread> session = _cmg->startConnect(ip, port);
     _vctrl = std::make_shared<ViewControl>(session, this);
+
+    //连接失败
+    if (session->status() == CSessionThread::SocketStatus::Err) {
+        messageBox("ERROR", "Connect Error !\n 请重试.");
+        _vctrl = nullptr;
+        return;
+    }
+    //连接成功
+    connect(_vctrl.get(), &ViewControl::connectOver, this, &CenterControl::on_viewcontrol_over);
     _widget->hide();
+    _vctrl->_viewWindow->show();
 }
 
 void CenterControl::sharePc()
 {
     _session = _cmg->startAccept();
-    start();
+    connect(_cmg, &CManagement::acceptInfo, this, [this](bool info) {
+        if (info) {
+            //开启接收事件信息
+            start();
+            messageBox("SUCCESS", "连接成功.");
+        } else
+            messageBox("ERROR", "连接失败.");
+    });
+}
+
+int CenterControl::messageBox(QString title, QString text)
+{
+    QMessageBox errMsg;
+    errMsg.setWindowTitle(title);
+    errMsg.setText(text);
+    errMsg.setStandardButtons(QMessageBox::Ok);
+    errMsg.setDefaultButton(QMessageBox::Ok);
+    return errMsg.exec();
 }
 
 void CenterControl::run()

@@ -6,6 +6,7 @@
 #include "data.h"
 #include "view.h"
 #include "viewwindow.h"
+#include <iostream>
 ViewControl::ViewControl(std::shared_ptr<CSessionThread> session, CenterControl *cctrl)
     : _session(session)
     , _cctrl(cctrl)
@@ -15,20 +16,25 @@ ViewControl::ViewControl(std::shared_ptr<CSessionThread> session, CenterControl 
     _data = std::make_shared<Data>(); //创建数据处理组
     _viewWindow = new ViewWindow(this);
     _view = _viewWindow->centralWidget();
-    _view->setSession(session);
+    _view->setControl(this);
     _viewWindow->setWindowTitle("远程控制系统主界面");
-    _viewWindow->show();
-    start(); //开启刷新线程
+    if (_session->status() == CSessionThread::SocketStatus::Ok)
+        start(); //开启刷新线程
 }
 
-ViewControl::~ViewControl() noexcept{}
-
-void ViewControl::updatePixmap()
+ViewControl::~ViewControl() noexcept
 {
-    //size_t dataLen = _data->getSendData(m_dataBuffer);
-    // 转换为图片
-    // 更新图片
-    _view->setPixmap(_data->transData(m_dataBuffer, m_dataLen));
+    //关闭窗口
+    _viewWindow->close();
+
+    //终止线程
+    m_threadStatus = TStatus::Err;
+    wait();
+}
+
+void ViewControl::closeConnect()
+{
+    emit connectOver(true);
 }
 
 void ViewControl::run()
@@ -36,9 +42,14 @@ void ViewControl::run()
     while (m_threadStatus == TStatus::Ok) {
         QMutexLocker<QMutex> locker(&(_session->m_recvDataLock));
         _session->m_waiter.wait(&(_session->m_recvDataLock));
+        //判断对端是否关闭
+        if (_session->status() == CSessionThread::SocketStatus::Err) {
+            emit connectOver(false);
+            quit();
+        }
         memcpy(m_dataBuffer->data(), _session->m_recvData->data(), _session->m_recvDataLen);
         m_dataLen = _session->m_recvDataLen;
-        updatePixmap();
+        _view->setPixmap(_data->transData(m_dataBuffer, m_dataLen));
     }
     quit();
 }

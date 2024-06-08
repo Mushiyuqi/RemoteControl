@@ -13,6 +13,7 @@ class CenterControl;
 class Widget : public QWidget
 {
     Q_OBJECT
+    friend CenterControl;
 
 public:
     Widget(CenterControl *cctrl, QWidget *parent = nullptr);
@@ -22,6 +23,11 @@ private slots:
     void on_shareBtn_clicked();
 
     void on_linkBtn_clicked();
+
+    void on_closeShareBtn_clicked();
+
+private:
+    void initial();
 
 private:
     Ui::Widget *_ui;

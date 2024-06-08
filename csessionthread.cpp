@@ -56,26 +56,53 @@ CSessionThread::CSessionThread(boost::asio::io_context &ioc, QString ip, unsigne
     _data = new Data(this);
 }
 
-CSessionThread::~CSessionThread() {}
+CSessionThread::~CSessionThread()
+{
+    m_socket.close();
+    wait();
+}
 
 void CSessionThread::serverStart()
 {
     if (m_roleStatus != Role::Server)
         return;
+    //调用本函数代表在accpet时连接成功
+    m_socketStatus = Ok;
     start(); //开启线程发送数据
 }
 
-void CSessionThread::clientStart()
+bool CSessionThread::clientStart()
 {
     if (m_roleStatus != Role::Client)
-        return;
-    //初始化socket的状态
-    m_socketStatus = SocketStatus::Err;
+        return false;
     boost::asio::ip::tcp::endpoint remoteEp{boost::asio::ip::address::from_string(
                                                 m_ip.toStdString()),
                                             m_port};
-    m_socket.async_connect(remoteEp,
-                           std::bind(&CSessionThread::handleConnect, this, std::placeholders::_1));
+    boost::system::error_code ec{boost::asio::error::host_not_found};
+    m_socket.connect(remoteEp, ec);
+    if (!ec) {
+        {
+            setSocket();
+            QMutexLocker locker(&m_sSLock);
+            m_socketStatus = SocketStatus::Ok;
+        }
+        std::cout << "Connect success " << std::endl;
+        // 开启接收数据的监听
+        m_socket.async_read_some(boost::asio::buffer(m_data.data(), MAX_LENGTH),
+                                 std::bind(&CSessionThread::handleRead,
+                                           this,
+                                           std::placeholders::_1,
+                                           std::placeholders::_2));
+        return true;
+    } else {
+        std::cerr << "connect failed, error code is " << ec.value() << " error message is "
+                  << ec.message() << std::endl;
+        {
+            QMutexLocker locker(&m_sSLock);
+            m_socketStatus = SocketStatus::Err;
+        }
+        return false;
+    }
 }
 
 bool CSessionThread::setSocket()
@@ -128,8 +155,6 @@ void CSessionThread::run()
                 send(_sendData->data(), sendLen);
             }
             memset(_sendData->data(), 0, sendLen); //重置m_sendData;
-            //等待每2ms发送一次
-            //msleep(2);
             m_sSLock.lock();
         }
         m_sSLock.unlock();
@@ -329,6 +354,7 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
         {
             QMutexLocker locker(&m_sSLock);
             m_socketStatus = SocketStatus::Err;
+            m_waiter.wakeAll(); //唤醒等待数据的view
         }
     }
 }
@@ -351,31 +377,6 @@ void CSessionThread::handleWrite(const boost::system::error_code &ec, size_t byt
                                            std::placeholders::_2));
     } else {
         std::cerr << "handle write failed, error code is " << ec.value() << ", message is "
-                  << ec.message() << std::endl;
-        {
-            QMutexLocker locker(&m_sSLock);
-            m_socketStatus = SocketStatus::Err;
-        }
-    }
-}
-
-void CSessionThread::handleConnect(const boost::system::error_code &ec)
-{
-    if (!ec) {
-        {
-            setSocket();
-            QMutexLocker locker(&m_sSLock);
-            m_socketStatus = SocketStatus::Ok;
-        }
-        std::cout << "Connect success " << std::endl;
-        // 开启接收数据的监听
-        m_socket.async_read_some(boost::asio::buffer(m_data.data(), MAX_LENGTH),
-                                 std::bind(&CSessionThread::handleRead,
-                                           this,
-                                           std::placeholders::_1,
-                                           std::placeholders::_2));
-    } else {
-        std::cerr << "connect failed, error code is " << ec.value() << " error message is "
                   << ec.message() << std::endl;
         {
             QMutexLocker locker(&m_sSLock);

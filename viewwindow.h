@@ -25,6 +25,10 @@ private:
 private:
     Ui::ViewWindow *_ui;
     ViewControl *_vctrl;
+
+    // QWidget interface
+protected:
+    virtual void closeEvent(QCloseEvent *event) override;
 };
 
 #endif // VIEWWINDOW_H

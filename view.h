@@ -2,7 +2,6 @@
 #define VIEW_H
 
 #include <QLabel>
-#include <memory>
 class Data;
 class CSessionThread;
 class ViewControl;
@@ -15,8 +14,8 @@ public:
     View(QWidget *parent = nullptr);
 
 private:
-    void setSession(std::shared_ptr<CSessionThread> session);
-    std::shared_ptr<CSessionThread> _session;
+    void setControl(ViewControl *vctrl);
+    ViewControl *_vctrl;
 
 protected:
     //鼠标事件

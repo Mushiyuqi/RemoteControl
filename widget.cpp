@@ -22,6 +22,15 @@ void Widget::on_shareBtn_clicked()
 
 void Widget::on_linkBtn_clicked()
 {
-    _cctrl->linkPc();
-    _ui->linkBtn->setEnabled(false);
+    QString ip = _ui->ipEdit->text();
+    unsigned short port = _ui->portEdit->text().toUShort();
+    _cctrl->linkPc(ip, port);
+}
+
+void Widget::on_closeShareBtn_clicked() {}
+
+void Widget::initial()
+{
+    _ui->shareBtn->setEnabled(true);
+    _ui->closeShareBtn->setEnabled(true);
 }

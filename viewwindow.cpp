@@ -24,3 +24,9 @@ View *ViewWindow::centralWidget()
 {
     return _ui->centralwidget;
 }
+
+void ViewWindow::closeEvent(QCloseEvent *event)
+{
+    _vctrl->closeConnect();
+    QMainWindow::closeEvent(event);
+}
