@@ -4,7 +4,7 @@
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QScreen>
-#include "csessionthread.h"
+#include "csession.h"
 #include "pevent.h"
 #include "viewcontrol.h"
 View::View(QWidget *parent)
@@ -23,7 +23,7 @@ void View::setControl(ViewControl *vctrl)
 
 void View::mouseReleaseEvent(QMouseEvent *event)
 {
-    if (_vctrl->_session->status() == CSessionThread::SocketStatus::Err)
+    if (_vctrl->_session->status() == CSession::SocketStatus::Err)
         return;
     PositionNode pNode(event->pos().x(),
                        event->pos().y(),

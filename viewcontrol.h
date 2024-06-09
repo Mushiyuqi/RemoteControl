@@ -7,7 +7,7 @@
 class ViewWindow;
 class View;
 class CenterControl;
-class CSessionThread;
+class CSession;
 class Data;
 class ViewControl : public QThread
 {
@@ -16,7 +16,7 @@ class ViewControl : public QThread
     friend View;
 
 public:
-    ViewControl(std::shared_ptr<CSessionThread> session, CenterControl *cctrl);
+    ViewControl(std::shared_ptr<CSession> session, CenterControl *cctrl);
     ~ViewControl() noexcept;
     //本端关闭
     void closeConnect();
@@ -42,7 +42,7 @@ private:
     int m_threadStatus = TStatus::Ok;
 
     //工具组件
-    std::shared_ptr<CSessionThread> _session; //用于获取数据
+    std::shared_ptr<CSession> _session; //用于获取数据
     std::shared_ptr<Data> _data;              //用于做数据处理
 
 protected:

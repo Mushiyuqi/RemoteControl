@@ -25,8 +25,8 @@ qt_add_executable(
   viewwindow.h
   viewwindow.cpp
   viewwindow.ui
-  csessionthread.h
-  csessionthread.cpp
+  csession.h
+  csession.cpp
   cmanagement.h
   cmanagement.cpp
   data.h

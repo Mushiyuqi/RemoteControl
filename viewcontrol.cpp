@@ -2,12 +2,12 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include "centercontrol.h"
-#include "csessionthread.h"
+#include "csession.h"
 #include "data.h"
 #include "view.h"
 #include "viewwindow.h"
 #include <iostream>
-ViewControl::ViewControl(std::shared_ptr<CSessionThread> session, CenterControl *cctrl)
+ViewControl::ViewControl(std::shared_ptr<CSession> session, CenterControl *cctrl)
     : _session(session)
     , _cctrl(cctrl)
 {
@@ -18,7 +18,7 @@ ViewControl::ViewControl(std::shared_ptr<CSessionThread> session, CenterControl 
     _view = _viewWindow->centralWidget();
     _view->setControl(this);
     _viewWindow->setWindowTitle("远程控制系统主界面");
-    if (_session->status() == CSessionThread::SocketStatus::Ok)
+    if (_session->status() == CSession::SocketStatus::Ok)
         start(); //开启刷新线程
 }
 
@@ -43,7 +43,7 @@ void ViewControl::run()
         QMutexLocker<QMutex> locker(&(_session->m_recvDataLock));
         _session->m_waiter.wait(&(_session->m_recvDataLock));
         //判断对端是否关闭
-        if (_session->status() == CSessionThread::SocketStatus::Err) {
+        if (_session->status() == CSession::SocketStatus::Err) {
             emit connectOver(false);
             quit();
         }

@@ -1,5 +1,5 @@
 #include "cmanagement.h"
-#include "csessionthread.h"
+#include "csession.h"
 #include "qdebug.h"
 #include <iostream>
 
@@ -31,10 +31,10 @@ CManagement::~CManagement()
     m_threads.join_all();
 }
 
-std::shared_ptr<CSessionThread> CManagement::startAccept()
+std::shared_ptr<CSession> CManagement::startAccept()
 {
     //session只是一种资源可以传给任何一个对象，不用对象树管理
-    _session = std::make_shared<CSessionThread>(m_ioc);
+    _session = std::make_shared<CSession>(m_ioc);
 
     //用于在一台电脑上运行的测试的acceptor的创建位置
     if (m_acceptor == nullptr)
@@ -49,7 +49,7 @@ std::shared_ptr<CSessionThread> CManagement::startAccept()
     return _session;
 }
 
-void CManagement::handleAccept(std::shared_ptr<CSessionThread> session,
+void CManagement::handleAccept(std::shared_ptr<CSession> session,
                                const boost::system::error_code &ec)
 {
     if (!ec) {
@@ -65,9 +65,9 @@ void CManagement::handleAccept(std::shared_ptr<CSessionThread> session,
     }
 }
 
-std::shared_ptr<CSessionThread> CManagement::startConnect(QString ip, unsigned short port)
+std::shared_ptr<CSession> CManagement::startConnect(QString ip, unsigned short port)
 {
-    std::shared_ptr<CSessionThread> session = std::make_shared<CSessionThread>(m_ioc,
+    std::shared_ptr<CSession> session = std::make_shared<CSession>(m_ioc,
                                                                                ip,
                                                                                port); //IPv4协议默认
     return session;

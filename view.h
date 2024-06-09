@@ -3,7 +3,7 @@
 
 #include <QLabel>
 class Data;
-class CSessionThread;
+class CSession;
 class ViewControl;
 class View : public QLabel
 {

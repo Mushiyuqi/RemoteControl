@@ -2,7 +2,7 @@
 #include <QJsonDocument>
 #include <QMessageBox>
 #include "cmanagement.h"
-#include "csessionthread.h"
+#include "csession.h"
 #include "pevent.h"
 #include "viewcontrol.h"
 #include "viewwindow.h"
@@ -44,11 +44,11 @@ void CenterControl::on_viewcontrol_over(bool info)
 
 void CenterControl::linkPc(QString &ip, unsigned short port)
 {
-    std::shared_ptr<CSessionThread> session = _cmg->startConnect(ip, port);
+    std::shared_ptr<CSession> session = _cmg->startConnect(ip, port);
     _vctrl = std::make_shared<ViewControl>(session, this);
 
     //连接失败
-    if (session->status() == CSessionThread::SocketStatus::Err) {
+    if (session->status() == CSession::SocketStatus::Err) {
         messageBox("ERROR", "Connect Error !\n 请重试.");
         _vctrl = nullptr;
         return;

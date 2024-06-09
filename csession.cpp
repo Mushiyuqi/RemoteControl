@@ -1,11 +1,11 @@
-#include "csessionthread.h"
+#include "csession.h"
 #include <QMutexLocker>
 #include "cmanagement.h"
 #include "data.h"
 #include "qdebug.h"
 #include <iostream>
 
-CSessionThread::CSessionThread(boost::asio::io_context &ioc)
+CSession::CSession(boost::asio::io_context &ioc)
     : m_socket(ioc)
     , _ioc(ioc)
 {
@@ -26,10 +26,10 @@ CSessionThread::CSessionThread(boost::asio::io_context &ioc)
     _sendBack = 0;
 
     m_recvData = std::make_shared<std::array<char, MAX_LENGTH>>();
-    _data = new Data(this);
+    _data = std::make_shared<Data>();
 }
 
-CSessionThread::CSessionThread(boost::asio::io_context &ioc, QString ip, unsigned short port)
+CSession::CSession(boost::asio::io_context &ioc, QString ip, unsigned short port)
     : m_socket(ioc)
     , _ioc(ioc)
     , m_ip(ip)
@@ -53,25 +53,54 @@ CSessionThread::CSessionThread(boost::asio::io_context &ioc, QString ip, unsigne
     _sendBack = 0;
 
     m_recvData = std::make_shared<std::array<char, MAX_LENGTH>>();
-    _data = new Data(this);
+    _data = std::make_shared<Data>();
 }
 
-CSessionThread::~CSessionThread()
+CSession::~CSession()
 {
-    m_socket.close();
-    wait();
+    //判断是否为服务器
+    //服务器需要额外关闭循环发送线程
+    if (m_roleStatus == Role::Server)
+        m_sendThread->join();
 }
 
-void CSessionThread::serverStart()
+void CSession::serverStart()
 {
     if (m_roleStatus != Role::Server)
         return;
     //调用本函数代表在accpet时连接成功
     m_socketStatus = Ok;
-    start(); //开启线程发送数据
+    //开启线程发送数据
+    auto sendThread = [this]() {
+        //全双工的收发
+        if (m_roleStatus == Role::Server) {
+            // 开启接收数据的监听
+            m_socket.async_read_some(boost::asio::buffer(m_data.data(), MAX_LENGTH),
+                                     std::bind(&CSession::handleRead,
+                                               this,
+                                               std::placeholders::_1,
+                                               std::placeholders::_2,
+                                               shared_from_this()));
+
+            // 循环发送数据
+            //对socket的状态变量加锁
+            m_socketSatusLock.lock();
+            while (m_socketStatus == SocketStatus::Ok) {
+                m_socketSatusLock.unlock();
+                size_t sendLen = _data->getSendData(_sendData);
+                if (sendLen != -1) {
+                    send(_sendData->data(), sendLen);
+                }
+                memset(_sendData->data(), 0, sendLen); //重置m_sendData;
+                m_socketSatusLock.lock();
+            }
+            m_socketSatusLock.unlock();
+        }
+    };
+    m_sendThread = std::make_shared<std::thread>(sendThread);
 }
 
-bool CSessionThread::clientStart()
+bool CSession::clientStart()
 {
     if (m_roleStatus != Role::Client)
         return false;
@@ -83,29 +112,30 @@ bool CSessionThread::clientStart()
     if (!ec) {
         {
             setSocket();
-            QMutexLocker locker(&m_sSLock);
+            QMutexLocker locker(&m_socketSatusLock);
             m_socketStatus = SocketStatus::Ok;
         }
         std::cout << "Connect success " << std::endl;
         // 开启接收数据的监听
         m_socket.async_read_some(boost::asio::buffer(m_data.data(), MAX_LENGTH),
-                                 std::bind(&CSessionThread::handleRead,
+                                 std::bind(&CSession::handleRead,
                                            this,
                                            std::placeholders::_1,
-                                           std::placeholders::_2));
+                                           std::placeholders::_2,
+                                           shared_from_this()));
         return true;
     } else {
         std::cerr << "connect failed, error code is " << ec.value() << " error message is "
                   << ec.message() << std::endl;
         {
-            QMutexLocker locker(&m_sSLock);
+            QMutexLocker locker(&m_socketSatusLock);
             m_socketStatus = SocketStatus::Err;
         }
         return false;
     }
 }
 
-bool CSessionThread::setSocket()
+bool CSession::setSocket()
 {
     //只能在open后设置所以要单独拿出来
     //socket设置
@@ -123,46 +153,18 @@ bool CSessionThread::setSocket()
     return true;
 }
 
-boost::asio::ip::tcp::socket &CSessionThread::socket()
+boost::asio::ip::tcp::socket &CSession::socket()
 {
     return m_socket;
 }
 
-int CSessionThread::status()
+int CSession::status()
 {
-    QMutexLocker locker(&m_sSLock);
+    QMutexLocker locker(&m_socketSatusLock);
     return m_socketStatus;
 }
 
-void CSessionThread::run()
-{
-    //全双工的收发
-    if (m_roleStatus == Role::Server) {
-        // 开启接收数据的监听
-        m_socket.async_read_some(boost::asio::buffer(m_data.data(), MAX_LENGTH),
-                                 std::bind(&CSessionThread::handleRead,
-                                           this,
-                                           std::placeholders::_1,
-                                           std::placeholders::_2));
-
-        // 循环发送数据
-        //对socket的状态变量加锁
-        m_sSLock.lock();
-        while (m_socketStatus == SocketStatus::Ok) {
-            m_sSLock.unlock();
-            size_t sendLen = _data->getSendData(_sendData);
-            if (sendLen != -1) {
-                send(_sendData->data(), sendLen);
-            }
-            memset(_sendData->data(), 0, sendLen); //重置m_sendData;
-            m_sSLock.lock();
-        }
-        m_sSLock.unlock();
-    }
-    quit();
-}
-
-void CSessionThread::send(char *msg, std::size_t sendLen)
+void CSession::send(char *msg, std::size_t sendLen)
 {
     //对队列的增减，取元素加锁
     QMutexLocker<QMutex> locker(&m_sendLock); // QMutexLocker 构造时加锁，析构时解锁
@@ -192,13 +194,24 @@ void CSessionThread::send(char *msg, std::size_t sendLen)
     boost::asio::async_write(m_socket,
                              boost::asio::buffer(_sendQue[_sendFront]->m_data,
                                                  _sendQue[_sendFront]->m_total_len),
-                             std::bind(&CSessionThread::handleWrite,
+                             std::bind(&CSession::handleWrite,
                                        this,
                                        std::placeholders::_1,
-                                       std::placeholders::_2));
+                                       std::placeholders::_2,
+                                       shared_from_this()));
 }
 
-void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_transferred)
+void CSession::close()
+{
+    //关闭socket
+    QMutexLocker<QMutex> socketLocker(&m_socketSatusLock);
+    m_socketStatus = SocketStatus::Err;
+    m_socket.close();
+}
+
+void CSession::handleRead(const boost::system::error_code &ec,
+                          size_t byt_transferred,
+                          std::shared_ptr<CSession> &_selfShared)
 {
     if (!ec) {
         // m_data(原始数据) 已经处理的数据
@@ -221,10 +234,11 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
                     _recvHeadNode->m_cur_len += byt_transferred;
                     ::memset(m_data.data(), 0, MAX_LENGTH);
                     m_socket.async_read_some(boost::asio::buffer(m_data.data(), MAX_LENGTH),
-                                             std::bind(&CSessionThread::handleRead,
+                                             std::bind(&CSession::handleRead,
                                                        this,
                                                        std::placeholders::_1,
-                                                       std::placeholders::_2));
+                                                       std::placeholders::_2,
+                                                       _selfShared));
                     return;
                 }
                 // 收到的消息比头部多
@@ -261,10 +275,11 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
                     // 头部已经处理
                     _b_head_parse = true;
                     m_socket.async_read_some(boost::asio::buffer(m_data.data(), MAX_LENGTH),
-                                             std::bind(&CSessionThread::handleRead,
+                                             std::bind(&CSession::handleRead,
                                                        this,
                                                        std::placeholders::_1,
-                                                       std::placeholders::_2));
+                                                       std::placeholders::_2,
+                                                       _selfShared));
 
                     return;
                 }
@@ -291,10 +306,11 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
                 if (byt_transferred <= 0) {
                     ::memset(m_data.data(), 0, MAX_LENGTH);
                     m_socket.async_read_some(boost::asio::buffer(m_data, MAX_LENGTH),
-                                             std::bind(&CSessionThread::handleRead,
+                                             std::bind(&CSession::handleRead,
                                                        this,
                                                        std::placeholders::_1,
-                                                       std::placeholders::_2));
+                                                       std::placeholders::_2,
+                                                       _selfShared));
                     return;
                 }
                 continue;
@@ -312,10 +328,11 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
                     _recvMsgNode->m_cur_len += byt_transferred;
                     ::memset(m_data.data(), 0, MAX_LENGTH);
                     m_socket.async_read_some(boost::asio::buffer(m_data.data(), MAX_LENGTH),
-                                             std::bind(&CSessionThread::handleRead,
+                                             std::bind(&CSession::handleRead,
                                                        this,
                                                        std::placeholders::_1,
-                                                       std::placeholders::_2));
+                                                       std::placeholders::_2,
+                                                       _selfShared));
                     return;
                 }
 
@@ -339,10 +356,11 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
                 if (byt_transferred <= 0) {
                     ::memset(m_data.data(), 0, MAX_LENGTH);
                     m_socket.async_read_some(boost::asio::buffer(m_data.data(), MAX_LENGTH),
-                                             std::bind(&CSessionThread::handleRead,
+                                             std::bind(&CSession::handleRead,
                                                        this,
                                                        std::placeholders::_1,
-                                                       std::placeholders::_2));
+                                                       std::placeholders::_2,
+                                                       _selfShared));
                     return;
                 }
                 continue;
@@ -352,14 +370,16 @@ void CSessionThread::handleRead(const boost::system::error_code &ec, size_t byt_
         std::cerr << "handle read failed, error code is " << ec.value() << ", message is "
                   << ec.message() << std::endl;
         {
-            QMutexLocker locker(&m_sSLock);
+            QMutexLocker locker(&m_socketSatusLock);
             m_socketStatus = SocketStatus::Err;
             m_waiter.wakeAll(); //唤醒等待数据的view
         }
     }
 }
 
-void CSessionThread::handleWrite(const boost::system::error_code &ec, size_t byt_transferred)
+void CSession::handleWrite(const boost::system::error_code &ec,
+                           size_t byt_transferred,
+                           std::shared_ptr<CSession> &_selfShared)
 {
     if (!ec) {
         //对队列的增减，取元素加锁
@@ -370,22 +390,24 @@ void CSessionThread::handleWrite(const boost::system::error_code &ec, size_t byt
         if (_currentSendingQueLen <= 0)
             return;
         boost::asio::async_write(m_socket,
-                                 boost::asio::buffer(_sendQue[_sendFront]->m_data, _sendQue[_sendFront]->m_total_len),
-                                 std::bind(&CSessionThread::handleWrite,
+                                 boost::asio::buffer(_sendQue[_sendFront]->m_data,
+                                                     _sendQue[_sendFront]->m_total_len),
+                                 std::bind(&CSession::handleWrite,
                                            this,
                                            std::placeholders::_1,
-                                           std::placeholders::_2));
+                                           std::placeholders::_2,
+                                           _selfShared));
     } else {
         std::cerr << "handle write failed, error code is " << ec.value() << ", message is "
                   << ec.message() << std::endl;
         {
-            QMutexLocker locker(&m_sSLock);
+            QMutexLocker locker(&m_socketSatusLock);
             m_socketStatus = SocketStatus::Err;
         }
     }
 }
 
-void CSessionThread::handleData()
+void CSession::handleData()
 {
     QMutexLocker locker(&m_recvDataLock);
     memcpy(&m_recvDataLen, _recvHeadNode->m_data, HEAD_LENGTH);

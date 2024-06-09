@@ -6,7 +6,6 @@
 
 class MsgNode {
     friend class CSession;
-    friend class CSessionThread;
 
 public:
     // 为记录长度预留了空间的node

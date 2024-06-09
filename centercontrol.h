@@ -4,7 +4,7 @@
 #include <QThread>
 #include <memory.h>
 
-class CSessionThread;
+class CSession;
 class CManagement;
 class Widget;
 class ViewControl;
@@ -34,7 +34,7 @@ private:
     Widget *_widget;
     ViewControl* _viewControl;
     CManagement *_cmg;
-    std::shared_ptr<CSessionThread> _session;
+    std::shared_ptr<CSession> _session;
 
     //线程状态
     enum TStatus { Ok = 0, Err = -1 };

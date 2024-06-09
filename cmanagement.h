@@ -6,28 +6,28 @@
 #define ServerPort 10086
 #define THREADS_NUM 10
 
-class CSessionThread;
+class CSession;
 class CManagement : public QObject
 {
     Q_OBJECT
 public:
     explicit CManagement(QObject *parent = nullptr);
     ~CManagement();
-    std::shared_ptr<CSessionThread> startAccept();
-    std::shared_ptr<CSessionThread> startConnect(QString ip, unsigned short port);
+    std::shared_ptr<CSession> startAccept();
+    std::shared_ptr<CSession> startConnect(QString ip, unsigned short port);
 
 signals:
     void acceptInfo(bool info);
 
 private:
-    void handleAccept(std::shared_ptr<CSessionThread> new_session,
+    void handleAccept(std::shared_ptr<CSession> new_session,
                       const boost::system::error_code &ec);
 
 private:
     std::shared_ptr<boost::asio::io_context::work> m_work; //控制io_context
     boost::asio::io_context m_ioc;                         //io上下文
     //boost::asio::ip::tcp::acceptor m_acceptor;             //监听连接请求
-    std::shared_ptr<CSessionThread> _session;              //用于分享屏幕的session
+    std::shared_ptr<CSession> _session;              //用于分享屏幕的session
 
     //因为想在一个电脑上运行两个网络程序就不能在初始化的时候分配端口
     std::shared_ptr<boost::asio::ip::tcp::acceptor> m_acceptor; //用于测试的acceptor
