@@ -12,12 +12,39 @@
 CenterControl::CenterControl(QObject *parent)
     : QThread{parent}
 {
-    _widget = new Widget(this);
-    _cmg = new CManagement(this);
+    _widget = new Widget(this);   //这里没用对象树
+    _cmg = new CManagement(this); //用了对象树
+
+    //接收连接请求成功
+    connect(
+        _cmg,
+        &CManagement::acceptInfo,
+        this,
+        [this](bool info) {
+            if (info) {
+                //开启接收事件信息
+                start();
+                messageBox("SUCCESS", "连接成功.");
+            } else
+                messageBox("ERROR", "连接失败.");
+        },
+        Qt::QueuedConnection);
+
+    connect(
+        this,
+        &CenterControl::connectOver,
+        this,
+        [this]() {
+            messageBox("MESSAGE", "连接断开.");
+            _widget->initialBtn();
+        },
+        Qt::QueuedConnection);
 }
 
 CenterControl::~CenterControl()
 {
+    //关闭CManagement的线程池
+    _cmg->close();
 }
 
 CenterControl &CenterControl::instance()
@@ -29,6 +56,16 @@ CenterControl &CenterControl::instance()
 void CenterControl::show()
 {
     _widget->show();
+}
+
+int CenterControl::messageBox(QString title, QString text)
+{
+    QMessageBox errMsg;
+    errMsg.setWindowTitle(title);
+    errMsg.setText(text);
+    errMsg.setStandardButtons(QMessageBox::Ok);
+    errMsg.setDefaultButton(QMessageBox::Ok);
+    return errMsg.exec();
 }
 
 void CenterControl::on_viewcontrol_over(bool info)
@@ -54,32 +91,28 @@ void CenterControl::linkPc(QString &ip, unsigned short port)
         return;
     }
     //连接成功
-    connect(_vctrl.get(), &ViewControl::connectOver, this, &CenterControl::on_viewcontrol_over);
+    connect(_vctrl.get(),
+            &ViewControl::connectOver,
+            this,
+            &CenterControl::on_viewcontrol_over,
+            Qt::QueuedConnection);
     _widget->hide();
     _vctrl->_viewWindow->show();
 }
 
 void CenterControl::sharePc()
 {
+    //开始连接监听
     _session = _cmg->startAccept();
-    connect(_cmg, &CManagement::acceptInfo, this, [this](bool info) {
-        if (info) {
-            //开启接收事件信息
-            start();
-            messageBox("SUCCESS", "连接成功.");
-        } else
-            messageBox("ERROR", "连接失败.");
-    });
 }
 
-int CenterControl::messageBox(QString title, QString text)
+void CenterControl::closeSharePc()
 {
-    QMessageBox errMsg;
-    errMsg.setWindowTitle(title);
-    errMsg.setText(text);
-    errMsg.setStandardButtons(QMessageBox::Ok);
-    errMsg.setDefaultButton(QMessageBox::Ok);
-    return errMsg.exec();
+    //删除session
+    _session->close();
+
+    //等待run线程结束
+    wait();
 }
 
 void CenterControl::run()
@@ -89,9 +122,18 @@ void CenterControl::run()
     while (m_threadStatus == TStatus::Ok) {
         QMutexLocker<QMutex> locker(&(_session->m_recvDataLock));
         _session->m_waiter.wait(&(_session->m_recvDataLock));
+
+        //判断是否任然连接中
+        if (_session->status() == CSession::SocketStatus::Err) {
+            m_threadStatus = TStatus::Err;
+            _session->close();
+            _session = nullptr;
+            emit connectOver();
+            break;
+        }
+
         QByteArray byteArray(_session->m_recvData->data(), _session->m_recvDataLen);
         QString jsonString = QString::fromUtf8(byteArray);
-        //std::cout << jsonString.toStdString() << std::endl;
 
         // 将JSON字符串解析为QJsonObject
         QJsonDocument jsonDocument = QJsonDocument::fromJson(jsonString.toUtf8());

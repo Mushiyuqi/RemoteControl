@@ -58,10 +58,7 @@ CSession::CSession(boost::asio::io_context &ioc, QString ip, unsigned short port
 
 CSession::~CSession()
 {
-    //判断是否为服务器
-    //服务器需要额外关闭循环发送线程
-    if (m_roleStatus == Role::Server)
-        m_sendThread->join();
+    std::cout << "a session is killed" << std::endl;
 }
 
 void CSession::serverStart()
@@ -71,9 +68,9 @@ void CSession::serverStart()
     //调用本函数代表在accpet时连接成功
     m_socketStatus = Ok;
     //开启线程发送数据
-    auto sendThread = [this]() {
-        //全双工的收发
-        if (m_roleStatus == Role::Server) {
+    auto sendThread =
+        [this]() {
+            //全双工的收发
             // 开启接收数据的监听
             m_socket.async_read_some(boost::asio::buffer(m_data.data(), MAX_LENGTH),
                                      std::bind(&CSession::handleRead,
@@ -84,19 +81,20 @@ void CSession::serverStart()
 
             // 循环发送数据
             //对socket的状态变量加锁
-            m_socketSatusLock.lock();
-            while (m_socketStatus == SocketStatus::Ok) {
-                m_socketSatusLock.unlock();
+            while (1) {
+                {
+                    QMutexLocker<QMutex> locker(&m_socketSatusLock);
+                    if (m_socketStatus == SocketStatus::Err)
+                        break;
+                }
                 size_t sendLen = _data->getSendData(_sendData);
+                std::cout << 1 << std::endl;
                 if (sendLen != -1) {
                     send(_sendData->data(), sendLen);
                 }
                 memset(_sendData->data(), 0, sendLen); //重置m_sendData;
-                m_socketSatusLock.lock();
             }
-            m_socketSatusLock.unlock();
-        }
-    };
+        };
     m_sendThread = std::make_shared<std::thread>(sendThread);
 }
 
@@ -112,7 +110,7 @@ bool CSession::clientStart()
     if (!ec) {
         {
             setSocket();
-            QMutexLocker locker(&m_socketSatusLock);
+            QMutexLocker<QMutex> locker(&m_socketSatusLock);
             m_socketStatus = SocketStatus::Ok;
         }
         std::cout << "Connect success " << std::endl;
@@ -128,7 +126,7 @@ bool CSession::clientStart()
         std::cerr << "connect failed, error code is " << ec.value() << " error message is "
                   << ec.message() << std::endl;
         {
-            QMutexLocker locker(&m_socketSatusLock);
+            QMutexLocker<QMutex> locker(&m_socketSatusLock);
             m_socketStatus = SocketStatus::Err;
         }
         return false;
@@ -160,7 +158,7 @@ boost::asio::ip::tcp::socket &CSession::socket()
 
 int CSession::status()
 {
-    QMutexLocker locker(&m_socketSatusLock);
+    QMutexLocker<QMutex> locker(&m_socketSatusLock);
     return m_socketStatus;
 }
 
@@ -204,9 +202,11 @@ void CSession::send(char *msg, std::size_t sendLen)
 void CSession::close()
 {
     //关闭socket
-    QMutexLocker<QMutex> socketLocker(&m_socketSatusLock);
-    m_socketStatus = SocketStatus::Err;
     m_socket.close();
+    //判断是否为服务器
+    //服务器需要额外关闭循环发送线程
+    if (m_roleStatus == Role::Server)
+        m_sendThread->join();
 }
 
 void CSession::handleRead(const boost::system::error_code &ec,
@@ -369,11 +369,9 @@ void CSession::handleRead(const boost::system::error_code &ec,
     } else {
         std::cerr << "handle read failed, error code is " << ec.value() << ", message is "
                   << ec.message() << std::endl;
-        {
-            QMutexLocker locker(&m_socketSatusLock);
-            m_socketStatus = SocketStatus::Err;
-            m_waiter.wakeAll(); //唤醒等待数据的view
-        }
+        QMutexLocker<QMutex> locker(&m_socketSatusLock);
+        m_socketStatus = SocketStatus::Err;
+        m_waiter.wakeAll(); //唤醒等待数据的view
     }
 }
 
@@ -400,10 +398,8 @@ void CSession::handleWrite(const boost::system::error_code &ec,
     } else {
         std::cerr << "handle write failed, error code is " << ec.value() << ", message is "
                   << ec.message() << std::endl;
-        {
-            QMutexLocker locker(&m_socketSatusLock);
-            m_socketStatus = SocketStatus::Err;
-        }
+        QMutexLocker<QMutex> locker(&m_socketSatusLock);
+        m_socketStatus = SocketStatus::Err;
     }
 }
 

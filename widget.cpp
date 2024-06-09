@@ -7,6 +7,9 @@ Widget::Widget(CenterControl *cctrl, QWidget *parent)
     , _cctrl(cctrl)
 {
     _ui->setupUi(this);
+    _ui->shareBtn->setEnabled(true);
+    _ui->closeShareBtn->setEnabled(false);
+    _ui->linkBtn->setEnabled(true);
 }
 
 Widget::~Widget()
@@ -16,8 +19,15 @@ Widget::~Widget()
 
 void Widget::on_shareBtn_clicked()
 {
-    _cctrl->sharePc();
     _ui->shareBtn->setEnabled(false);
+    _ui->closeShareBtn->setEnabled(true);
+    _ui->linkBtn->setEnabled(false);
+    _cctrl->sharePc();
+}
+
+void Widget::on_closeShareBtn_clicked()
+{
+    _cctrl->closeSharePc();
 }
 
 void Widget::on_linkBtn_clicked()
@@ -27,10 +37,9 @@ void Widget::on_linkBtn_clicked()
     _cctrl->linkPc(ip, port);
 }
 
-void Widget::on_closeShareBtn_clicked() {}
-
-void Widget::initial()
+void Widget::initialBtn()
 {
     _ui->shareBtn->setEnabled(true);
-    _ui->closeShareBtn->setEnabled(true);
+    _ui->closeShareBtn->setEnabled(false);
+    _ui->linkBtn->setEnabled(true);
 }

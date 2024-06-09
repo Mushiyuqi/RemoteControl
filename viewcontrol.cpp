@@ -12,12 +12,13 @@ ViewControl::ViewControl(std::shared_ptr<CSession> session, CenterControl *cctrl
     , _cctrl(cctrl)
 {
     m_dataBuffer = std::make_shared<std::array<char, MAX_LENGTH>>(); //创建缓冲区
-    _session->clientStart(); //开启客户端
     _data = std::make_shared<Data>(); //创建数据处理组
     _viewWindow = new ViewWindow(this);
     _view = _viewWindow->centralWidget();
     _view->setControl(this);
     _viewWindow->setWindowTitle("远程控制系统主界面");
+
+    _session->clientStart(); //开启客户端
     if (_session->status() == CSession::SocketStatus::Ok)
         start(); //开启刷新线程
 }
@@ -26,6 +27,8 @@ ViewControl::~ViewControl() noexcept
 {
     //关闭窗口
     _viewWindow->close();
+    //关闭socket
+    _session->close();
 
     //终止线程
     m_threadStatus = TStatus::Err;
@@ -44,8 +47,9 @@ void ViewControl::run()
         _session->m_waiter.wait(&(_session->m_recvDataLock));
         //判断对端是否关闭
         if (_session->status() == CSession::SocketStatus::Err) {
+            m_threadStatus = TStatus::Err;
             emit connectOver(false);
-            quit();
+            break;
         }
         memcpy(m_dataBuffer->data(), _session->m_recvData->data(), _session->m_recvDataLen);
         m_dataLen = _session->m_recvDataLen;

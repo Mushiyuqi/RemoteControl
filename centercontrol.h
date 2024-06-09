@@ -19,6 +19,9 @@ public:
     static CenterControl &instance();
     void show();
 
+signals:
+    void connectOver();
+
 private slots:
     void on_viewcontrol_over(bool info);
 
@@ -27,6 +30,7 @@ private:
     ~CenterControl();
     void linkPc(QString &ip, unsigned short port);
     void sharePc();
+    void closeSharePc();
     //此函数返回一个 StandardButton 值
     int messageBox(QString title = "", QString text = "");
 

@@ -22,12 +22,11 @@ public:
 private slots:
     void on_shareBtn_clicked();
 
-    void on_linkBtn_clicked();
-
     void on_closeShareBtn_clicked();
 
-private:
-    void initial();
+    void on_linkBtn_clicked();
+
+    void initialBtn();
 
 private:
     Ui::Widget *_ui;
