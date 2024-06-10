@@ -257,6 +257,9 @@ void CSession::handleRead(const boost::system::error_code &ec,
                 // 头部长度非法
                 if (data_len > MAX_LENGTH) {
                     std::cerr << "invalid data length is" << data_len << std::endl;
+                    QMutexLocker<QMutex> locker(&m_socketSatusLock);
+                    m_socketStatus = SocketStatus::Err;
+                    m_waiter.wakeAll(); //唤醒等待数据的view
                     return;
                 }
 

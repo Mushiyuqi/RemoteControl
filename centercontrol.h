@@ -1,6 +1,7 @@
 #ifndef CENTERCONTROL_H
 #define CENTERCONTROL_H
 
+#include <QMutex>
 #include <QThread>
 #include <memory.h>
 
@@ -22,9 +23,6 @@ public:
 signals:
     void connectOver();
 
-private slots:
-    void on_viewcontrol_over();
-
 private:
     explicit CenterControl(QObject *parent = nullptr);
     ~CenterControl();
@@ -41,9 +39,13 @@ private:
     std::shared_ptr<CSession> _session;
     std::shared_ptr<ViewControl> _vctrl;
 
+    //是否已经连接
+    bool m_connectSuccess = false;
+
     //线程状态
+    QMutex m_mutex;
     enum TStatus { Ok = 0, Err = -1 };
-    int m_threadStatus = Ok;
+    int m_threadStatus = Err;
 
 protected:
     virtual void run() override;

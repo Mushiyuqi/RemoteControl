@@ -36,10 +36,9 @@ std::shared_ptr<CSession> CManagement::startAccept()
     //session只是一种资源可以传给任何一个对象，不用对象树管理
     std::shared_ptr<CSession> session = std::make_shared<CSession>(m_ioc);
 
-    //用于在一台电脑上运行的测试的acceptor的创建位置
-    if (m_acceptor == nullptr)
-        m_acceptor = std::make_shared<boost::asio::ip::tcp::acceptor>(
-            m_ioc, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), ServerPort));
+    //创建acceptor用于接收连接请求
+    m_acceptor = std::make_shared<boost::asio::ip::tcp::acceptor>(
+        m_ioc, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), ServerPort));
 
     m_acceptor
         ->async_accept(session->socket(),
@@ -56,10 +55,14 @@ void CManagement::handleAccept(std::shared_ptr<CSession> session,
         session->setSocket();
         //开启服务器
         session->serverStart();
+        //销毁acceptor
+        m_acceptor = nullptr;
     } else {
         emit acceptInfo(false);
         std::cerr << "accept error, error code is " << ec.value() << " error message is "
                   << ec.message() << std::endl;
+        //销毁acceptor
+        m_acceptor = nullptr;
     }
 }
 
@@ -69,6 +72,11 @@ std::shared_ptr<CSession> CManagement::startConnect(QString ip, unsigned short p
                                                                                ip,
                                                                                port); //IPv4协议默认
     return session;
+}
+
+void CManagement::cancelAccept()
+{
+    m_acceptor->close();
 }
 
 void CManagement::close()

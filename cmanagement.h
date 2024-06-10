@@ -15,7 +15,8 @@ public:
     ~CManagement();
     std::shared_ptr<CSession> startAccept();
     std::shared_ptr<CSession> startConnect(QString ip, unsigned short port);
-    void close();
+    void cancelAccept();
+    void close(); //程序结束关闭忙等待的io_context
 
 signals:
     void acceptInfo(bool info);

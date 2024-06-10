@@ -1,6 +1,7 @@
 #include "centercontrol.h"
 #include <QJsonDocument>
 #include <QMessageBox>
+#include <QMutexLocker>
 #include "cmanagement.h"
 #include "csession.h"
 #include "pevent.h"
@@ -22,14 +23,22 @@ CenterControl::CenterControl(QObject *parent)
         this,
         [this](bool info) {
             if (info) {
+                //确保线程在开启前处于关闭状态
+                wait();
+                //恢复状态
+                m_threadStatus = TStatus::Ok;
+                m_connectSuccess = true;
                 //开启接收事件信息
                 start();
                 messageBox("SUCCESS", "连接成功.");
-            } else
+            } else {
+                m_connectSuccess = false;
                 messageBox("ERROR", "连接失败.");
+            }
         },
         Qt::QueuedConnection);
 
+    //连接断开
     connect(
         this,
         &CenterControl::connectOver,
@@ -43,6 +52,17 @@ CenterControl::CenterControl(QObject *parent)
 
 CenterControl::~CenterControl()
 {
+    //关闭session
+    if (_session != nullptr) {
+        if (m_connectSuccess) {
+            _session->socket().close();
+        } else {
+            _session = nullptr;
+            _cmg->cancelAccept();
+            _widget->initialBtn();
+        }
+    }
+    wait();
     //关闭CManagement的线程池
     _cmg->close();
 }
@@ -68,13 +88,6 @@ int CenterControl::messageBox(QString title, QString text)
     return errMsg.exec();
 }
 
-void CenterControl::on_viewcontrol_over()
-{
-    _vctrl = nullptr;
-    _widget->setEnabled(true);
-    messageBox("MESSAGE", "Connect Error !\n 连接以断开.");
-}
-
 void CenterControl::linkPc(QString &ip, unsigned short port)
 {
     std::shared_ptr<CSession> session = _cmg->startConnect(ip, port);
@@ -87,11 +100,17 @@ void CenterControl::linkPc(QString &ip, unsigned short port)
         return;
     }
     //连接成功
-    connect(_vctrl.get(),
-            &ViewControl::connectOver,
-            this,
-            &CenterControl::on_viewcontrol_over,
-            Qt::QueuedConnection);
+    //连接断开
+    connect(
+        _vctrl.get(),
+        &ViewControl::connectOver,
+        this,
+        [this]() {
+            _vctrl = nullptr;
+            _widget->setEnabled(true);
+            messageBox("MESSAGE", "Connect Error !\n 连接以断开.");
+        },
+        Qt::QueuedConnection);
     _widget->setEnabled(false);
     _vctrl->_viewWindow->show();
 }
@@ -104,19 +123,27 @@ void CenterControl::sharePc()
 
 void CenterControl::closeSharePc()
 {
-    //删除session
-    _session->close();
-
-    //等待run线程结束
-    wait();
+    if (m_connectSuccess) {
+        //之所以直接关闭socket是因为run里会阻塞直到有client数据发送过来才有机会获得线程状态的锁，不然就一直阻塞
+        _session->socket().close();
+    } else {
+        _session = nullptr;
+        _cmg->cancelAccept();
+        _widget->initialBtn();
+    }
 }
 
 void CenterControl::run()
 {
     //创建事件处理器 确保start创建的线程和pEvent在一起
     PEvent pEvent;
-    while (m_threadStatus == TStatus::Ok) {
-        QMutexLocker<QMutex> locker(&(_session->m_recvDataLock));
+    while (1) {
+        QMutexLocker<QMutex> lockerThis(&m_mutex);
+        //本端关闭
+        if (m_threadStatus == TStatus::Err)
+            break;
+
+        QMutexLocker<QMutex> lockerSession(&(_session->m_recvDataLock));
         _session->m_waiter.wait(&(_session->m_recvDataLock));
 
         //判断是否任然连接中

@@ -53,8 +53,13 @@ void ViewControl::run()
             break;
 
         QMutexLocker<QMutex> lockerSession(&(_session->m_recvDataLock));
-        _session->m_waiter.wait(&(_session->m_recvDataLock));
+        //判断对端是否关闭
+        if (_session->status() == CSession::SocketStatus::Err) {
+            m_threadStatus = TStatus::Err;
+            break;
+        }
 
+        _session->m_waiter.wait(&(_session->m_recvDataLock));
         //判断对端是否关闭
         if (_session->status() == CSession::SocketStatus::Err) {
             m_threadStatus = TStatus::Err;
