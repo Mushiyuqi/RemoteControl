@@ -1,10 +1,11 @@
 #include "viewwindow.h"
-#include "ui_viewwindow.h"
-#include "viewcontrol.h"
+#include <QCloseEvent>
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QScreen>
+#include "ui_viewwindow.h"
+#include "viewcontrol.h"
 
 ViewWindow::ViewWindow(ViewControl *ctrl, QWidget *parent)
     : QMainWindow(parent)
@@ -28,5 +29,4 @@ View *ViewWindow::centralWidget()
 void ViewWindow::closeEvent(QCloseEvent *event)
 {
     _vctrl->closeConnect();
-    QMainWindow::closeEvent(event);
 }

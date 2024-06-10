@@ -23,7 +23,7 @@ signals:
     void connectOver();
 
 private slots:
-    void on_viewcontrol_over(bool info);
+    void on_viewcontrol_over();
 
 private:
     explicit CenterControl(QObject *parent = nullptr);
@@ -39,13 +39,11 @@ private:
     ViewControl* _viewControl;
     CManagement *_cmg;
     std::shared_ptr<CSession> _session;
+    std::shared_ptr<ViewControl> _vctrl;
 
     //线程状态
     enum TStatus { Ok = 0, Err = -1 };
     int m_threadStatus = Ok;
-
-    //没想好vctrl怎么管理先放到智能指针里
-    std::shared_ptr<ViewControl> _vctrl;
 
 protected:
     virtual void run() override;

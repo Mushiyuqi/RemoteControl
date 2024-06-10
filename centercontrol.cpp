@@ -68,15 +68,11 @@ int CenterControl::messageBox(QString title, QString text)
     return errMsg.exec();
 }
 
-void CenterControl::on_viewcontrol_over(bool info)
+void CenterControl::on_viewcontrol_over()
 {
-    //删除connect数据
     _vctrl = nullptr;
-    _widget->show();
-    if (!info)
-        messageBox("ERROR", "Connect Error !\n 对方已经关闭连接.");
-    else
-        messageBox("MESSAGE", "Connect Error !\n 连接以断开.");
+    _widget->setEnabled(true);
+    messageBox("MESSAGE", "Connect Error !\n 连接以断开.");
 }
 
 void CenterControl::linkPc(QString &ip, unsigned short port)
@@ -96,7 +92,7 @@ void CenterControl::linkPc(QString &ip, unsigned short port)
             this,
             &CenterControl::on_viewcontrol_over,
             Qt::QueuedConnection);
-    _widget->hide();
+    _widget->setEnabled(false);
     _vctrl->_viewWindow->show();
 }
 
@@ -126,9 +122,6 @@ void CenterControl::run()
         //判断是否任然连接中
         if (_session->status() == CSession::SocketStatus::Err) {
             m_threadStatus = TStatus::Err;
-            _session->close();
-            _session = nullptr;
-            emit connectOver();
             break;
         }
 
@@ -145,5 +138,9 @@ void CenterControl::run()
         //做事件处理
         pEvent.toDo(pNode);
     }
+    //关闭session
+    _session->close();
+    _session = nullptr;
+    emit connectOver();
     quit();
 }
