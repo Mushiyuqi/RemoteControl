@@ -71,6 +71,9 @@ std::shared_ptr<CSession> CManagement::startConnect(QString ip, unsigned short p
     std::shared_ptr<CSession> session = std::make_shared<CSession>(m_ioc,
                                                                                ip,
                                                                                port); //IPv4协议默认
+    //开启客户端
+    if (!session->clientStart())
+        session = nullptr;
     return session;
 }
 

@@ -91,15 +91,14 @@ int CenterControl::messageBox(QString title, QString text)
 void CenterControl::linkPc(QString &ip, unsigned short port)
 {
     std::shared_ptr<CSession> session = _cmg->startConnect(ip, port);
-    _vctrl = std::make_shared<ViewControl>(session, this);
 
     //连接失败
-    if (session->status() == CSession::SocketStatus::Err) {
+    if (session == nullptr) {
         messageBox("ERROR", "Connect Error !\n 请重试.");
-        _vctrl = nullptr;
         return;
     }
     //连接成功
+    _vctrl = std::make_shared<ViewControl>(session, this);
     //连接断开
     connect(
         _vctrl.get(),

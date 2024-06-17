@@ -18,9 +18,7 @@ ViewControl::ViewControl(std::shared_ptr<CSession> session, CenterControl *cctrl
     _view->setControl(this);
     _viewWindow->setWindowTitle("远程控制系统主界面");
 
-    _session->clientStart(); //开启客户端
-    if (_session->status() == CSession::SocketStatus::Ok)
-        start(); //开启刷新线程
+    start(); //开启刷新线程
 }
 
 ViewControl::~ViewControl() noexcept
