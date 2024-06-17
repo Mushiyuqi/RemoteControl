@@ -50,24 +50,26 @@ bool PEvent::toDo(PositionNode &pNode)
 {
     if (pNode.m_type == PositionNode::Type::mouseLeftRelease
         || pNode.m_type == PositionNode::Type::mouseRightRelease) {
+
+        //移动 左键 右键
+        if (pNode.m_type == PositionNode::Type::mouseLeftRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "click"<< "1");
+        } else if (pNode.m_type == PositionNode::Type::mouseRightRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "click"<< "3");
+        }
+        m_process.waitForFinished(); // 等待命令完成
+    } else if (pNode.m_type == PositionNode::Type::mouseMove) {
         //计算坐标
         int x = m_screenWidth * pNode.m_px * m_globalScaleRatio;
         int y = m_screenHeight * pNode.m_py * m_globalScaleRatio;
-        //移动并点击 左键 右键
-        if (pNode.m_type == PositionNode::Type::mouseLeftRelease) {
-            m_process.start("xdotool",
-                            QStringList() << "mousemove" << QString::number(x) << QString::number(y)
-                                          << "click"
-                                          << "1");
-        } else if (pNode.m_type == PositionNode::Type::mouseRightRelease) {
-            m_process.start("xdotool",
-                            QStringList() << "mousemove" << QString::number(x) << QString::number(y)
-                                          << "click"
-                                          << "3");
-        }
+        m_process.start("xdotool", QStringList() << "mousemove" << QString::number(x) << QString::number(y) );
         m_process.waitForFinished(); // 等待命令完成
-
-    } else if (pNode.m_type == PositionNode::Type::mouseDouble) {
     }
+    else if (pNode.m_type == PositionNode::Type::mouseDouble) {
+        //TODO
+    }
+
     return true;
 }
