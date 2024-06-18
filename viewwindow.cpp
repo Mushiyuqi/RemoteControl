@@ -28,5 +28,6 @@ View *ViewWindow::centralWidget()
 
 void ViewWindow::closeEvent(QCloseEvent *event)
 {
+    _vctrl->showCCtrl();
     _vctrl->closeConnect();
 }

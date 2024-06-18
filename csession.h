@@ -56,6 +56,7 @@ private:
     boost::asio::io_context &_ioc;             //处理异步事件
     std::shared_ptr<Data> _data;               //处理数据
     std::shared_ptr<std::thread> m_sendThread; //服务器循环发送线程
+    bool m_sendThreadJoined = false;           //控制join次数 只能join一次
 
     //连接数据结构
     QString m_ip;          //对端的ip

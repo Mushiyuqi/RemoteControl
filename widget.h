@@ -10,10 +10,12 @@ class Widget;
 QT_END_NAMESPACE
 
 class CenterControl;
+class ViewControl;
 class Widget : public QWidget
 {
     Q_OBJECT
     friend CenterControl;
+    friend ViewControl;
 
 public:
     Widget(CenterControl *cctrl, QWidget *parent = nullptr);

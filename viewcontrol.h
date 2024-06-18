@@ -21,6 +21,8 @@ public:
     ~ViewControl() noexcept;
     //本端关闭
     void closeConnect();
+    //显示centercontrol
+    void showCCtrl();
 
     enum TStatus { Ok = 0, Err = -1 };
 signals:

@@ -6,6 +6,7 @@
 #include "data.h"
 #include "view.h"
 #include "viewwindow.h"
+#include "widget.h"
 #include <iostream>
 ViewControl::ViewControl(std::shared_ptr<CSession> session, CenterControl *cctrl)
     : _session(session)
@@ -39,6 +40,11 @@ void ViewControl::closeConnect()
     m_threadStatus = TStatus::Err;
     _viewWindow = nullptr;
     _view = nullptr;
+}
+
+void ViewControl::showCCtrl()
+{
+    _cctrl->_widget->show();
 }
 
 void ViewControl::run()
