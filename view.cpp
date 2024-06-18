@@ -34,10 +34,7 @@ void View::mouseReleaseEvent(QMouseEvent *event)
         pNode.m_type = PositionNode::Type::mouseLeftRelease;
     else if (event->button() == Qt::RightButton)
         pNode.m_type = PositionNode::Type::mouseRightRelease;
-    //转换为json字符串
-    QJsonDocument jsonDocument(pNode.toJson());
-    QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
-    _vctrl->_session->send(jsonString.toStdString().data(), jsonString.length());
+
 }
 
 void View::mouseMoveEvent(QMouseEvent *event) {
@@ -47,16 +44,7 @@ void View::mouseMoveEvent(QMouseEvent *event) {
                        event->pos().y(),
                        (double) event->pos().x() / QLabel::width(),
                        (double) event->pos().y() / QLabel::height());
-    //移动
     pNode.m_type = PositionNode::Type::mouseMove;
-    //转换为json字符串
-    QJsonDocument jsonDocument(pNode.toJson());
-    QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
-    _vctrl->_session->send(jsonString.toStdString().data(), jsonString.length());
+
+    _vctrl->mouseMoveAcction(pNode);
 }
-
-void View::mouseDoubleClickEvent(QMouseEvent *event) {
-
-}
-
-void View::keyReleaseEvent(QKeyEvent *event) {}

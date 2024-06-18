@@ -67,9 +67,6 @@ bool PEvent::toDo(PositionNode &pNode)
         m_process.start("xdotool", QStringList() << "mousemove" << QString::number(x) << QString::number(y) );
         m_process.waitForFinished(); // 等待命令完成
     }
-    else if (pNode.m_type == PositionNode::Type::mouseDouble) {
-        //TODO
-    }
 
     return true;
 }
