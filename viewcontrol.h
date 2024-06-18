@@ -5,6 +5,7 @@
 #include <QThread>
 #include "msgnode.h"
 #include <memory>
+#include <pevent.h>
 class ViewWindow;
 class View;
 class CenterControl;
@@ -47,6 +48,9 @@ private:
     //工具组件
     std::shared_ptr<CSession> _session; //用于获取数据
     std::shared_ptr<Data> _data;        //用于做数据处理
+
+    void mouseMoveAcction(PositionNode p);
+    void mouseClickedAcction(PositionNode p);
 
 protected:
     //接收图片用来改变view

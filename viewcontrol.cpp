@@ -1,4 +1,5 @@
 #include "viewcontrol.h"
+#include <QJsonDocument>
 #include <QMutex>
 #include <QMutexLocker>
 #include "centercontrol.h"
@@ -78,4 +79,19 @@ void ViewControl::run()
     _session->close();
     emit connectOver();
     quit();
+}
+
+void ViewControl::mouseMoveAcction(PositionNode p)
+{
+    //转换为json字符串
+    QJsonDocument jsonDocument(p.toJson());
+    QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
+    this->_session->send(jsonString.toStdString().data(), jsonString.length());
+}
+void ViewControl::mouseClickedAcction(PositionNode p)
+{
+    //转换为json字符串
+    QJsonDocument jsonDocument(p.toJson());
+    QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
+    this->_session->send(jsonString.toStdString().data(), jsonString.length());
 }
