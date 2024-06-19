@@ -12,10 +12,13 @@ public:
     explicit ViewBridge(QObject *parent = nullptr);
     ~ViewBridge();
 
-    ImageProvider *getImageProvider() { return m_imageprovider; }
+    ImageProvider *getImageProvider() { return m_imageprovider; }  
+    Q_INVOKABLE int getImgWidth();
+    Q_INVOKABLE int getImgHeight();
 
     //更新屏幕数据
     Q_INVOKABLE void updatePixmap(QPixmap pixmap);
+
     ImageProvider *m_imageprovider;
     CenterControl *_cctrl;
 

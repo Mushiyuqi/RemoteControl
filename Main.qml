@@ -6,10 +6,10 @@ import QtQuick.Layouts
 Window {
     id: logPage
     visible: true
-    width: 480
-    height: 320
     minimumWidth: 480
     minimumHeight: 320
+    maximumWidth: 480
+    maximumHeight: 320
     title: qsTr("远程控制")
     color: "gainsboro"
 

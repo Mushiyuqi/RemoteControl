@@ -21,4 +21,10 @@ Item {
         text: "IP或Port输出错误"
         informativeText: "控制他人则输入他人ip,分享屏幕则输入本人ip"
     }
+    MessageDialog {
+        id: _
+        buttons: MessageDialog.Ok
+        text: "对方关闭"
+        informativeText: "控制他人则输入他人ip,分享屏幕则输入本人ip"
+    }
 }

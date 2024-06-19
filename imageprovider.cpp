@@ -1,13 +1,18 @@
 #include "imageprovider.h"
+#include <QApplication>
 #include <QGuiApplication>
 #include <QPixmap>
 #include <QScreen>
 ImageProvider::ImageProvider()
     : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
-    QPixmap pixmap(100, 100);
+    QScreen *screen = QApplication::primaryScreen();
+    QPixmap pixmap = screen->grabWindow(0);
     pixmap.fill(Qt::black);
+    QRect screenGeometry = screen->geometry();
     m_pixmap = pixmap;
+    _width = screenGeometry.width() * 0.6;
+    _height = screenGeometry.height() * 0.6;
 }
 
 QPixmap ImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)

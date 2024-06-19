@@ -4,48 +4,49 @@ import QtQuick.Layouts
 
 ApplicationWindow {
     id: root
-    width: 640
-    height: 480
-    minimumWidth: 480
-    minimumHeight: 320
-    menuBar: MenuBar {
-        Menu {
-            title: qsTr("Setting")
-            MenuItem {
-                action: actions.stop
-            }
 
-            MenuItem {
-                action: actions.quit
-            }
-        }
-        Menu {
-            title: qsTr("Help")
-            MenuItem {
-                action: actions.about
-            }
-        }
-    }
+    minimumWidth: viewbridge.getImgWidth()
+    maximumWidth: viewbridge.getImgWidth()
+    minimumHeight: viewbridge.getImgHeight()
+    maximumHeight: viewbridge.getImgHeight()
 
-    header: ToolBar {
-        id: toolbar
-        RowLayout {
+    // menuBar: MenuBar {
+    //     Menu {
+    //         title: qsTr("Setting")
+    //         MenuItem {
+    //             action: actions.stop
+    //         }
 
-            ToolButton {
-                action: actions.stop
-            }
+    //         MenuItem {
+    //             action: actions.quit
+    //         }
+    //     }
+    //     Menu {
+    //         title: qsTr("Help")
+    //         MenuItem {
+    //             action: actions.about
+    //         }
+    //     }
+    // }
 
-            ToolButton {
-                action: actions.quit
-            }
-        }
-    }
+    // header: ToolBar {
+    //     id: toolbar
+    //     RowLayout {
 
-    Actions {
-        id: actions
-        about.onTriggered: dialogs.about.open()
-    }
+    //         ToolButton {
+    //             action: actions.stop
+    //         }
 
+    //         ToolButton {
+    //             action: actions.quit
+    //         }
+    //     }
+    // }
+
+    // Actions {
+    //     id: actions
+    //     about.onTriggered: dialogs.about.open()
+    // }
     Dialogs {
         id: dialogs
     }
@@ -53,4 +54,8 @@ ApplicationWindow {
     Content {
         id: content
     }
+    // Component.onCompleted: {
+    //     root.width = viewbridge.getImgWidth()
+    //     root.height = viewbridge.getImgHeight()
+    // }
 }

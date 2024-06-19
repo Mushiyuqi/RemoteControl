@@ -2,11 +2,12 @@ import QtQuick
 
 Item {
     anchors.fill: parent
+    property alias image: _image
     Image {
-        id: image
+        id: _image
         anchors.fill: parent
         source: "image://img"
-        fillMode: Image.Stretch
+        fillMode:Image.PreserveAspectFit
         cache: false
     }
     Connections {

@@ -13,6 +13,9 @@ public:
     }
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize) override;
 
+    int _width;
+    int _height;
+
 private:
     QPixmap m_pixmap;
 };

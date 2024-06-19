@@ -19,6 +19,15 @@ ViewBridge::~ViewBridge()
     delete m_imageprovider;
 }
 
+int ViewBridge::getImgWidth()
+{
+    return m_imageprovider->_width;
+}
+
+int ViewBridge::getImgHeight()
+{
+    return m_imageprovider->_height;
+}
 //更新图片源
 void ViewBridge::updatePixmap(QPixmap pixmap)
 {
