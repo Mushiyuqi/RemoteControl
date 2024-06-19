@@ -30,9 +30,9 @@ private:
     //顶级控件
     CenterControl *_cctrl;
 
-    //显示组件
-    ViewWindow *_viewWindow;
-    View *_view;
+    // //显示组件
+    // ViewWindow *_viewWindow;
+    // View *_view;
 
     //缓存数据
     std::shared_ptr<std::array<char, MAX_LENGTH>> m_dataBuffer;

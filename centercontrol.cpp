@@ -6,14 +6,14 @@
 #include "csession.h"
 #include "pevent.h"
 #include "viewcontrol.h"
-#include "viewwindow.h"
-#include "widget.h"
+// #include "viewwindow.h"
+// #include "widget.h"
 #include <iostream>
 
 CenterControl::CenterControl(QObject *parent)
     : QThread{parent}
 {
-    _widget = new Widget(this);   //这里没用对象树
+    // _widget = new Widget(this);   //这里没用对象树
     _cmg = new CManagement(this); //用了对象树
 
     //接收连接请求成功
@@ -45,7 +45,7 @@ CenterControl::CenterControl(QObject *parent)
         this,
         [this]() {
             messageBox("MESSAGE", "连接断开.");
-            _widget->initialBtn();
+            // _widget->initialBtn();
         },
         Qt::QueuedConnection);
 }
@@ -59,7 +59,7 @@ CenterControl::~CenterControl()
         } else {
             _session = nullptr;
             _cmg->cancelAccept();
-            _widget->initialBtn();
+            // _widget->initialBtn();
         }
     }
     wait();
@@ -75,7 +75,7 @@ CenterControl &CenterControl::instance()
 
 void CenterControl::show()
 {
-    _widget->show();
+    // _widget->show();
 }
 
 int CenterControl::messageBox(QString title, QString text)
@@ -107,12 +107,12 @@ void CenterControl::linkPc(QString &ip, unsigned short port)
         this,
         [this]() {
             _vctrl = nullptr;
-            _widget->setEnabled(true);
+            // _widget->setEnabled(true);
             messageBox("MESSAGE", "Connect Error !\n 连接以断开.");
         },
         Qt::QueuedConnection);
-    _widget->setEnabled(false);
-    _vctrl->_viewWindow->show();
+    // _widget->setEnabled(false);
+    // _vctrl->_viewWindow->show();
 }
 
 void CenterControl::sharePc()
@@ -129,7 +129,7 @@ void CenterControl::closeSharePc()
     } else {
         _session = nullptr;
         _cmg->cancelAccept();
-        _widget->initialBtn();
+        // _widget->initialBtn();
     }
 }
 

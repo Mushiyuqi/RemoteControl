@@ -14,25 +14,25 @@ qt_standard_project_setup()
 
 qt_add_executable(
   RemoteControl
-  widget.h
-  widget.cpp
-  widget.ui
+
+
+
   main.cpp
   msgnode.h
   msgnode.cpp
   centercontrol.h
   centercontrol.cpp
-  viewwindow.h
-  viewwindow.cpp
-  viewwindow.ui
+
+
+
   csession.h
   csession.cpp
   cmanagement.h
   cmanagement.cpp
   data.h
   data.cpp
-  view.h
-  view.cpp
+
+
   viewcontrol.h
   viewcontrol.cpp
   pevent.h

@@ -4,8 +4,8 @@
 #include "centercontrol.h"
 #include "csession.h"
 #include "data.h"
-#include "view.h"
-#include "viewwindow.h"
+// #include "view.h"
+//#include "viewwindow.h"
 #include <iostream>
 ViewControl::ViewControl(std::shared_ptr<CSession> session, CenterControl *cctrl)
     : _session(session)
@@ -13,10 +13,10 @@ ViewControl::ViewControl(std::shared_ptr<CSession> session, CenterControl *cctrl
 {
     m_dataBuffer = std::make_shared<std::array<char, MAX_LENGTH>>(); //创建缓冲区
     _data = std::make_shared<Data>(); //创建数据处理组
-    _viewWindow = new ViewWindow(this);
-    _view = _viewWindow->centralWidget();
-    _view->setControl(this);
-    _viewWindow->setWindowTitle("远程控制系统主界面");
+    // _viewWindow = new ViewWindow(this);
+    // _view = _viewWindow->centralWidget();
+    // _view->setControl(this);
+    // _viewWindow->setWindowTitle("远程控制系统主界面");
 
     _session->clientStart(); //开启客户端
     if (_session->status() == CSession::SocketStatus::Ok)
@@ -29,8 +29,8 @@ ViewControl::~ViewControl() noexcept
     _session->close();
 
     //关闭窗口
-    if (_viewWindow != nullptr)
-        _viewWindow->close();
+    // if (_viewWindow != nullptr)
+    //     _viewWindow->close();
     //等待线程结束
     wait();
 }
@@ -39,8 +39,8 @@ void ViewControl::closeConnect()
 {
     QMutexLocker<QMutex> locker(&m_mutex);
     m_threadStatus = TStatus::Err;
-    _viewWindow = nullptr;
-    _view = nullptr;
+    // _viewWindow = nullptr;
+    // _view = nullptr;
 }
 
 void ViewControl::run()
@@ -68,7 +68,7 @@ void ViewControl::run()
 
         memcpy(m_dataBuffer->data(), _session->m_recvData->data(), _session->m_recvDataLen);
         m_dataLen = _session->m_recvDataLen;
-        _view->setPixmap(_data->transData(m_dataBuffer, m_dataLen));
+        // _view->setPixmap(_data->transData(m_dataBuffer, m_dataLen));
     }
     //关闭session
     _session->close();
