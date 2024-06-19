@@ -3,11 +3,13 @@
 #include <QScreen>
 #include <QThread>
 #include <QTimer>
+#include "centercontrol.h"
 #include "imageprovider.h"
 
 ViewBridge::ViewBridge(QObject *parent)
     : QObject{parent}
 {
+    _cctrl = qobject_cast<CenterControl *>(parent);
     m_imageprovider = new ImageProvider;
     QTimer *timer = new QTimer(this);
 }
@@ -26,14 +28,21 @@ void ViewBridge::updatePixmap(QPixmap pixmap)
 }
 
 //处理ip,port是否连接成功，成功则返回true
-bool ViewBridge::handleValidText(const QString &textIP, const QString &textPort)
+bool ViewBridge::handleValidLink(QString textIP, QString textPort)
 {
     qDebug() << "valid text ";
+    _cctrl->linkPc(textIP, textPort.toUShort());
     //todo：后端处理text
     return true;
 }
 
+void ViewBridge::handleUnShare()
+{
+    _cctrl->closeSharePc();
+}
+
 bool ViewBridge::handlerValidShare()
 {
+    _cctrl->sharePc();
     return true;
 }

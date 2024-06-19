@@ -3,6 +3,7 @@
 #include <QMouseEvent>
 #include <QObject>
 #include <QPixmap>
+class CenterControl;
 class ImageProvider;
 class ViewBridge : public QObject
 {
@@ -16,6 +17,7 @@ public:
     //更新屏幕数据
     Q_INVOKABLE void updatePixmap(QPixmap pixmap);
     ImageProvider *m_imageprovider;
+    CenterControl *_cctrl;
 
     void closeEvent(); //client关闭
 
@@ -30,5 +32,6 @@ signals:
 
 public slots:
     bool handlerValidShare();                                             //处理共享
-    bool handleValidText(const QString &textIP, const QString &textPort); //
+    bool handleValidLink(QString textIP, QString textPort);               //
+    void handleUnShare();
 };

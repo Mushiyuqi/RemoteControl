@@ -123,8 +123,11 @@ Window {
                         //IP,port格式正确则传入后端
                         console.log("Valid IP address:", editIp.text)
                         console.log("Valid Port:", editPort.text)
-                        if (controller.handleValidText(editIp.text,
+                        if (viewbridge.handleValidLink(editIp.text,
                                                        editPort.text)) {
+                            btnUnShare.enabled = false
+                            btnShare.enabled = false
+                            btnLink.enabled = false
                             mainPage.show()
                             logPage.hide()
                         }
@@ -159,10 +162,10 @@ Window {
                         //IP,port格式正确则传入后端
                         console.log("Valid IP address:", editIp.text)
                         console.log("Valid Port:", editPort.text)
-                        if (controller.handleValidText(editIp.text,
-                                                       editPort.text)) {
+                        if (viewbridge.handlerValidShare()) {
                             btnUnShare.enabled = true
                             btnShare.enabled = false
+                            btnLink.enabled = false
                             //调用后端逻辑
                         }
                     } else {
@@ -188,6 +191,12 @@ Window {
                 font.pixelSize: 16
 
                 text: "关闭共享"
+                onClicked: {
+                    viewbridge.handleUnShare()
+                    btnUnShare.enabled = false
+                    btnShare.enabled = true
+                    btnLink.enabled = true
+                }
             }
         }
     }

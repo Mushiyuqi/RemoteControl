@@ -14,10 +14,11 @@ class CenterControl : public QThread
 {
     Q_OBJECT
     friend ViewControl;
+    friend ViewBridge;
 
 public:
     static CenterControl &instance();
-    void show();
+    ViewBridge *viewBridge();
 
 signals:
     void connectOver();

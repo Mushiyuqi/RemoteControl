@@ -29,10 +29,10 @@ CenterControl::CenterControl(QObject *parent)
                 m_connectSuccess = true;
                 //开启接收事件信息
                 start();
-                messageBox("SUCCESS", "连接成功.");
+                //messageBox("SUCCESS", "连接成功.");
             } else {
                 m_connectSuccess = false;
-                messageBox("ERROR", "连接失败.");
+                //messageBox("ERROR", "连接失败.");
             }
         },
         Qt::QueuedConnection);
@@ -43,7 +43,7 @@ CenterControl::CenterControl(QObject *parent)
         &CenterControl::connectOver,
         this,
         [this]() {
-            messageBox("MESSAGE", "连接断开.");
+            // messageBox("MESSAGE", "连接断开.");
             // _widget->initialBtn();
         },
         Qt::QueuedConnection);
@@ -72,9 +72,9 @@ CenterControl &CenterControl::instance()
     return cctrl;
 }
 
-void CenterControl::show()
+ViewBridge *CenterControl::viewBridge()
 {
-    // _widget->show();
+    return _viewBridge;
 }
 
 int CenterControl::messageBox(QString title, QString text)
@@ -94,7 +94,7 @@ void CenterControl::linkPc(QString &ip, unsigned short port)
 
     //连接失败
     if (session->status() == CSession::SocketStatus::Err) {
-        messageBox("ERROR", "Connect Error !\n 请重试.");
+        // messageBox("ERROR", "Connect Error !\n 请重试.");
         _vctrl = nullptr;
         return;
     }
@@ -107,7 +107,7 @@ void CenterControl::linkPc(QString &ip, unsigned short port)
         [this]() {
             _vctrl = nullptr;
             // _widget->setEnabled(true);
-            messageBox("MESSAGE", "Connect Error !\n 连接以断开.");
+            // messageBox("MESSAGE", "Connect Error !\n 连接以断开.");
         },
         Qt::QueuedConnection);
     // _widget->setEnabled(false);

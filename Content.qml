@@ -10,7 +10,7 @@ Item {
         cache: false
     }
     Connections {
-        target: controller
+        target: viewbridge
         onNeedUpdate: {
             console.log("qml端重载图片")
             image.source = "image://img/" + Math.random()
