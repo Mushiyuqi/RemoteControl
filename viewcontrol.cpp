@@ -1,4 +1,5 @@
 #include "viewcontrol.h"
+#include <QJsonDocument>
 #include <QMutex>
 #include <QMutexLocker>
 #include "centercontrol.h"
@@ -14,9 +15,8 @@ ViewControl::ViewControl(std::shared_ptr<CSession> session,
     m_dataBuffer = std::make_shared<std::array<char, MAX_LENGTH>>(); //创建缓冲区
     _data = std::make_shared<Data>(); //创建数据处理组
     _viewBridge = viewBridge;         //viewwindow部分与前端交互
-    _session->clientStart();          //开启客户端
-    if (_session->status() == CSession::SocketStatus::Ok)
-        start(); //开启刷新线程
+
+    start(); //开启刷新线程
 }
 
 ViewControl::~ViewControl() noexcept
@@ -65,4 +65,19 @@ void ViewControl::run()
     _session->close();
     emit connectOver();
     quit();
+}
+
+void ViewControl::mouseMoveAcction(PositionNode p)
+{
+    //转换为json字符串
+    QJsonDocument jsonDocument(p.toJson());
+    QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
+    this->_session->send(jsonString.toStdString().data(), jsonString.length());
+}
+void ViewControl::mouseClickedAcction(PositionNode p)
+{
+    //转换为json字符串
+    QJsonDocument jsonDocument(p.toJson());
+    QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
+    this->_session->send(jsonString.toStdString().data(), jsonString.length());
 }
