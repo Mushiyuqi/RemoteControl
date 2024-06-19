@@ -7,13 +7,12 @@
 
 class CSession;
 class CManagement;
-class Widget;
+class ViewBridge;
 class ViewControl;
 class PEvent;
 class CenterControl : public QThread
 {
     Q_OBJECT
-    friend Widget;
     friend ViewControl;
 
 public:
@@ -33,8 +32,8 @@ private:
     int messageBox(QString title = "", QString text = "");
 
 private:
-    Widget *_widget;
-    ViewControl* _viewControl;
+    ViewBridge *_viewBridge;
+    ViewControl *_viewControl;
     CManagement *_cmg;
     std::shared_ptr<CSession> _session;
     std::shared_ptr<ViewControl> _vctrl;

@@ -5,15 +5,14 @@
 #include "cmanagement.h"
 #include "csession.h"
 #include "pevent.h"
+#include "viewbridge.h"
 #include "viewcontrol.h"
-// #include "viewwindow.h"
-// #include "widget.h"
 #include <iostream>
 
 CenterControl::CenterControl(QObject *parent)
     : QThread{parent}
 {
-    // _widget = new Widget(this);   //这里没用对象树
+    _viewBridge = new ViewBridge(this);
     _cmg = new CManagement(this); //用了对象树
 
     //接收连接请求成功
@@ -91,7 +90,7 @@ int CenterControl::messageBox(QString title, QString text)
 void CenterControl::linkPc(QString &ip, unsigned short port)
 {
     std::shared_ptr<CSession> session = _cmg->startConnect(ip, port);
-    _vctrl = std::make_shared<ViewControl>(session, this);
+    _vctrl = std::make_shared<ViewControl>(session, this, _viewBridge);
 
     //连接失败
     if (session->status() == CSession::SocketStatus::Err) {

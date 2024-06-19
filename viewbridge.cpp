@@ -10,21 +10,19 @@ ViewBridge::ViewBridge(QObject *parent)
 {
     m_imageprovider = new ImageProvider;
     QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [this]() {
-        updatePixmap();
-        emit needUpdate();
-    });
-    timer->start(4000);
+}
+
+ViewBridge::~ViewBridge()
+{
+    delete m_imageprovider;
 }
 
 //更新图片源
-void ViewBridge::updatePixmap()
+void ViewBridge::updatePixmap(QPixmap pixmap)
 {
-    qDebug() << "调用updatePixmap，更新图片源";
-    QScreen *screen = QGuiApplication::primaryScreen();
-    QPixmap pixmap = screen->grabWindow(0);
     // pixmap = pixmap.scaled(400, 300);
     m_imageprovider->setPixmap(pixmap);
+    emit needUpdate();
 }
 
 //处理ip,port是否连接成功，成功则返回true

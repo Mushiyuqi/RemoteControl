@@ -5,8 +5,7 @@
 #include <QThread>
 #include "msgnode.h"
 #include <memory>
-class ViewWindow;
-class View;
+class ViewBridge;
 class CenterControl;
 class CSession;
 class Data;
@@ -14,10 +13,9 @@ class ViewControl : public QThread
 {
     Q_OBJECT
     friend CenterControl;
-    friend View;
 
 public:
-    ViewControl(std::shared_ptr<CSession> session, CenterControl *cctrl);
+    ViewControl(std::shared_ptr<CSession> session, CenterControl *cctrl, ViewBridge *viewBridge);
     ~ViewControl() noexcept;
     //本端关闭
     void closeConnect();
@@ -30,9 +28,8 @@ private:
     //顶级控件
     CenterControl *_cctrl;
 
-    //显示组件
-    ViewWindow *_viewWindow;
-    View *_view;
+    //桥梁组件
+    ViewBridge *_viewBridge;
 
     //缓存数据
     std::shared_ptr<std::array<char, MAX_LENGTH>> m_dataBuffer;

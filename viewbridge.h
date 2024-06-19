@@ -9,11 +9,12 @@ class ViewBridge : public QObject
     Q_OBJECT
 public:
     explicit ViewBridge(QObject *parent = nullptr);
+    ~ViewBridge();
 
     ImageProvider *getImageProvider() { return m_imageprovider; }
 
     //更新屏幕数据
-    Q_INVOKABLE void updatePixmap();
+    Q_INVOKABLE void updatePixmap(QPixmap pixmap);
     ImageProvider *m_imageprovider;
 
     void closeEvent(); //client关闭
