@@ -5,6 +5,7 @@
 #include <QTimer>
 #include "centercontrol.h"
 #include "imageprovider.h"
+#include "viewcontrol.h"
 
 ViewBridge::ViewBridge(QObject *parent)
     : QObject{parent}
@@ -37,20 +38,24 @@ void ViewBridge::updatePixmap(QPixmap pixmap)
 }
 
 //处理ip,port是否连接成功，成功则返回true
-bool ViewBridge::handleValidLink(QString textIP, QString textPort)
+bool ViewBridge::handleLink(QString textIP, QString textPort)
 {
-    qDebug() << "valid text ";
     _cctrl->linkPc(textIP, textPort.toUShort());
-    //todo：后端处理text
     return true;
 }
 
-void ViewBridge::handleUnShare()
+void ViewBridge::handleCloseShare()
 {
     _cctrl->closeSharePc();
 }
 
-bool ViewBridge::handlerValidShare()
+void ViewBridge::handleClientClose()
+{
+    // _vctrl->showCCtrl();
+    _vctrl->closeConnect();
+}
+
+bool ViewBridge::handlerShare()
 {
     _cctrl->sharePc();
     return true;

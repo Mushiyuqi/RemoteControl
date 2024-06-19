@@ -54,6 +54,8 @@ ApplicationWindow {
     Content {
         id: content
     }
+    onClosing: viewbridge.handleClientClose()
+
     // Component.onCompleted: {
     //     root.width = viewbridge.getImgWidth()
     //     root.height = viewbridge.getImgHeight()

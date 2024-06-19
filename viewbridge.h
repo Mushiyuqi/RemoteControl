@@ -5,6 +5,7 @@
 #include <QPixmap>
 class CenterControl;
 class ImageProvider;
+class ViewControl;
 class ViewBridge : public QObject
 {
     Q_OBJECT
@@ -21,6 +22,7 @@ public:
 
     ImageProvider *m_imageprovider;
     CenterControl *_cctrl;
+    ViewControl *_vctrl;
 
     void closeEvent(); //client关闭
 
@@ -30,11 +32,14 @@ public:
 signals:
     void needUpdate();
     void acceptInfo(bool);  //true accept连接成功 false accept连接失败
-    void connectOver();     //连接被对方关闭
     void connectInfo(bool); //link连接失败 或 失败
 
+    void connectSeverOver();  //连接被对方关闭
+    void connectClientOver(); //连接被对方关闭
+
 public slots:
-    bool handlerValidShare();                                             //处理共享
-    bool handleValidLink(QString textIP, QString textPort);               //
-    void handleUnShare();
+    bool handlerShare();                               //处理共享
+    bool handleLink(QString textIP, QString textPort); //
+    void handleCloseShare();
+    void handleClientClose();
 };

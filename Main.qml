@@ -123,12 +123,13 @@ Window {
                         //IP,port格式正确则传入后端
                         console.log("Valid IP address:", editIp.text)
                         console.log("Valid Port:", editPort.text)
-                        if (viewbridge.handleValidLink(editIp.text,
+                        if (viewbridge.handleLink(editIp.text,
                                                        editPort.text)) {
                             btnUnShare.enabled = false
                             btnShare.enabled = false
                             btnLink.enabled = false
                             mainPage.show()
+
                             logPage.hide()
                         }
                     } else {
@@ -162,11 +163,11 @@ Window {
                         //IP,port格式正确则传入后端
                         console.log("Valid IP address:", editIp.text)
                         console.log("Valid Port:", editPort.text)
-                        if (viewbridge.handlerValidShare()) {
+                        if (viewbridge.handlerShare()) {
                             btnUnShare.enabled = true
                             btnShare.enabled = false
                             btnLink.enabled = false
-                            //调用后端逻辑
+
                         }
                     } else {
                         dialogs.textError.open()
