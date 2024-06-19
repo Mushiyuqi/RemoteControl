@@ -13,8 +13,8 @@ ViewControl::ViewControl(std::shared_ptr<CSession> session,
     , _cctrl(cctrl)
 {
     m_dataBuffer = std::make_shared<std::array<char, MAX_LENGTH>>(); //创建缓冲区
-    _data = std::make_shared<Data>(); //创建数据处理组
-    _viewBridge = viewBridge;         //viewwindow部分与前端交互
+    _data = std::make_shared<Data>();                                //创建数据处理组
+    _viewBridge = viewBridge; //viewwindow部分与前端交互
 
     start(); //开启刷新线程
 }

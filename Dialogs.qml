@@ -6,6 +6,12 @@ Item {
 
     property alias about: _about
     property alias textError: _textError
+    property alias connectOver: _connectOver
+    property alias connectFailed: _connectFailed
+    property alias acceptSuccess: _acceptSuccess
+    property alias acceptFailed: _acceptFailed
+    property alias debugDialog: _debugDialog
+
     MessageDialog {
         id: _about
         modality: Qt.WindowModal
@@ -22,9 +28,33 @@ Item {
         informativeText: "控制他人则输入他人ip,分享屏幕则输入本人ip"
     }
     MessageDialog {
-        id: _
+        id: _connectOver
         buttons: MessageDialog.Ok
-        text: "对方关闭"
-        informativeText: "控制他人则输入他人ip,分享屏幕则输入本人ip"
+        text: "连接被断开"
+        informativeText: ""
+    }
+    MessageDialog {
+        id: _connectFailed
+        buttons: MessageDialog.Ok
+        text: "连接失败"
+        informativeText: ""
+    }
+    MessageDialog {
+        id: _acceptSuccess
+        buttons: MessageDialog.Ok
+        text: "共享成功"
+        informativeText: ""
+    }
+    MessageDialog {
+        id: _acceptFailed
+        buttons: MessageDialog.Ok
+        text: "共享失败"
+        informativeText: ""
+    }
+    MessageDialog {
+        id: _debugDialog
+        buttons: MessageDialog.Ok
+        text: "this is debug"
+        informativeText: ""
     }
 }

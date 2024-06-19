@@ -6,14 +6,12 @@ import QtQuick.Layouts
 Window {
     id: logPage
     visible: true
-    minimumWidth: 480
-    minimumHeight: 320
-    maximumWidth: 480
-    maximumHeight: 320
+    minimumWidth: 300
+    minimumHeight: 400
+    maximumWidth: 300
+    maximumHeight: 400
     title: qsTr("远程控制")
-    color: "gainsboro"
-
-    property bool connected: false
+    color: "white"
 
     //验证是否是正确ip 格式xx.xxx.xxx.xxx
     function validateIP(ip) {
@@ -55,9 +53,9 @@ Window {
                 }
 
                 font.bold: true
-                font.pixelSize: 12
+                font.pixelSize: 14
 
-                placeholderText: "127.0.0.1"
+                text: "127.0.0.1"
             }
         }
 
@@ -89,7 +87,7 @@ Window {
                 font.bold: true
                 font.pixelSize: 14
 
-                placeholderText: "10086"
+                text: "10086"
             }
         }
 
@@ -125,12 +123,15 @@ Window {
                         console.log("Valid Port:", editPort.text)
                         if (viewbridge.handleLink(editIp.text,
                                                        editPort.text)) {
+                            //连接成功
                             btnUnShare.enabled = false
                             btnShare.enabled = false
                             btnLink.enabled = false
                             mainPage.show()
-
                             logPage.hide()
+                        }else{
+                            //连接失败
+                            dialogs.connectFailed.open()
                         }
                     } else {
                         dialogs.textError.open()
@@ -158,20 +159,10 @@ Window {
 
                 text: "共享屏幕"
                 onClicked: {
-                    if (validateIP(editIp.text) && validatePort(
-                                editPort.text)) {
-                        //IP,port格式正确则传入后端
-                        console.log("Valid IP address:", editIp.text)
-                        console.log("Valid Port:", editPort.text)
-                        if (viewbridge.handlerShare()) {
-                            btnUnShare.enabled = true
-                            btnShare.enabled = false
-                            btnLink.enabled = false
-
-                        }
-                    } else {
-                        dialogs.textError.open()
-                    }
+                    viewbridge.handlerShare()
+                    btnUnShare.enabled = true
+                    btnShare.enabled = false
+                    btnLink.enabled = false
                 }
             }
 
@@ -193,7 +184,7 @@ Window {
 
                 text: "关闭共享"
                 onClicked: {
-                    viewbridge.handleUnShare()
+                    viewbridge.handleCloseShare()
                     btnUnShare.enabled = false
                     btnShare.enabled = true
                     btnLink.enabled = true
@@ -206,5 +197,44 @@ Window {
     }
     MainPage {
         id: mainPage
+        onClosing: {
+            dialogs.debugDialog.open()
+            viewbridge.handleClientClose()
+            logPage.show()
+            mainPage.hide()
+            btnUnShare.enabled = false
+            btnShare.enabled = true
+            btnLink.enabled = true
+        }
     }
+
+    Connections{
+        target: viewbridge
+        onAcceptInfo: (info)=>{
+            if(info === true){
+                dialogs.acceptSuccess.open();
+            }
+            else{
+                dialogs.acceptFailed.open();
+                btnUnShare.enabled = false
+                btnShare.enabled = true
+                btnLink.enabled = true
+            }
+        }
+        onConnectSeverOver:{
+            dialogs.connectOver.open()
+            btnUnShare.enabled = false
+            btnShare.enabled = true
+            btnLink.enabled = true
+        }
+        onConnectClientOver:{
+            dialogs.connectOver.open()
+            logPage.show()
+            mainPage.hide()
+            btnUnShare.enabled = false
+            btnShare.enabled = true
+            btnLink.enabled = true
+        }
+    }
+
 }

@@ -10,43 +10,6 @@ ApplicationWindow {
     minimumHeight: viewbridge.getImgHeight()
     maximumHeight: viewbridge.getImgHeight()
 
-    // menuBar: MenuBar {
-    //     Menu {
-    //         title: qsTr("Setting")
-    //         MenuItem {
-    //             action: actions.stop
-    //         }
-
-    //         MenuItem {
-    //             action: actions.quit
-    //         }
-    //     }
-    //     Menu {
-    //         title: qsTr("Help")
-    //         MenuItem {
-    //             action: actions.about
-    //         }
-    //     }
-    // }
-
-    // header: ToolBar {
-    //     id: toolbar
-    //     RowLayout {
-
-    //         ToolButton {
-    //             action: actions.stop
-    //         }
-
-    //         ToolButton {
-    //             action: actions.quit
-    //         }
-    //     }
-    // }
-
-    // Actions {
-    //     id: actions
-    //     about.onTriggered: dialogs.about.open()
-    // }
     Dialogs {
         id: dialogs
     }
@@ -54,10 +17,4 @@ ApplicationWindow {
     Content {
         id: content
     }
-    onClosing: viewbridge.handleClientClose()
-
-    // Component.onCompleted: {
-    //     root.width = viewbridge.getImgWidth()
-    //     root.height = viewbridge.getImgHeight()
-    // }
 }

@@ -22,9 +22,9 @@ public:
 
     ImageProvider *m_imageprovider;
     CenterControl *_cctrl;
-    ViewControl *_vctrl;
+    ViewControl *_vctrl = nullptr;
 
-    void closeEvent(); //client关闭
+    void setViewControl(ViewControl *vctrl);
 
     void mouseMoveEvent(QMouseEvent *event);    //鼠标移动
     void mouseReleaseEvent(QMouseEvent *event); //鼠标点击
@@ -32,13 +32,12 @@ public:
 signals:
     void needUpdate();
     void acceptInfo(bool);  //true accept连接成功 false accept连接失败
-    void connectInfo(bool); //link连接失败 或 失败
 
     void connectSeverOver();  //连接被对方关闭
     void connectClientOver(); //连接被对方关闭
 
 public slots:
-    bool handlerShare();                               //处理共享
+    void handlerShare();                               //处理共享
     bool handleLink(QString textIP, QString textPort); //
     void handleCloseShare();
     void handleClientClose();

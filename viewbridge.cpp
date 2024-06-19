@@ -12,7 +12,6 @@ ViewBridge::ViewBridge(QObject *parent)
 {
     _cctrl = qobject_cast<CenterControl *>(parent);
     m_imageprovider = new ImageProvider;
-    QTimer *timer = new QTimer(this);
 }
 
 ViewBridge::~ViewBridge()
@@ -37,11 +36,15 @@ void ViewBridge::updatePixmap(QPixmap pixmap)
     emit needUpdate();
 }
 
+void ViewBridge::setViewControl(ViewControl *vctrl)
+{
+    _vctrl = vctrl;
+}
+
 //处理ip,port是否连接成功，成功则返回true
 bool ViewBridge::handleLink(QString textIP, QString textPort)
 {
-    _cctrl->linkPc(textIP, textPort.toUShort());
-    return true;
+    return _cctrl->linkPc(textIP, textPort.toUShort());
 }
 
 void ViewBridge::handleCloseShare()
@@ -51,12 +54,12 @@ void ViewBridge::handleCloseShare()
 
 void ViewBridge::handleClientClose()
 {
-    // _vctrl->showCCtrl();
+    if (_vctrl == nullptr)
+        return;
     _vctrl->closeConnect();
 }
 
-bool ViewBridge::handlerShare()
+void ViewBridge::handlerShare()
 {
     _cctrl->sharePc();
-    return true;
 }

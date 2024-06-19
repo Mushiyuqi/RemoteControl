@@ -26,11 +26,9 @@ signals:
 private:
     explicit CenterControl(QObject *parent = nullptr);
     ~CenterControl();
-    void linkPc(QString &ip, unsigned short port);
+    bool linkPc(QString &ip, unsigned short port);
     void sharePc();
     void closeSharePc();
-    //此函数返回一个 StandardButton 值
-    int messageBox(QString title = "", QString text = "");
 
 private:
     ViewBridge *_viewBridge;

@@ -29,10 +29,10 @@ CenterControl::CenterControl(QObject *parent)
                 m_connectSuccess = true;
                 //开启接收事件信息
                 start();
-                //messageBox("SUCCESS", "连接成功.");
+                emit _viewBridge->acceptInfo(true);
             } else {
                 m_connectSuccess = false;
-                //messageBox("ERROR", "连接失败.");
+                emit _viewBridge->acceptInfo(false);
             }
         },
         Qt::QueuedConnection);
@@ -44,6 +44,7 @@ CenterControl::CenterControl(QObject *parent)
         this,
         [this]() {
             m_connectSuccess = false;
+            emit _viewBridge->connectSeverOver();
         },
         Qt::QueuedConnection);
 }
@@ -75,40 +76,29 @@ ViewBridge *CenterControl::viewBridge()
     return _viewBridge;
 }
 
-int CenterControl::messageBox(QString title, QString text)
-{
-    QMessageBox errMsg;
-    errMsg.setWindowTitle(title);
-    errMsg.setText(text);
-    errMsg.setStandardButtons(QMessageBox::Ok);
-    errMsg.setDefaultButton(QMessageBox::Ok);
-    return errMsg.exec();
-}
-
-void CenterControl::linkPc(QString &ip, unsigned short port)
+bool CenterControl::linkPc(QString &ip, unsigned short port)
 {
     std::shared_ptr<CSession> session = _cmg->startConnect(ip, port);
 
     //连接失败
     if (session == nullptr) {
-        //messageBox("ERROR", "Connect Error !\n 请重试.");
-        return;
+        return false;
     }
     //连接成功
     _vctrl = std::make_shared<ViewControl>(session, this, _viewBridge);
+    _viewBridge->setViewControl(_vctrl.get());
     //连接断开
     connect(
         _vctrl.get(),
         &ViewControl::connectOver,
         this,
         [this]() {
+            _viewBridge->setViewControl(nullptr);
             _vctrl = nullptr;
-            // _widget->setEnabled(true);
-            // messageBox("MESSAGE", "Connect Error !\n 连接以断开.");
+            emit _viewBridge->connectClientOver();
         },
         Qt::QueuedConnection);
-    // _widget->setEnabled(false);
-    // _vctrl->_viewWindow->show();
+    return true;
 }
 
 void CenterControl::sharePc()
@@ -124,7 +114,6 @@ void CenterControl::closeSharePc()
     } else {
         _session = nullptr;
         _cmg->cancelAccept();
-        // _widget->initialBtn();
     }
     m_connectSuccess = false;
 }
@@ -134,11 +123,6 @@ void CenterControl::run()
     //创建事件处理器 确保start创建的线程和pEvent在一起
     PEvent pEvent;
     while (1) {
-        // QMutexLocker<QMutex> lockerThis(&m_mutex);
-        // //本端关闭
-        // if (m_threadStatus == TStatus::Err)
-        //     break;
-
         QMutexLocker<QMutex> lockerSession(&(_session->m_recvDataLock));
         _session->m_waiter.wait(&(_session->m_recvDataLock));
 
