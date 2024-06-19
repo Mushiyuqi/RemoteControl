@@ -7,12 +7,12 @@ Item {
         id: _image
         anchors.fill: parent
         source: "image://img"
-        fillMode:Image.PreserveAspectFit
+        fillMode: Image.PreserveAspectFit
         cache: false
     }
     Connections {
         target: viewbridge
-        onNeedUpdate: {
+        function onNeedUpdate() {
             console.log("qml端重载图片")
             image.source = "image://img/" + Math.random()
         }

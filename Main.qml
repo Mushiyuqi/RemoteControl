@@ -121,15 +121,14 @@ Window {
                         //IP,port格式正确则传入后端
                         console.log("Valid IP address:", editIp.text)
                         console.log("Valid Port:", editPort.text)
-                        if (viewbridge.handleLink(editIp.text,
-                                                       editPort.text)) {
+                        if (viewbridge.handleLink(editIp.text, editPort.text)) {
                             //连接成功
                             btnUnShare.enabled = false
                             btnShare.enabled = false
                             btnLink.enabled = false
                             mainPage.show()
                             logPage.hide()
-                        }else{
+                        } else {
                             //连接失败
                             dialogs.connectFailed.open()
                         }
@@ -208,26 +207,25 @@ Window {
         }
     }
 
-    Connections{
+    Connections {
         target: viewbridge
-        onAcceptInfo: (info)=>{
-            if(info === true){
-                dialogs.acceptSuccess.open();
-            }
-            else{
-                dialogs.acceptFailed.open();
+        function onAcceptInfo(info) {
+            if (info === true) {
+                dialogs.acceptSuccess.open()
+            } else {
+                dialogs.acceptFailed.open()
                 btnUnShare.enabled = false
                 btnShare.enabled = true
                 btnLink.enabled = true
             }
         }
-        onConnectSeverOver:{
+        function onConnectSeverOver() {
             dialogs.connectOver.open()
             btnUnShare.enabled = false
             btnShare.enabled = true
             btnLink.enabled = true
         }
-        onConnectClientOver:{
+        function onConnectClientOver() {
             dialogs.connectOver.open()
             logPage.show()
             mainPage.hide()
@@ -236,5 +234,4 @@ Window {
             btnLink.enabled = true
         }
     }
-
 }
