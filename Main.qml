@@ -191,13 +191,14 @@ Window {
             }
         }
     }
+
     Dialogs {
         id: dialogs
     }
+
     MainPage {
         id: mainPage
         onClosing: {
-            dialogs.debugDialog.open()
             viewbridge.handleClientClose()
             logPage.show()
             mainPage.hide()

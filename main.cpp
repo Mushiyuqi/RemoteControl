@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     CenterControl &centerControl = CenterControl::instance();
     engine.rootContext()->setContextProperty("viewbridge", centerControl.viewBridge());
-    engine.addImageProvider(QLatin1String("img"), centerControl.viewBridge()->getImageProvider());
+    engine.addImageProvider("img", centerControl.viewBridge()->getImageProvider());
 
     QObject::connect(
         &engine,
@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
         &app,
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
-    engine.load(QUrl(QStringLiteral("../../Main.qml")));
+    engine.loadFromModule("remotecontrol", "Main");
 
     return app.exec();
 }

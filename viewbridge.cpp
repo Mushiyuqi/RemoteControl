@@ -21,13 +21,14 @@ ViewBridge::~ViewBridge()
 
 int ViewBridge::getImgWidth()
 {
-    return m_imageprovider->_width;
+    return m_imageprovider->m_width;
 }
 
 int ViewBridge::getImgHeight()
 {
-    return m_imageprovider->_height;
+    return m_imageprovider->m_height;
 }
+
 //更新图片源
 void ViewBridge::updatePixmap(QPixmap pixmap)
 {

@@ -35,8 +35,24 @@ qt_add_executable(
   Dialogs.qml
   Actions.qml
   Content.qml
-  imageprovider.h imageprovider.cpp
-  viewbridge.h viewbridge.cpp)
+  imageprovider.h
+  imageprovider.cpp
+  viewbridge.h
+  viewbridge.cpp)
+
+qt_add_qml_module(
+  RemoteControl
+  URI
+  remotecontrol
+  VERSION
+  1.0
+  QML_FILES
+  Main.qml
+  Dialogs.qml
+  Content.qml
+  Actions.qml
+  MainPage.qml
+  SOURCES)
 
 target_include_directories(RemoteControl PRIVATE .)
 
