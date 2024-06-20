@@ -13,6 +13,8 @@ Window {
     title: qsTr("远程控制")
     color: "white"
 
+
+
     //验证是否是正确ip 格式xx.xxx.xxx.xxx
     function validateIP(ip) {
         var regex = /^([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])$/

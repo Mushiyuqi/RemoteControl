@@ -14,9 +14,11 @@ ViewBridge::ViewBridge(QObject *parent)
     m_imageprovider = new ImageProvider;
 }
 
-ViewBridge::~ViewBridge()
+ViewBridge::~ViewBridge(){}
+
+ImageProvider *ViewBridge::getImageProvider()
 {
-    delete m_imageprovider;
+    return m_imageprovider;
 }
 
 int ViewBridge::getImgWidth()
