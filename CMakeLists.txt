@@ -36,7 +36,8 @@ qt_add_executable(
   Actions.qml
   Content.qml
   imageprovider.h imageprovider.cpp
-  viewbridge.h viewbridge.cpp)
+  viewbridge.h viewbridge.cpp
+  MyButton.qml)
 
 target_include_directories(RemoteControl PRIVATE .)
 

@@ -31,6 +31,7 @@ Item {
         id: _connectOver
         buttons: MessageDialog.Ok
         text: "连接被断开"
+
         informativeText: ""
     }
     MessageDialog {

@@ -100,20 +100,8 @@ Window {
         // 连接按钮和分享屏幕按钮
         RowLayout {
             //连接按钮
-            Button {
+            MyButton {
                 id: btnLink
-                Layout.preferredWidth: 80
-                Layout.preferredHeight: 30
-
-                background: Rectangle {
-                    color: "lightskyblue"
-                    radius: 5
-                    border.color: "skyblue"
-                    border.width: 3
-                }
-
-                font.pixelSize: 16
-
                 text: "连接"
                 onClicked: {
                     if (validateIP(editIp.text) && validatePort(
@@ -142,20 +130,8 @@ Window {
         RowLayout {
             spacing: 35
             //共享屏幕按钮
-            Button {
+            MyButton {
                 id: btnShare
-                Layout.preferredWidth: 80
-                Layout.preferredHeight: 30
-
-                background: Rectangle {
-                    color: "lightskyblue"
-                    radius: 5
-                    border.color: "skyblue"
-                    border.width: 3
-                }
-
-                font.pixelSize: 16
-
                 text: "共享屏幕"
                 onClicked: {
                     viewbridge.handlerShare()
@@ -166,21 +142,9 @@ Window {
             }
 
             //取消分享按钮
-            Button {
+            MyButton {
                 id: btnUnShare
                 enabled: false
-                Layout.preferredWidth: 80
-                Layout.preferredHeight: 30
-
-                background: Rectangle {
-                    color: "lightskyblue"
-                    radius: 5
-                    border.color: "skyblue"
-                    border.width: 3
-                }
-
-                font.pixelSize: 16
-
                 text: "关闭共享"
                 onClicked: {
                     viewbridge.handleCloseShare()
