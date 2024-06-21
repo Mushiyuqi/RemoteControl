@@ -69,6 +69,8 @@ void ViewControl::run()
 
 void ViewControl::mouseMoveAcction(PositionNode p)
 {
+    if (_session->status() == CSession::SocketStatus::Err)
+        return;
     //转换为json字符串
     QJsonDocument jsonDocument(p.toJson());
     QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
@@ -76,6 +78,8 @@ void ViewControl::mouseMoveAcction(PositionNode p)
 }
 void ViewControl::mouseClickedAcction(PositionNode p)
 {
+    if (_session->status() == CSession::SocketStatus::Err)
+        return;
     //转换为json字符串
     QJsonDocument jsonDocument(p.toJson());
     QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);

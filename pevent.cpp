@@ -50,7 +50,6 @@ bool PEvent::toDo(PositionNode &pNode)
 {
     if (pNode.m_type == PositionNode::Type::mouseLeftRelease
         || pNode.m_type == PositionNode::Type::mouseRightRelease) {
-
         //移动 左键 右键
         if (pNode.m_type == PositionNode::Type::mouseLeftRelease) {
             m_process.start("xdotool",
