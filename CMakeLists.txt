@@ -39,8 +39,7 @@ qt_add_executable(
   imageprovider.cpp
   viewbridge.h
   viewbridge.cpp
-        MyButton.qml
-)
+  MyButton.qml)
 
 qt_add_qml_module(
   RemoteControl
@@ -53,8 +52,11 @@ qt_add_qml_module(
   Dialogs.qml
   Content.qml
   Actions.qml
-  MainPage.qml MyButton.qml
-  SOURCES)
+  MainPage.qml
+  MyButton.qml
+  SOURCES
+  RESOURCES
+  logo.qrc)
 
 target_include_directories(RemoteControl PRIVATE .)
 

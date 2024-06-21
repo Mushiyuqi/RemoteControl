@@ -2,11 +2,11 @@ import QtQuick 2.12
 
 Rectangle {
     id: root
-    width: text.width + widthMargin * 2
-    height: text.height + heightMargin * 2
+    width: 150
+    height: 35
     radius: 6
-    color: hovered ? Qt.darker("lightskyblue", 1.18) : "lightskyblue"
-    border.color: Qt.darker("lightskyblue", 1.18)
+    color: hovered ? Qt.darker("#49b6d7", 1.18) : "#49b6d7"
+    border.color: Qt.darker("#49b6d7", 1.18)
     border.width: 1
     property alias text: text.text
     property alias fontSize: text.font.pointSize
@@ -23,9 +23,10 @@ Rectangle {
 
     Text {
         id: text
-
         x: widthMargin
         y: heightMargin
+        horizontalAlignment: Qt.AlignHCenter // 水平居中
+        verticalAlignment: Qt.AlignVCenter // 垂直居中
     }
 
     MouseArea {

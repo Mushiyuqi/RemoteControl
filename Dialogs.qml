@@ -22,6 +22,7 @@ Item {
     }
 
     MessageDialog {
+
         id: _textError
         buttons: MessageDialog.Ok
         text: "IP或Port输出错误"
@@ -35,12 +36,14 @@ Item {
         informativeText: ""
     }
     MessageDialog {
+
         id: _connectFailed
         buttons: MessageDialog.Ok
         text: "连接失败"
         informativeText: ""
     }
     MessageDialog {
+
         id: _acceptSuccess
         buttons: MessageDialog.Ok
         text: "共享成功"

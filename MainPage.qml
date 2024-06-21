@@ -4,6 +4,7 @@ import QtQuick.Layouts
 
 ApplicationWindow {
     id: root
+
     minimumWidth: viewbridge.getImgWidth() * 0.4
     minimumHeight: viewbridge.getImgHeight() * 0.4
     maximumWidth: viewbridge.getImgWidth() * 0.4

@@ -2,109 +2,184 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 
 Window {
+
     id: logPage
     visible: true
-    minimumWidth: 300
+    minimumWidth: 600
     minimumHeight: 400
-    maximumWidth: 300
+    maximumWidth: 600
     maximumHeight: 400
     title: qsTr("远程控制")
-    color: "white"
 
-
-
-    //验证是否是正确ip 格式xx.xxx.xxx.xxx
+    // 验证是否是正确ip 格式xx.xxx.xxx.xxx
     function validateIP(ip) {
         var regex = /^([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])$/
         return regex.test(ip)
     }
-
-    //验证是否是正确port 格式1-5位数
+    // 验证是否是正确port 格式1-5位数
     function validatePort(port) {
         var regex = /^([1-9]\d{0,4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-3][0-5])$/
         return regex.test(port)
     }
+    Rectangle {
 
-    //mainPage的content
-    ColumnLayout {
+        //外背景
+        id: background
+        anchors.fill: parent
+        gradient: Gradient {
+            GradientStop {
+                position: 0.0
+                color: "#0fa1d8"
+            }
+            GradientStop {
+                position: 0.2
+                color: "#49b6d7"
+            }
+            GradientStop {
+                position: 0.66
+                color: "#81d2d8"
+            }
+            GradientStop {
+                position: 1.0
+                color: "#49b6d7"
+            }
+        }
+    }
+
+    RectangularGlow {
+        //发光边缘
+        id: effect
+        anchors.fill: rect
+        glowRadius: 10
+        spread: 0.2
+        color: "white"
+        cornerRadius: rect.radius + glowRadius
+    }
+
+    Rectangle {
+        //内白板
+        id: rect
+        color: "white"
         anchors.centerIn: parent
-        // IP部分
-        RowLayout {
+        width: Math.round(parent.width / 1.3)
+        height: Math.round(parent.height / 1.4)
+        radius: 25
+        opacity: 0.9
+        //内容
+        ColumnLayout {
+            //左半部分
+            id: leftlayout
+            RowLayout {
+                //标题
+                spacing: 20
+                Layout.margins: 20
+                Image {
+                    //logo
+                    id: applogo
+                    Layout.preferredWidth: 70
+                    Layout.preferredHeight: 70
+                    source: "qrc:/logo/communicate.svg"
+                    fillMode: Image.PreserveAspectCrop
+                    smooth: true
+                }
+                Text {
+                    //title
+                    id: apptitle
+                    Layout.preferredWidth: text.width + 20
+                    Layout.preferredHeight: text.height + 20
+                    text: qsTr("远程控制")
+                    font.family: "仿宋"
+                    font.pixelSize: 25
+                }
+            }
             Label {
+                //label ip
                 Layout.preferredWidth: 40
-                Layout.preferredHeight: 30
+                Layout.leftMargin: 17
+                Layout.topMargin: 10
                 text: "IP:"
-
                 font.bold: true
                 font.pixelSize: 16
-
                 horizontalAlignment: Qt.AlignHCenter // 水平居中
                 verticalAlignment: Qt.AlignVCenter // 垂直居中
             }
-            TextField {
-                id: editIp
-                Layout.preferredWidth: 150
-                Layout.preferredHeight: 30
-                background: Rectangle {
-                    color: "lightskyblue"
-                    radius: 5
-                    border.color: "skyblue"
-                    border.width: 3
+            RowLayout {
+                // Layout.margins: 20
+                Image {
+                    Layout.leftMargin: 16
+                    fillMode: Image.PreserveAspectFit
+                    horizontalAlignment: Qt.AlignHCenter // 水平居中
+                    verticalAlignment: Qt.AlignVCenter // 垂直居中
+                    source: "qrc:/logo/video.svg"
                 }
+                TextField {
+                    id: editIp
+                    Layout.preferredWidth: 150
+                    Layout.preferredHeight: 30
+                    background: Rectangle {
+                        color: "#49b6d7"
+                        radius: 5
+                        border.color: Qt.darker("#49b6d7", 1.18)
+                        border.width: 3
+                    }
 
-                font.bold: true
-                font.pixelSize: 14
+                    font.bold: true
+                    font.pixelSize: 14
 
-                text: "127.0.0.1"
+                    text: "127.0.0.1"
+                }
             }
-        }
-
-        // Port部分
-        RowLayout {
+            // Port部分
             Label {
                 Layout.preferredWidth: 40
                 Layout.preferredHeight: 30
-
+                Layout.leftMargin: 17
                 text: "port:"
-
                 font.bold: true
                 font.pixelSize: 14
 
                 horizontalAlignment: Qt.AlignHCenter // 水平居中
                 verticalAlignment: Qt.AlignVCenter // 垂直居中
             }
-            TextField {
-                id: editPort
-                Layout.preferredWidth: 150
-                Layout.preferredHeight: 30
-                background: Rectangle {
-                    color: "lightskyblue"
-                    radius: 5
-                    border.color: "skyblue"
-                    border.width: 3
+            RowLayout {
+                Image {
+                    Layout.leftMargin: 15
+                    fillMode: Image.PreserveAspectFit
+                    horizontalAlignment: Qt.AlignHCenter // 水平居中
+                    verticalAlignment: Qt.AlignVCenter // 垂直居中
+                    source: "qrc:/logo/video.svg"
                 }
+                TextField {
+                    id: editPort
+                    Layout.preferredWidth: 150
+                    Layout.preferredHeight: 30
+                    background: Rectangle {
+                        color: "#49b6d7"
+                        radius: 5
+                        border.color: Qt.darker("#49b6d7", 1.18)
+                        border.width: 3
+                    }
 
-                font.bold: true
-                font.pixelSize: 14
+                    font.bold: true
+                    font.pixelSize: 14
 
-                text: "10086"
+                    text: "10086"
+                }
             }
         }
 
-        RowLayout {
-            Rectangle {
-                Layout.preferredHeight: 30
-            }
-        }
-
-        // 连接按钮和分享屏幕按钮
-        RowLayout {
+        ColumnLayout {
+            //右半部分
+            id: rightlayout
+            anchors.left: leftlayout.right
             //连接按钮
             MyButton {
                 id: btnLink
                 text: "连接"
+                Layout.margins: 30
                 onClicked: {
                     if (validateIP(editIp.text) && validatePort(
                                 editPort.text)) {
@@ -127,25 +202,43 @@ Window {
                     }
                 }
             }
-        }
+            Rectangle {
+                //分隔
+                Layout.topMargin: 10
+                Layout.bottomMargin: 10
+                Layout.leftMargin: 30
+                Layout.rightMargin: 30
+                width: btnShare.width
+                height: 1
+                color: "lightgray"
+            }
 
-        RowLayout {
-            spacing: 35
             //共享屏幕按钮
             MyButton {
                 id: btnShare
+                Layout.topMargin: 30
+                Layout.bottomMargin: 10
+                Layout.leftMargin: 30
                 text: "共享屏幕"
                 onClicked: {
-                    viewbridge.handlerShare()
-                    btnUnShare.enabled = true
-                    btnShare.enabled = false
-                    btnLink.enabled = false
+                    if (validateIP(editIp.text) && validatePort(
+                                editPort.text)) {
+                        viewbridge.handlerShare()
+                        btnUnShare.enabled = true
+                        btnShare.enabled = false
+                        btnLink.enabled = false
+                    } else {
+                        dialogs.textError.open()
+                    }
                 }
             }
 
             //取消分享按钮
             MyButton {
                 id: btnUnShare
+                Layout.rightMargin: 30
+                Layout.topMargin: 10
+                Layout.leftMargin: 30
                 enabled: false
                 text: "关闭共享"
                 onClicked: {
@@ -157,7 +250,6 @@ Window {
             }
         }
     }
-
     Dialogs {
         id: dialogs
     }
