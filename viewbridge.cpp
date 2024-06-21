@@ -5,6 +5,7 @@
 #include <QTimer>
 #include "centercontrol.h"
 #include "imageprovider.h"
+#include "pevent.h"
 #include "viewcontrol.h"
 
 ViewBridge::ViewBridge(QObject *parent)
@@ -65,4 +66,36 @@ void ViewBridge::handleClientClose()
 void ViewBridge::handlerShare()
 {
     _cctrl->sharePc();
+}
+
+void ViewBridge::mouseLeftReleaseEvent(int x, int y, int width, int height)
+{
+    if (_vctrl == nullptr)
+        return;
+    PositionNode pNode(x,
+                       y,
+                       (double) x / width,
+                       (double) y / height,
+                       PositionNode::Type::mouseLeftRelease);
+    _vctrl->mouseClickedAcction(pNode);
+}
+
+void ViewBridge::mouseRightReleaseEvent(int x, int y, int width, int height)
+{
+    if (_vctrl == nullptr)
+        return;
+    PositionNode pNode(x,
+                       y,
+                       (double) x / width,
+                       (double) y / height,
+                       PositionNode::Type::mouseRightRelease);
+    _vctrl->mouseClickedAcction(pNode);
+}
+
+void ViewBridge::mouseMoveEvent(int x, int y, int width, int height)
+{
+    if (_vctrl == nullptr)
+        return;
+    PositionNode pNode(x, y, (double) x / width, (double) y / height, PositionNode::Type::mouseMove);
+    _vctrl->mouseMoveAcction(pNode);
 }

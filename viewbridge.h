@@ -26,9 +26,6 @@ public:
 
     void setViewControl(ViewControl *vctrl);
 
-    void mouseMoveEvent(QMouseEvent *event);    //鼠标移动
-    void mouseReleaseEvent(QMouseEvent *event); //鼠标点击
-
 signals:
     void needUpdate();
     void acceptInfo(bool);  //true accept连接成功 false accept连接失败
@@ -41,4 +38,9 @@ public slots:
     bool handleLink(QString textIP, QString textPort); //
     void handleCloseShare();
     void handleClientClose();
+
+    //鼠标事件
+    void mouseLeftReleaseEvent(int x, int y, int width, int height);
+    void mouseRightReleaseEvent(int x, int y, int width, int height);
+    void mouseMoveEvent(int x, int y, int width, int height);
 };
