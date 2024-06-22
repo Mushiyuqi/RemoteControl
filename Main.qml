@@ -300,10 +300,15 @@ Window {
         visible: true
         icon.source: "qrc:/logo/communicate.png"
         onActivated: {
-            if (logPage.visible === true && mainPage.visible === false)
+            if (logPage.visible === true && mainPage.visible === false) {
                 logPage.show()
-            else if (logPage.visible === false && mainPage.visible === true)
+                logPage.raise()
+                logPage.requestActivate()
+            } else if (logPage.visible === false && mainPage.visible === true) {
                 mainPage.show()
+                mainPage.raise()
+                mainPage.requestActivate()
+            }
         }
     }
 }
