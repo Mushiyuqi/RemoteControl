@@ -26,7 +26,6 @@ Window {
         return regex.test(port)
     }
     Rectangle {
-
         //外背景
         id: background
         anchors.fill: parent
@@ -74,7 +73,7 @@ Window {
             //左半部分
             id: leftlayout
             RowLayout {
-                //标题
+                //app标题
                 spacing: 20
                 Layout.margins: 20
                 Image {
@@ -92,31 +91,30 @@ Window {
                     Layout.preferredWidth: text.width + 20
                     Layout.preferredHeight: text.height + 20
                     text: qsTr("远程控制")
-                    font.family: "仿宋"
+                    font.family: "KaiTi"
                     font.pixelSize: 25
                 }
             }
             Label {
-                //label ip
+                //IP部分
                 Layout.preferredWidth: 40
                 Layout.leftMargin: 17
                 Layout.topMargin: 10
                 text: "IP:"
                 font.bold: true
                 font.pixelSize: 16
-                horizontalAlignment: Qt.AlignHCenter // 水平居中
-                verticalAlignment: Qt.AlignVCenter // 垂直居中
             }
             RowLayout {
                 Image {
+                    //iplogo
                     Layout.leftMargin: 16
                     Layout.rightMargin: 1
                     fillMode: Image.PreserveAspectFit
-                    horizontalAlignment: Qt.AlignHCenter // 水平居中
-                    verticalAlignment: Qt.AlignVCenter // 垂直居中
+
                     source: "qrc:/logo/video.png"
                 }
                 TextField {
+                    //ip输入框
                     id: editIp
                     Layout.preferredWidth: 150
                     Layout.preferredHeight: 30
@@ -124,7 +122,7 @@ Window {
                         color: "#49b6d7"
                         radius: 5
                         border.color: Qt.darker("#49b6d7", 1.18)
-                        border.width: 3
+                        border.width: 2
                     }
 
                     font.bold: true
@@ -147,6 +145,7 @@ Window {
             }
             RowLayout {
                 Image {
+                    //port图标
                     Layout.leftMargin: 16
                     Layout.rightMargin: 1
                     fillMode: Image.PreserveAspectFit
@@ -155,6 +154,7 @@ Window {
                     source: "qrc:/logo/video.png"
                 }
                 TextField {
+                    //port输入框
                     id: editPort
                     Layout.preferredWidth: 150
                     Layout.preferredHeight: 30
@@ -162,7 +162,7 @@ Window {
                         color: "#49b6d7"
                         radius: 5
                         border.color: Qt.darker("#49b6d7", 1.18)
-                        border.width: 3
+                        border.width: 2
                     }
 
                     font.bold: true
@@ -180,8 +180,10 @@ Window {
             //连接按钮
             MyButton {
                 id: btnLink
-                text: "连接"
+                text: "连 接"
                 Layout.margins: 30
+                Layout.preferredWidth: 150
+                Layout.preferredHeight: 35
                 onClicked: {
                     if (validateIP(editIp.text) && validatePort(
                                 editPort.text)) {
@@ -210,7 +212,7 @@ Window {
                 Layout.bottomMargin: 10
                 Layout.leftMargin: 30
                 Layout.rightMargin: 30
-                width: btnShare.width
+                Layout.preferredWidth: 150
                 height: 1
                 color: "lightgray"
             }
@@ -221,6 +223,8 @@ Window {
                 Layout.topMargin: 30
                 Layout.bottomMargin: 10
                 Layout.leftMargin: 30
+                Layout.preferredWidth: 150
+                Layout.preferredHeight: 35
                 text: "共享屏幕"
                 onClicked: {
                     if (validateIP(editIp.text) && validatePort(
@@ -235,12 +239,14 @@ Window {
                 }
             }
 
-            //取消分享按钮
+            //关闭共享按钮
             MyButton {
                 id: btnUnShare
                 Layout.rightMargin: 30
                 Layout.topMargin: 10
                 Layout.leftMargin: 30
+                Layout.preferredWidth: 150
+                Layout.preferredHeight: 35
                 enabled: false
                 text: "关闭共享"
                 onClicked: {
