@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt.labs.platform
 
 ApplicationWindow {
     id: root
@@ -16,7 +17,7 @@ ApplicationWindow {
 
     Content {
         id: content
-        function onUpDateSize(){
+        function onUpDateSize() {
             root.minimumWidth = viewbridge.getImgWidth() * 0.4
             root.minimumHeight = viewbridge.getImgHeight() * 0.4
             root.maximumWidth = viewbridge.getImgWidth() * 0.4

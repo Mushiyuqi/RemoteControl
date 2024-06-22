@@ -3,6 +3,7 @@ import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
+import Qt.labs.platform
 
 Window {
 
@@ -81,7 +82,7 @@ Window {
                     id: applogo
                     Layout.preferredWidth: 70
                     Layout.preferredHeight: 70
-                    source: "qrc:/logo/communicate.svg"
+                    source: "qrc:/logo/communicate.png"
                     fillMode: Image.PreserveAspectCrop
                     smooth: true
                 }
@@ -107,13 +108,13 @@ Window {
                 verticalAlignment: Qt.AlignVCenter // 垂直居中
             }
             RowLayout {
-                // Layout.margins: 20
                 Image {
                     Layout.leftMargin: 16
+                    Layout.rightMargin: 1
                     fillMode: Image.PreserveAspectFit
                     horizontalAlignment: Qt.AlignHCenter // 水平居中
                     verticalAlignment: Qt.AlignVCenter // 垂直居中
-                    source: "qrc:/logo/video.svg"
+                    source: "qrc:/logo/video.png"
                 }
                 TextField {
                     id: editIp
@@ -146,11 +147,12 @@ Window {
             }
             RowLayout {
                 Image {
-                    Layout.leftMargin: 15
+                    Layout.leftMargin: 16
+                    Layout.rightMargin: 1
                     fillMode: Image.PreserveAspectFit
                     horizontalAlignment: Qt.AlignHCenter // 水平居中
                     verticalAlignment: Qt.AlignVCenter // 垂直居中
-                    source: "qrc:/logo/video.svg"
+                    source: "qrc:/logo/video.png"
                 }
                 TextField {
                     id: editPort
@@ -291,6 +293,17 @@ Window {
             btnUnShare.enabled = false
             btnShare.enabled = true
             btnLink.enabled = true
+        }
+    }
+    //系统托盘
+    SystemTrayIcon {
+        visible: true
+        icon.source: "qrc:/logo/communicate.png"
+        onActivated: {
+            if (logPage.visible === true && mainPage.visible === false)
+                logPage.show()
+            else if (logPage.visible === false && mainPage.visible === true)
+                mainPage.show()
         }
     }
 }
