@@ -87,9 +87,11 @@ bool PEvent::toDo(PositionNode &pNode)
 }
 bool PEvent::KeyTodo(KeyNode &kNode) {
     if (kNode.m_type == KeyNode::Type::keyValue_A) {
-        QProcess process;
-        process.start("xdotool", QStringList() << "key" << "a");
-        process.waitForFinished();
+        m_process.start("xdotool",
+                        QStringList() << "key"
+                                      << "a");
+        m_process.waitForFinished();
+        qDebug() << "执行了a键";
     }
     return true;
 }

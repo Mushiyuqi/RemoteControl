@@ -88,7 +88,6 @@ void CSession::serverStart()
                         break;
                 }
                 size_t sendLen = _data->getSendData(_sendData);
-                std::cout << 1 << std::endl;
                 if (sendLen != -1) {
                     send(_sendData->data(), sendLen);
                 }
@@ -183,7 +182,7 @@ void CSession::send(char *msg, std::size_t sendLen)
         memcpy(_sendQue[_sendBack]->m_data, &sendLen, HEAD_LENGTH);// 将消息长度写入m_data
         memcpy(_sendQue[_sendBack]->m_data+ HEAD_LENGTH, msg, sendLen);// 将消息内容写入m_data
         _sendBack = (_sendBack + 1) % SEND_QUEUE_LEN;
-        std::cout << "sendLen is " << sendLen << std::endl;
+        //std::cout << "sendLen is " << sendLen << std::endl;
     }
 
     if (pending)
@@ -370,8 +369,8 @@ void CSession::handleRead(const boost::system::error_code &ec,
             }
         }
     } else {
-        std::cerr << "handle read failed, error code is " << ec.value() << ", message is "
-                  << ec.message() << std::endl;
+        //std::cerr << "handle read failed, error code is " << ec.value() << ", message is "
+        //          << ec.message() << std::endl;
         QMutexLocker<QMutex> locker(&m_socketSatusLock);
         m_socketStatus = SocketStatus::Err;
         m_waiter.wakeAll(); //唤醒等待数据的view
@@ -384,7 +383,7 @@ void CSession::handleWrite(const boost::system::error_code &ec,
 {
     if (!ec) {
         //对队列的增减，取元素加锁
-        std::cout << "handleWrite byt_transferred is " << byt_transferred << std::endl;
+        //std::cout << "handleWrite byt_transferred is " << byt_transferred << std::endl;
         QMutexLocker<QMutex> locker(&m_sendLock);
         _sendFront = (_sendFront + 1) % SEND_QUEUE_LEN;
         _currentSendingQueLen = (_sendBack - _sendFront + SEND_QUEUE_LEN) % SEND_QUEUE_LEN;
@@ -399,8 +398,8 @@ void CSession::handleWrite(const boost::system::error_code &ec,
                                            std::placeholders::_2,
                                            _selfShared));
     } else {
-        std::cerr << "handle write failed, error code is " << ec.value() << ", message is "
-                  << ec.message() << std::endl;
+        //std::cerr << "handle write failed, error code is " << ec.value() << ", message is "
+        //          << ec.message() << std::endl;
         QMutexLocker<QMutex> locker(&m_socketSatusLock);
         m_socketStatus = SocketStatus::Err;
     }
@@ -410,7 +409,7 @@ void CSession::handleData()
 {
     QMutexLocker locker(&m_recvDataLock);
     memcpy(&m_recvDataLen, _recvHeadNode->m_data, HEAD_LENGTH);
-    std::cout << "receive dataLen is " << m_recvDataLen << std::endl;
+    //std::cout << "receive dataLen is " << m_recvDataLen << std::endl;
     memcpy(m_recvData->data(), _recvMsgNode->m_data, m_recvDataLen);
     m_waiter.wakeAll();
 }

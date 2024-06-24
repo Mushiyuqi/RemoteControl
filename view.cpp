@@ -1,4 +1,5 @@
 #include "view.h"
+#include <QDebug>
 #include <QGuiApplication>
 #include <QJsonDocument>
 #include <QMouseEvent>
@@ -12,6 +13,7 @@ View::View(QWidget *parent)
 {
     setScaledContents(true);
     setMouseTracking(true);
+    setFocusPolicy(Qt::StrongFocus);
     QScreen* screen = QGuiApplication::primaryScreen();
     QPixmap pixmap = screen->grabWindow(0);
     setPixmap(pixmap.scaled(pixmap.size(), Qt::IgnoreAspectRatio));
@@ -23,7 +25,6 @@ void View::setControl(ViewControl *vctrl)
 }
 void View::mouseReleaseEvent(QMouseEvent *event)
 {
-
     if (_vctrl->_session->status() == CSession::SocketStatus::Err)
         return;
     PositionNode pNode(event->pos().x(),

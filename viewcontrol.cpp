@@ -1,4 +1,5 @@
 #include "viewcontrol.h"
+#include <QDebug>
 #include <QJsonDocument>
 #include <QMutex>
 #include <QMutexLocker>
@@ -96,5 +97,5 @@ void ViewControl::keyPressedAction(KeyNode k) {
     QJsonDocument jsonDocument(k.toJson());
     QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
     this->_session->send(jsonString.toStdString().data(), jsonString.length());
+    qDebug() << "执行了类viewcontrol.cpp里的keyPressedAction里的send函数";
 }
-

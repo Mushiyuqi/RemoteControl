@@ -8,6 +8,7 @@
 #include "viewcontrol.h"
 #include "viewwindow.h"
 #include "widget.h"
+#include <QDebug>
 #include <iostream>
 
 CenterControl::CenterControl(QObject *parent)
