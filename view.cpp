@@ -46,5 +46,13 @@ void View::mouseMoveEvent(QMouseEvent *event) {
                        (double) event->pos().y() / QLabel::height());
     pNode.m_type = PositionNode::Type::mouseMove;
 
-    _vctrl->mouseMoveAcction(pNode);
+    _vctrl->mouseMoveAction(pNode);
 }
+
+void View::keyPressEvent(QKeyEvent *event) {
+    if (_vctrl->_session->status() == CSession::SocketStatus::Err)
+        return;
+    KeyNode kNode(1); //A
+    _vctrl->keyPressedAction(kNode);
+}
+

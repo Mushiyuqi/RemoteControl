@@ -160,10 +160,14 @@ void CenterControl::run()
         QJsonObject jsonObject = jsonDocument.object();
 
         // 从QJsonObject构造PositionNode实例
-        PositionNode pNode = PositionNode::fromJson(jsonObject);
+        //PositionNode pNode = PositionNode::fromJson(jsonObject);
 
-        //做事件处理
-        pEvent.toDo(pNode);
+        //做鼠标事件处理
+        //pEvent.toDo(pNode);
+
+        //做键盘事件处理
+        KeyNode kNode = KeyNode::fromJson(jsonObject);
+        pEvent.KeyTodo(kNode);
     }
     //关闭session
     _session->close();

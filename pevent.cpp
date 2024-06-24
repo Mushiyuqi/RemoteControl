@@ -12,6 +12,21 @@ PositionNode::PositionNode(int x, int y, double px, double py, int type)
     , m_py(py)
     , m_type(type)
 {}
+KeyNode::KeyNode(int type)
+    : m_type(type)
+{}
+
+QJsonObject KeyNode::toJson() const {
+    QJsonObject obj;
+    obj["type"] = m_type;
+    return obj;
+}
+
+KeyNode KeyNode::fromJson(const QJsonObject &obj) {
+    int m_type = obj["type"].toInt();
+    return KeyNode(m_type);
+}
+
 
 QJsonObject PositionNode::toJson() const
 {
@@ -68,5 +83,13 @@ bool PEvent::toDo(PositionNode &pNode)
         m_process.waitForFinished(); // 等待命令完成
     }
 
+    return true;
+}
+bool PEvent::KeyTodo(KeyNode &kNode) {
+    if (kNode.m_type == KeyNode::Type::keyValue_A) {
+        QProcess process;
+        process.start("xdotool", QStringList() << "key" << "a");
+        process.waitForFinished();
+    }
     return true;
 }
