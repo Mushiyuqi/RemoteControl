@@ -78,24 +78,12 @@ void ViewControl::run()
     quit();
 }
 
-void ViewControl::mouseMoveAction(PositionNode p)
+void ViewControl::mouseAction(PositionNode p)
 {
     //转换为json字符串
-    //QJsonDocument jsonDocument(p.toJson());
-    //QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
-    //this->_session->send(jsonString.toStdString().data(), jsonString.length());
-}
-void ViewControl::mouseClickedAction(PositionNode p)
-{
-    //转换为json字符串
-    //QJsonDocument jsonDocument(p.toJson());
-    //QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
-    //this->_session->send(jsonString.toStdString().data(), jsonString.length());
-}
-
-void ViewControl::keyPressedAction(KeyNode k) {
-    QJsonDocument jsonDocument(k.toJson());
+    QJsonDocument jsonDocument(p.toJson());
     QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
     this->_session->send(jsonString.toStdString().data(), jsonString.length());
-    qDebug() << "keyPressedAction中send一次";
 }
+
+void ViewControl::keyAction(KeyNode k) {}

@@ -18,12 +18,16 @@ public:
     //事件类型
     enum Type {
         nullEvent = 0,
-        mouseLeftRelease = 1,
-        mouseRightRelease = 2,
-        mouseMove = 3,
-        mouseDouble = 4,
-        keyPress = 5,
-        keyRelease = 6
+        mouseLeftPress = 1,
+        mouseLeftRelease = 2,
+        mouseRightPress = 3,
+        mouseRightRelease = 4,
+        keyTyped = 5,
+        shortcutOverride = 6,
+        mouseMove = 7,
+        mouseDouble = 8,
+        keyPress = 9,
+        keyRelease = 10
     };
     int m_type;
 
@@ -57,7 +61,7 @@ class PEvent : public QObject
     Q_OBJECT
 public:
     explicit PEvent(QObject *parent = nullptr);
-    bool toDo(PositionNode &pNode);
+    bool mouseToDo(PositionNode &pNode);
     bool KeyTodo(KeyNode &kNode);
     qreal m_globalScaleRatio; //全局缩放率
     int m_screenWidth;

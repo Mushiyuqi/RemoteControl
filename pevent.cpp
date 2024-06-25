@@ -61,32 +61,59 @@ PEvent::PEvent(QObject *parent)
     m_screenHeight = screenGeometry.height();
 }
 
-bool PEvent::toDo(PositionNode &pNode)
+//鼠标的
+bool PEvent::mouseToDo(PositionNode &pNode)
 {
-    if (pNode.m_type == PositionNode::Type::mouseLeftRelease
-        || pNode.m_type == PositionNode::Type::mouseRightRelease) {
-
-        //移动 左键 右键
-        if (pNode.m_type == PositionNode::Type::mouseLeftRelease) {
+    //左键
+    if (pNode.m_type == PositionNode::Type::mouseLeftPress
+        || pNode.m_type == PositionNode::Type::mouseLeftRelease) {
+        if (pNode.m_type == PositionNode::Type::mouseLeftPress) {
+            m_process.start("xdotool", QStringList() << "press" << "1");
+        } else {
             m_process.start("xdotool",
-                            QStringList() << "click"<< "1");
-        } else if (pNode.m_type == PositionNode::Type::mouseRightRelease) {
-            m_process.start("xdotool",
-                            QStringList() << "click"<< "3");
+                            QStringList() << "release"<< "1");
         }
-        m_process.waitForFinished(); // 等待命令完成
-    } else if (pNode.m_type == PositionNode::Type::mouseMove) {
+        m_process.waitForFinished();
+    }
+
+    //右键
+    else if (pNode.m_type == PositionNode::Type::mouseRightPress
+             || pNode.m_type == PositionNode::Type::mouseRightRelease) {
+        if (pNode.m_type == PositionNode::Type::mouseRightPress) {
+            m_process.start("xdotool", QStringList() << "press" << "3");
+        } else {
+            m_process.start("xdotool", QStringList() << "release" << "3");
+        }
+        m_process.waitForFinished();
+    }
+
+    //移动
+    else if (pNode.m_type == PositionNode::Type::mouseMove) {
         //计算坐标
         int x = m_screenWidth * pNode.m_px * m_globalScaleRatio;
         int y = m_screenHeight * pNode.m_py * m_globalScaleRatio;
-        m_process.start("xdotool", QStringList() << "mousemove" << QString::number(x) << QString::number(y) );
-        m_process.waitForFinished(); // 等待命令完成
+        m_process.start("xdotool",QStringList() << "mousemove" << QString::number(x) << QString::number(y));
+        m_process.waitForFinished();
     }
-    qDebug() << "执行一次toDo";
+
+    //双击(xdotool只能用两次单击实现)
+    else if (pNode.m_type == PositionNode::Type::mouseDouble) {
+        m_process.start("xdotool",
+                        QStringList() << "click"
+                                      << "1");
+        m_process.waitForFinished();
+        m_process.start("xdotool",
+                        QStringList() << "click"
+                                      << "1");
+        m_process.waitForFinished();
+    }
 
     return true;
 }
-bool PEvent::KeyTodo(KeyNode &kNode) {
+
+//键盘的
+bool PEvent::KeyTodo(KeyNode &kNode)
+{
     qDebug() << "到了KeyTodo里面";
     if (kNode.m_type == KeyNode::Type::keyValue_A) {
         m_process.start("xdotool",

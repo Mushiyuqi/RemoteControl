@@ -47,9 +47,9 @@ private:
     std::shared_ptr<CSession> _session; //用于获取数据
     std::shared_ptr<Data> _data;        //用于做数据处理
 
-    void mouseMoveAction(PositionNode p);
-    void mouseClickedAction(PositionNode p);
-    void keyPressedAction(KeyNode k);
+    void mouseAction(PositionNode p);
+    void keyAction(KeyNode k);
+
 protected:
     //接收图片用来改变view
     virtual void run() override;
