@@ -33,25 +33,29 @@ void View::mousePressEvent(QMouseEvent *event)
                        (double) event->pos().x() / QLabel::width(),
                        (double) event->pos().y() / QLabel::height());
     if (event->button() == Qt::LeftButton)
-        pNode.m_type = PositionNode::Type::mouseLeftPress;
+        pNode.m_type = PositionNode::Type::mouseLeftClick;
     else if (event->button() == Qt::RightButton)
-        pNode.m_type = PositionNode::Type::mouseRightPress;
+        pNode.m_type = PositionNode::Type::mouseRightClick;
 
     _vctrl->mouseAction(pNode);
 }
-void View::mouseReleaseEvent(QMouseEvent *event)
+
+void View::wheelEvent(QWheelEvent *event)
 {
     if (_vctrl->_session->status() == CSession::SocketStatus::Err)
         return;
-    PositionNode pNode(event->pos().x(),
-                       event->pos().y(),
-                       (double) event->pos().x() / QLabel::width(),
-                       (double) event->pos().y() / QLabel::height());
-    if (event->button() == Qt::LeftButton)
-        pNode.m_type = PositionNode::Type::mouseLeftRelease;
-    else if (event->button() == Qt::RightButton)
-        pNode.m_type = PositionNode::Type::mouseRightRelease;
+    PositionNode pNode(0, 0, 0, 0);
+    // 获取滚动的角度和方向
+    int delta = event->angleDelta().y();
 
+    // 判断滚动的方向
+    if (delta > 0) {
+        qDebug() << "Mouse wheel scrolled up";
+        pNode.m_type = PositionNode::Type::mouseScrollUp;
+    } else {
+        qDebug() << "Mouse wheel scrolled down";
+        pNode.m_type = PositionNode::Type::mouseScrollDown;
+    }
     _vctrl->mouseAction(pNode);
 }
 
@@ -77,6 +81,7 @@ void View::mouseDoubleClickEvent(QMouseEvent *event)
                        (double) event->pos().y() / QLabel::height());
     pNode.m_type = PositionNode::Type::mouseDouble;
     _vctrl->mouseAction(pNode);
+    qDebug() << "双击";
 }
 
 void View::keyPressEvent(QKeyEvent *event) {

@@ -20,7 +20,7 @@ private:
 protected:
     //鼠标事件
     virtual void mousePressEvent(QMouseEvent *event) override;
-    virtual void mouseReleaseEvent(QMouseEvent *event) override;
+    virtual void wheelEvent(QWheelEvent *event) override;
     virtual void mouseMoveEvent(QMouseEvent *event) override;
     virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
     //键盘事件

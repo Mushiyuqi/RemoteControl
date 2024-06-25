@@ -64,25 +64,36 @@ PEvent::PEvent(QObject *parent)
 //鼠标的
 bool PEvent::mouseToDo(PositionNode &pNode)
 {
-    //左键
-    if (pNode.m_type == PositionNode::Type::mouseLeftPress
-        || pNode.m_type == PositionNode::Type::mouseLeftRelease) {
-        if (pNode.m_type == PositionNode::Type::mouseLeftPress) {
-            m_process.start("xdotool", QStringList() << "press" << "1");
+    //点击
+    if (pNode.m_type == PositionNode::Type::mouseLeftClick
+        || pNode.m_type == PositionNode::Type::mouseRightClick) {
+        if (pNode.m_type == PositionNode::Type::mouseLeftClick) {
+            m_process.start("xdotool",
+                            QStringList() << "click"
+                                          << "1");
         } else {
             m_process.start("xdotool",
-                            QStringList() << "release"<< "1");
+                            QStringList() << "click"
+                                          << "3");
         }
         m_process.waitForFinished();
     }
 
-    //右键
-    else if (pNode.m_type == PositionNode::Type::mouseRightPress
-             || pNode.m_type == PositionNode::Type::mouseRightRelease) {
-        if (pNode.m_type == PositionNode::Type::mouseRightPress) {
-            m_process.start("xdotool", QStringList() << "press" << "3");
+    //滚动
+    if (pNode.m_type == PositionNode::Type::mouseScrollUp
+        || pNode.m_type == PositionNode::Type::mouseScrollDown) {
+        if (pNode.m_type == PositionNode::Type::mouseScrollUp) {
+            m_process.start("xdotool",
+                            QStringList() << "click"
+                                          << "5"
+                                          << "--repeat"
+                                          << "1");
         } else {
-            m_process.start("xdotool", QStringList() << "release" << "3");
+            m_process.start("xdotool",
+                            QStringList() << "click"
+                                          << "4"
+                                          << "--repeat"
+                                          << "1");
         }
         m_process.waitForFinished();
     }

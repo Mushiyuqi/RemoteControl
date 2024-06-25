@@ -4,7 +4,7 @@
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 #define ServerPort 10086
-#define THREADS_NUM 10
+#define THREADS_NUM 1
 
 class CSession;
 class CManagement : public QObject
