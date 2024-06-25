@@ -4,6 +4,46 @@
 #include <QPoint>
 #include <QProcess>
 #include <QKeyEvent>
+
+class EventNode {
+public:
+    explicit EventNode(int x = 0, int y = 0, double px = 0, double py = 0, int type = 0, int keyType = 0);
+
+    //以view窗口为基准的坐标
+    int m_x;
+    int m_y;
+    //百分比坐标
+    double m_px;
+    double m_py;
+    //事件类型
+    enum Type {
+        nullEvent = 0,
+        mouseLeftClick = 1,
+        mouseRightClick = 2,
+        mouseScrollUp = 3,
+        mouseScrollDown = 4,
+        keyTyped = 5,
+        shortcutOverride = 6,
+        mouseMove = 7,
+        mouseDouble = 8,
+        keyPress = 9,
+        keyRelease = 10
+    };
+
+    //键盘类型
+    enum KeyType {
+        nullKey = 0,
+        key_A = 1,
+        key_B = 2
+    };
+
+    int m_type;
+    int m_keyType;
+    //转换为JSON格式
+    QJsonObject toJson() const;
+    // 从QJsonObject构造实例
+    static EventNode fromJson(const QJsonObject &obj);
+};
 class PositionNode
 {
 public:
@@ -29,8 +69,9 @@ public:
         keyPress = 9,
         keyRelease = 10
     };
-    int m_type;
 
+
+    int m_type;
     //转换为JSON格式
     QJsonObject toJson() const;
     // 从QJsonObject构造实例
@@ -61,8 +102,9 @@ class PEvent : public QObject
     Q_OBJECT
 public:
     explicit PEvent(QObject *parent = nullptr);
-    bool mouseToDo(PositionNode &pNode);
-    bool KeyTodo(KeyNode &kNode);
+    bool mouseToDo(EventNode &eNode);
+    bool KeyTodo(EventNode &eNode);
+    bool eventToDo(EventNode &eNode);
     qreal m_globalScaleRatio; //全局缩放率
     int m_screenWidth;
     int m_screenHeight;

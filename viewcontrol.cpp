@@ -78,7 +78,7 @@ void ViewControl::run()
     quit();
 }
 
-void ViewControl::mouseAction(PositionNode p)
+/*void ViewControl::mouseAction(PositionNode p)
 {
     //转换为json字符串
     QJsonDocument jsonDocument(p.toJson());
@@ -86,4 +86,12 @@ void ViewControl::mouseAction(PositionNode p)
     this->_session->send(jsonString.toStdString().data(), jsonString.length());
 }
 
-void ViewControl::keyAction(KeyNode k) {}
+void ViewControl::keyAction(KeyNode k) {}*/
+
+void ViewControl::eventAction(EventNode eNode) {
+    //转换为json字符串
+    QJsonDocument jsonDocument(eNode.toJson());
+    QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
+    this->_session->send(jsonString.toStdString().data(), jsonString.length());
+}
+

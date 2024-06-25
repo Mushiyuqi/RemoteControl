@@ -25,6 +25,7 @@ protected:
     virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
     //键盘事件
     virtual void keyPressEvent(QKeyEvent *event) override;
+    virtual void keyReleaseEvent(QKeyEvent *event) override;
 };
 
 #endif // VIEW_H
