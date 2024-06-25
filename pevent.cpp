@@ -82,16 +82,19 @@ bool PEvent::toDo(PositionNode &pNode)
         m_process.start("xdotool", QStringList() << "mousemove" << QString::number(x) << QString::number(y) );
         m_process.waitForFinished(); // 等待命令完成
     }
+    qDebug() << "执行一次toDo";
 
     return true;
 }
 bool PEvent::KeyTodo(KeyNode &kNode) {
+    qDebug() << "到了KeyTodo里面";
     if (kNode.m_type == KeyNode::Type::keyValue_A) {
         m_process.start("xdotool",
                         QStringList() << "key"
                                       << "a");
         m_process.waitForFinished();
         qDebug() << "执行了a键";
+        kNode.m_type = KeyNode::Type::nullKey;
     }
     return true;
 }

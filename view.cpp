@@ -53,7 +53,11 @@ void View::mouseMoveEvent(QMouseEvent *event) {
 void View::keyPressEvent(QKeyEvent *event) {
     if (_vctrl->_session->status() == CSession::SocketStatus::Err)
         return;
-    KeyNode kNode(1); //A
-    _vctrl->keyPressedAction(kNode);
+    if (event->key() == Qt::Key_A) {
+        KeyNode kNode(1); //A
+        _vctrl->keyPressedAction(kNode);
+    }
+
+    qDebug() << "keypressEvent";
 }
 
