@@ -2,6 +2,7 @@
 #define VIEW_H
 
 #include <QLabel>
+#include "pevent.h"
 class Data;
 class CSession;
 class ViewControl;
@@ -26,6 +27,8 @@ protected:
     //键盘事件
     virtual void keyPressEvent(QKeyEvent *event) override;
     virtual void keyReleaseEvent(QKeyEvent *event) override;
+
+    bool getKetType(EventNode &eNode, int keyType);
 };
 
 #endif // VIEW_H

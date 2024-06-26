@@ -33,8 +33,33 @@ public:
     //键盘类型
     enum KeyType {
         nullKey = 0,
-        key_A = 1,
-        key_B = 2
+        key_A = 'a',
+        key_B = 'b',
+        key_C = 'c',
+        key_D = 'd',
+        key_E = 'e',
+        key_F = 'f',
+        key_G = 'g',
+        key_H = 'h',
+        key_I = 'i',
+        key_J = 'j',
+        key_K = 'k',
+        key_L = 'l',
+        key_M = 'm',
+        key_N = 'n',
+        key_O = 'o',
+        key_P = 'p',
+        key_Q = 'q',
+        key_R = 'r',
+        key_S = 's',
+        key_T = 't',
+        key_U = 'u',
+        key_V = 'v',
+        key_W = 'w',
+        key_X = 'x',
+        key_Y = 'y',
+        key_Z = 'z',
+
     };
 
     int m_type;
@@ -43,56 +68,6 @@ public:
     QJsonObject toJson() const;
     // 从QJsonObject构造实例
     static EventNode fromJson(const QJsonObject &obj);
-};
-class PositionNode
-{
-public:
-    explicit PositionNode(int x = 0, int y = 0, double px = 0, double py = 0, int type = 0);
-
-    //以view窗口为基准的坐标
-    int m_x;
-    int m_y;
-    //百分比坐标
-    double m_px;
-    double m_py;
-    //事件类型
-    enum Type {
-        nullEvent = 0,
-        mouseLeftClick = 1,
-        mouseRightClick = 2,
-        mouseScrollUp = 3,
-        mouseScrollDown = 4,
-        keyTyped = 5,
-        shortcutOverride = 6,
-        mouseMove = 7,
-        mouseDouble = 8,
-        keyPress = 9,
-        keyRelease = 10
-    };
-
-
-    int m_type;
-    //转换为JSON格式
-    QJsonObject toJson() const;
-    // 从QJsonObject构造实例
-    static PositionNode fromJson(const QJsonObject &obj);
-};
-
-
-class KeyNode {
-public:
-    explicit KeyNode(int type = 0);
-
-    enum Type {
-        nullKey = 0,
-        keyValue_A = 1
-    };
-    int m_type;
-
-    //转换为JSON格式
-    QJsonObject toJson() const;
-    // 从QJsonObject构造实例
-    static KeyNode fromJson(const QJsonObject &obj);
 };
 
 

@@ -162,13 +162,6 @@ void CenterControl::run()
 
          EventNode eNode = EventNode::fromJson(jsonObject);
         pEvent.eventToDo(eNode);
-        //PositionNode pNode = PositionNode::fromJson(jsonObject);
-        //pEvent.mouseToDo(pNode);
-
-        //做键盘事件处理
-        //KeyNode kNode = KeyNode::fromJson(jsonObject);
-        //pEvent.KeyTodo(kNode);
-        //qDebug() << "执行一次KeyTodo";
     }
     //关闭session
     _session->close();
