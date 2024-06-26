@@ -164,9 +164,175 @@ bool View::getKetType(EventNode &eNode, int keyType)
     case Qt::Key_Z:
         eNode.m_keyType = EventNode::KeyType::key_Z;
         break;
+    case Qt::Key_QuoteLeft:
+        eNode.m_keyType = EventNode::KeyType::key_QuoteLeft;
+        break;
+    case Qt::Key_0:
+        eNode.m_keyType = EventNode::KeyType::key_0;
+        break;
+    case Qt::Key_1:
+        eNode.m_keyType = EventNode::KeyType::key_1;
+        break;
+    case Qt::Key_2:
+        eNode.m_keyType = EventNode::KeyType::key_2;
+        break;
+    case Qt::Key_3:
+        eNode.m_keyType = EventNode::KeyType::key_3;
+        break;
+    case Qt::Key_4:
+        eNode.m_keyType = EventNode::KeyType::key_4;
+        break;
+    case Qt::Key_5:
+        eNode.m_keyType = EventNode::KeyType::key_5;
+        break;
+    case Qt::Key_6:
+        eNode.m_keyType = EventNode::KeyType::key_6;
+        break;
+    case Qt::Key_7:
+        eNode.m_keyType = EventNode::KeyType::key_7;
+        break;
+    case Qt::Key_8:
+        eNode.m_keyType = EventNode::KeyType::key_8;
+        break;
+    case Qt::Key_9:
+        eNode.m_keyType = EventNode::KeyType::key_9;
+        break;
+    case Qt::Key_Minus:
+        eNode.m_keyType = EventNode::KeyType::key_Minus;
+        break;
+    case Qt::Key_Equal:
+        eNode.m_keyType = EventNode::KeyType::key_Equal;
+        break;
+    case Qt::Key_Backspace:
+        eNode.m_keyType = EventNode::KeyType::key_Backspace;
+        break;
+    case Qt::Key_BracketLeft:
+        eNode.m_keyType = EventNode::KeyType::key_BracketLeft;
+        break;
+    case Qt::Key_BracketRight:
+        eNode.m_keyType = EventNode::KeyType::key_BracketRgiht;
+        break;
+    case Qt::Key_Backslash:
+        eNode.m_keyType = EventNode::KeyType::key_Backslash;
+        break;
+    case Qt::Key_Enter:
+        eNode.m_keyType = EventNode::KeyType::key_Enter;
+        break;
+    case Qt::Key_Tab:
+        eNode.m_keyType = EventNode::KeyType::key_Tab;
+        break;
+    case Qt::Key_CapsLock:
+        eNode.m_keyType = EventNode::KeyType::key_CapsLock;
+        break;
+    case Qt::Key_Shift:
+        eNode.m_keyType = EventNode::KeyType::key_Shift;
+        break;
     case Qt::Key_Control:
         eNode.m_keyType = EventNode::KeyType::key_Ctrl;
         break;
+    case Qt::Key_Meta:
+        eNode.m_keyType = EventNode::KeyType::key_Meta;
+        break;
+    case Qt::Key_Alt:
+        eNode.m_keyType = EventNode::KeyType::key_Alt;
+        break;
+    case Qt::Key_Space:
+        eNode.m_keyType = EventNode::KeyType::key_Space;
+        break;
+    case Qt::Key_Semicolon:
+        eNode.m_keyType = EventNode::KeyType::key_Semicolon;
+        break;
+    case Qt::Key_Apostrophe:
+        eNode.m_keyType = EventNode::KeyType::key_Apostrophe;
+        break;
+    case Qt::Key_Comma:
+        eNode.m_keyType = EventNode::KeyType::key_Comma;
+        break;
+    case Qt::Key_Period:
+        eNode.m_keyType = EventNode::KeyType::key_Period;
+        break;
+    case Qt::Key_Slash:
+        eNode.m_keyType = EventNode::KeyType::key_Slash;
+        break;
+    case Qt::Key_Escape:
+        eNode.m_keyType = EventNode::KeyType::key_Esc;
+        break;
+    case Qt::Key_F1:
+        eNode.m_keyType = EventNode::KeyType::key_F1;
+        break;
+    case Qt::Key_F2:
+        eNode.m_keyType = EventNode::KeyType::key_F2;
+        break;
+    case Qt::Key_F3:
+        eNode.m_keyType = EventNode::KeyType::key_F3;
+        break;
+    case Qt::Key_F4:
+        eNode.m_keyType = EventNode::KeyType::key_F4;
+        break;
+    case Qt::Key_F5:
+        eNode.m_keyType = EventNode::KeyType::key_F5;
+        break;
+    case Qt::Key_F6:
+        eNode.m_keyType = EventNode::KeyType::key_F6;
+        break;
+    case Qt::Key_F7:
+        eNode.m_keyType = EventNode::KeyType::key_F7;
+        break;
+    case Qt::Key_F8:
+        eNode.m_keyType = EventNode::KeyType::key_F8;
+        break;
+    case Qt::Key_F9:
+        eNode.m_keyType = EventNode::KeyType::key_F9;
+        break;
+    case Qt::Key_F10:
+        eNode.m_keyType = EventNode::KeyType::key_F10;
+        break;
+    case Qt::Key_F11:
+        eNode.m_keyType = EventNode::KeyType::key_F11;
+        break;
+    case Qt::Key_F12:
+        eNode.m_keyType = EventNode::KeyType::key_F12;
+        break;
+    case Qt::Key_ScrollLock:
+        eNode.m_keyType = EventNode::KeyType::key_ScrollLock;
+        break;
+    case Qt::Key_Print:
+        eNode.m_keyType = EventNode::KeyType::key_Print;
+        break;
+    case Qt::Key_Pause:
+        eNode.m_keyType = EventNode::KeyType::key_PauseBreak;
+        break;
+    case Qt::Key_Insert:
+        eNode.m_keyType = EventNode::KeyType::key_Insert;
+        break;
+    case Qt::Key_Home:
+        eNode.m_keyType = EventNode::KeyType::key_Home;
+        break;
+    case Qt::Key_PageUp:
+        eNode.m_keyType = EventNode::KeyType::key_PageUp;
+        break;
+    case Qt::Key_PageDown:
+        eNode.m_keyType = EventNode::KeyType::key_PageDown;
+        break;
+    case Qt::Key_Delete:
+        eNode.m_keyType = EventNode::KeyType::key_Delete;
+        break;
+    case Qt::Key_End:
+        eNode.m_keyType = EventNode::KeyType::key_End;
+        break;
+    case Qt::Key_Up:
+        eNode.m_keyType = EventNode::KeyType::key_Up;
+        break;
+    case Qt::Key_Down:
+        eNode.m_keyType = EventNode::KeyType::key_Down;
+        break;
+    case Qt::Key_Left:
+        eNode.m_keyType = EventNode::KeyType::key_Left;
+        break;
+    case Qt::Key_Right:
+        eNode.m_keyType = EventNode::KeyType::key_Right;
+        break;
+
     default:
         flag = true;
         break;
