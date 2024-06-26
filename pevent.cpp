@@ -73,13 +73,13 @@ bool PEvent::eventToDo(EventNode &eNode) {
         if (eNode.m_type == EventNode::Type::mouseScrollUp) {
             m_process.start("xdotool",
                             QStringList() << "click"
-                                          << "5"
+                                          << "4"
                                           << "--repeat"
                                           << "1");
         } else {
             m_process.start("xdotool",
                             QStringList() << "click"
-                                          << "4"
+                                          << "5"
                                           << "--repeat"
                                           << "1");
         }
@@ -117,6 +117,19 @@ bool PEvent::eventToDo(EventNode &eNode) {
             m_process.start("xdotool",
                             QStringList()
                                 << "keyup" << QString(QChar(static_cast<uchar>(eNode.m_keyType))));
+            qDebug() << "松开键盘";
+        }
+        m_process.waitForFinished();
+    } else if (eNode.m_keyType == EventNode::KeyType::key_Ctrl) {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "Control_L");
+            qDebug() << "按下键盘";
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "Control_L");
             qDebug() << "松开键盘";
         }
         m_process.waitForFinished();

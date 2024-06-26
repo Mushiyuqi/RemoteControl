@@ -164,6 +164,9 @@ bool View::getKetType(EventNode &eNode, int keyType)
     case Qt::Key_Z:
         eNode.m_keyType = EventNode::KeyType::key_Z;
         break;
+    case Qt::Key_Control:
+        eNode.m_keyType = EventNode::KeyType::key_Ctrl;
+        break;
     default:
         flag = true;
         break;
@@ -177,7 +180,6 @@ void View::keyPressEvent(QKeyEvent *event) {
          return;
     EventNode eNode(0, 0, 0, 0, EventNode::Type::keyPress, 0);
 
-    int keyType = event->key();
     if (getKetType(eNode, event->key())) {
         return;
     }

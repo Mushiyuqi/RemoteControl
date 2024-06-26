@@ -7,7 +7,8 @@
 
 class EventNode {
 public:
-    explicit EventNode(int x = 0, int y = 0, double px = 0, double py = 0, int type = 0, int keyType = 0);
+    explicit EventNode(
+        int x = 0, int y = 0, double px = 0, double py = 0, int type = 0, int keyType = 0);
 
     //以view窗口为基准的坐标
     int m_x;
@@ -59,7 +60,7 @@ public:
         key_X = 'x',
         key_Y = 'y',
         key_Z = 'z',
-
+        key_Ctrl = 1
     };
 
     int m_type;
