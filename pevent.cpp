@@ -133,21 +133,21 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
 
     switch (eNode.m_keyType) {
         //`
-    case Qt::Key_QuoteLeft: {
+    case EventNode::KeyType::key_QuoteLeft: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
-                                          << "`");
+                                          << "quoteleft");
         } else if (eNode.m_type == EventNode::Type::keyRelease) {
             m_process.start("xdotool",
                             QStringList() << "keyup"
-                                          << "`");
+                                          << "quoteleft");
         }
         m_process.waitForFinished();
         return true;
     }
     //0
-    case Qt::Key_0: {
+    case EventNode::KeyType::key_0: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -161,7 +161,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //1
-    case Qt::Key_1: {
+    case EventNode::KeyType::key_1: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -175,7 +175,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //2
-    case Qt::Key_2: {
+    case EventNode::KeyType::key_2: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -189,7 +189,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //3
-    case Qt::Key_3: {
+    case EventNode::KeyType::key_3: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -203,7 +203,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //4
-    case Qt::Key_4: {
+    case EventNode::KeyType::key_4: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -217,7 +217,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //5
-    case Qt::Key_5: {
+    case EventNode::KeyType::key_5: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -231,7 +231,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //6
-    case Qt::Key_6: {
+    case EventNode::KeyType::key_6: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -245,7 +245,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //7
-    case Qt::Key_7: {
+    case EventNode::KeyType::key_7: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -259,7 +259,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //8
-    case Qt::Key_8: {
+    case EventNode::KeyType::key_8: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -273,7 +273,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //9
-    case Qt::Key_9: {
+    case EventNode::KeyType::key_9: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -287,35 +287,35 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //-
-    case Qt::Key_Minus: {
+    case EventNode::KeyType::key_Minus: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
-                                          << "-");
+                                          << "minus");
         } else if (eNode.m_type == EventNode::Type::keyRelease) {
             m_process.start("xdotool",
                             QStringList() << "keyup"
-                                          << "-");
+                                          << "minus");
         }
         m_process.waitForFinished();
         return true;
     }
     //=
-    case Qt::Key_Equal: {
+    case EventNode::KeyType::key_Equal: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
-                                          << "=");
+                                          << "equal");
         } else if (eNode.m_type == EventNode::Type::keyRelease) {
             m_process.start("xdotool",
                             QStringList() << "keyup"
-                                          << "=");
+                                          << "equal");
         }
         m_process.waitForFinished();
         return true;
     }
     //Backspace
-    case Qt::Key_Backspace: {
+    case EventNode::KeyType::key_Backspace: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -329,7 +329,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //bracketleft
-    case Qt::Key_BracketLeft: {
+    case EventNode::KeyType::key_BracketLeft: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -343,7 +343,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //bracketright
-    case Qt::Key_BracketRight: {
+    case EventNode::KeyType::key_BracketRgiht: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -357,22 +357,22 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //  反斜杠
-    case Qt::Key_Backslash: {
+    case EventNode::KeyType::key_Backslash: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
-                                          << "\\");
+                                          << "backslash");
         } else if (eNode.m_type == EventNode::Type::keyRelease) {
             m_process.start("xdotool",
                             QStringList() << "keyup"
-                                          << "\\");
+                                          << "backslash");
         }
         m_process.waitForFinished();
         return true;
     }
 
     //Return
-    case Qt::Key_Enter: {
+    case EventNode::KeyType::key_Enter: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -386,7 +386,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Tab
-    case Qt::Key_Tab: {
+    case EventNode::KeyType::key_Tab: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -400,7 +400,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Caps_Lock
-    case Qt::Key_CapsLock: {
+    case EventNode::KeyType::key_CapsLock: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -414,7 +414,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Shift_L
-    case Qt::Key_Shift: {
+    case EventNode::KeyType::key_Shift: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -428,7 +428,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Control_L
-    case Qt::Key_Control: {
+    case EventNode::KeyType::key_Ctrl: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -442,7 +442,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Win
-    case Qt::Key_Meta: {
+    case EventNode::KeyType::key_Meta: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -456,7 +456,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Alt_L
-    case Qt::Key_Alt: {
+    case EventNode::KeyType::key_Alt: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -470,7 +470,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //space
-    case Qt::Key_Space: {
+    case EventNode::KeyType::key_Space: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -484,7 +484,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //semicolon
-    case Qt::Key_Semicolon: {
+    case EventNode::KeyType::key_Semicolon: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -498,21 +498,21 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //'
-    case Qt::Key_Apostrophe: {
+    case EventNode::KeyType::key_Apostrophe: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
-                                          << "'");
+                                          << "apostrophe");
         } else if (eNode.m_type == EventNode::Type::keyRelease) {
             m_process.start("xdotool",
                             QStringList() << "keyup"
-                                          << "'");
+                                          << "apostrophe");
         }
         m_process.waitForFinished();
         return true;
     }
     //comma
-    case Qt::Key_Comma: {
+    case EventNode::KeyType::key_Comma: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -526,7 +526,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //period
-    case Qt::Key_Period: {
+    case EventNode::KeyType::key_Period: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -540,21 +540,21 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     // /
-    case Qt::Key_Slash: {
+    case EventNode::KeyType::key_Slash: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
-                                          << "/");
+                                          << "slash");
         } else if (eNode.m_type == EventNode::Type::keyRelease) {
             m_process.start("xdotool",
                             QStringList() << "keyup"
-                                          << "/");
+                                          << "slash");
         }
         m_process.waitForFinished();
         return true;
     }
     //Escape
-    case Qt::Key_Escape: {
+    case EventNode::KeyType::key_Esc: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -568,7 +568,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //F1
-    case Qt::Key_F1: {
+    case EventNode::KeyType::key_F1: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -582,7 +582,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //F2
-    case Qt::Key_F2: {
+    case EventNode::KeyType::key_F2: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -596,7 +596,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //F3
-    case Qt::Key_F3: {
+    case EventNode::KeyType::key_F3: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -610,7 +610,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //F4
-    case Qt::Key_F4: {
+    case EventNode::KeyType::key_F4: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -624,7 +624,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //F5
-    case Qt::Key_F5: {
+    case EventNode::KeyType::key_F5: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -638,7 +638,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //F6
-    case Qt::Key_F6: {
+    case EventNode::KeyType::key_F6: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -652,7 +652,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //F7
-    case Qt::Key_F7: {
+    case EventNode::KeyType::key_F7: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -666,7 +666,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //F8
-    case Qt::Key_F8: {
+    case EventNode::KeyType::key_F8: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -680,7 +680,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //F9
-    case Qt::Key_F9: {
+    case EventNode::KeyType::key_F9: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -694,7 +694,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //F10
-    case Qt::Key_F10: {
+    case EventNode::KeyType::key_F10: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -708,7 +708,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //F11
-    case Qt::Key_F11: {
+    case EventNode::KeyType::key_F11: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -722,7 +722,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //F12
-    case Qt::Key_F12: {
+    case EventNode::KeyType::key_F12: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -736,7 +736,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Scroll_Lock
-    case Qt::Key_ScrollLock: {
+    case EventNode::KeyType::key_ScrollLock: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -750,7 +750,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Print
-    case Qt::Key_Print: {
+    case EventNode::KeyType::key_Print: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -764,7 +764,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Pause_Break
-    case Qt::Key_Pause: {
+    case EventNode::KeyType::key_PauseBreak: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -778,7 +778,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Insert
-    case Qt::Key_Insert: {
+    case EventNode::KeyType::key_Insert: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -792,7 +792,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Home
-    case Qt::Key_Home: {
+    case EventNode::KeyType::key_Home: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -806,7 +806,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Page_Up
-    case Qt::Key_PageUp: {
+    case EventNode::KeyType::key_PageUp: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -820,7 +820,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Page_Down
-    case Qt::Key_PageDown: {
+    case EventNode::KeyType::key_PageDown: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -834,7 +834,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Delete
-    case Qt::Key_Delete: {
+    case EventNode::KeyType::key_Delete: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -848,7 +848,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //End
-    case Qt::Key_End: {
+    case EventNode::KeyType::key_End: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -862,7 +862,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Up
-    case Qt::Key_Up: {
+    case EventNode::KeyType::key_Up: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -876,7 +876,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Down
-    case Qt::Key_Down: {
+    case EventNode::KeyType::key_Down: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -890,7 +890,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Left
-    case Qt::Key_Left: {
+    case EventNode::KeyType::key_Left: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -904,7 +904,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         return true;
     }
     //Right
-    case Qt::Key_Right: {
+    case EventNode::KeyType::key_Right: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
@@ -921,4 +921,5 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
     default:
         break;
     }
+    return false;
 }
