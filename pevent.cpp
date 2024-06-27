@@ -166,10 +166,12 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
             m_process.start("xdotool",
                             QStringList() << "keydown"
                                           << "1");
+            qDebug() << "按下了1键";
         } else if (eNode.m_type == EventNode::Type::keyRelease) {
             m_process.start("xdotool",
                             QStringList() << "keyup"
                                           << "1");
+            qDebug() << "松开了1键";
         }
         m_process.waitForFinished();
         return true;
@@ -319,11 +321,11 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
-                                          << "Backspace");
+                                          << "BackSpace");
         } else if (eNode.m_type == EventNode::Type::keyRelease) {
             m_process.start("xdotool",
                             QStringList() << "keyup"
-                                          << "Backspace");
+                                          << "BackSpace");
         }
         m_process.waitForFinished();
         return true;
@@ -376,11 +378,11 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
-                                          << "Return");
+                                          << "KP_Enter");
         } else if (eNode.m_type == EventNode::Type::keyRelease) {
             m_process.start("xdotool",
                             QStringList() << "keyup"
-                                          << "Return");
+                                          << "KP_Enter");
         }
         m_process.waitForFinished();
         return true;
@@ -419,10 +421,12 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
             m_process.start("xdotool",
                             QStringList() << "keydown"
                                           << "Shift_L");
+            qDebug() << "按下了shift键";
         } else if (eNode.m_type == EventNode::Type::keyRelease) {
             m_process.start("xdotool",
                             QStringList() << "keyup"
                                           << "Shift_L");
+            qDebug() << "松开了shift键";
         }
         m_process.waitForFinished();
         return true;
