@@ -378,11 +378,11 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",
                             QStringList() << "keydown"
-                                          << "KP_Enter");
+                                          << "Return");
         } else if (eNode.m_type == EventNode::Type::keyRelease) {
             m_process.start("xdotool",
                             QStringList() << "keyup"
-                                          << "KP_Enter");
+                                          << "Return");
         }
         m_process.waitForFinished();
         return true;
@@ -917,6 +917,267 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
             m_process.start("xdotool",
                             QStringList() << "keyup"
                                           << "Right");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+
+    case EventNode::KeyType::key_Exclam: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "exclam");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "exclam");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_At: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "at");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "at");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_NumberSign: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "numbersign");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "numbersign");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_Dollar: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "dollar");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "dollar");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_Percent: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "percent");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "percent");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_AsciiCircum: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "asciicircum");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "asciicircum");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_Ampersand: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "ampersand");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "ampersand");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_Asterisk: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "asterisk");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "asterisk");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_ParenLeft: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "parenleft");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "parenleft");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_ParenRight: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "parenright");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "parenright");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_Underscore: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "underscore");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "underscore");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_Plus: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "plus");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "plus");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_BraceLeft: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "braceleft");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "braceleft");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_BraceRight: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "braceright");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "braceright");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_Bar: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "bar");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "bar");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_Colon: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "colon");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "colon");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_QuoteDbl: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "quotedbl");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "quotedbl");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_Less: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "less");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "less");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_Greater: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "greater");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "greater");
+        }
+        m_process.waitForFinished();
+        return true;
+    }
+    case EventNode::KeyType::key_Question: {
+        if (eNode.m_type == EventNode::Type::keyPress) {
+            m_process.start("xdotool",
+                            QStringList() << "keydown"
+                                          << "question");
+        } else if (eNode.m_type == EventNode::Type::keyRelease) {
+            m_process.start("xdotool",
+                            QStringList() << "keyup"
+                                          << "question");
         }
         m_process.waitForFinished();
         return true;

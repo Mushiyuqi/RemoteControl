@@ -88,6 +88,7 @@ bool View::getKetType(EventNode &eNode, int keyType)
     switch (keyType) {
     case Qt::Key_A:
         eNode.m_keyType = EventNode::KeyType::key_A;
+        qDebug() << "a键";
         break;
     case Qt::Key_B:
         eNode.m_keyType = EventNode::KeyType::key_B;
@@ -172,6 +173,7 @@ bool View::getKetType(EventNode &eNode, int keyType)
         break;
     case Qt::Key_1:
         eNode.m_keyType = EventNode::KeyType::key_1;
+        qDebug() << "1键";
         break;
     case Qt::Key_2:
         eNode.m_keyType = EventNode::KeyType::key_2;
@@ -210,7 +212,7 @@ bool View::getKetType(EventNode &eNode, int keyType)
         eNode.m_keyType = EventNode::KeyType::key_BracketLeft;
         break;
     case Qt::Key_BracketRight:
-        eNode.m_keyType = EventNode::KeyType::key_BracketRgiht;
+        eNode.m_keyType = EventNode::KeyType::key_BracketRight;
         break;
     case Qt::Key_Backslash:
         eNode.m_keyType = EventNode::KeyType::key_Backslash;
@@ -226,9 +228,11 @@ bool View::getKetType(EventNode &eNode, int keyType)
         break;
     case Qt::Key_Shift:
         eNode.m_keyType = EventNode::KeyType::key_Shift;
+        qDebug() << "shift键";
         break;
     case Qt::Key_Control:
         eNode.m_keyType = EventNode::KeyType::key_Ctrl;
+        qDebug() << "control键";
         break;
     case Qt::Key_Meta:
         eNode.m_keyType = EventNode::KeyType::key_Meta;
@@ -332,6 +336,69 @@ bool View::getKetType(EventNode &eNode, int keyType)
     case Qt::Key_Right:
         eNode.m_keyType = EventNode::KeyType::key_Right;
         break;
+    case Qt::Key_Exclam:
+        eNode.m_keyType = EventNode::KeyType::key_Exclam;
+        break;
+    case Qt::Key_At:
+        eNode.m_keyType = EventNode::KeyType::key_At;
+        break;
+    case Qt::Key_NumberSign:
+        eNode.m_keyType = EventNode::KeyType::key_NumberSign;
+        break;
+    case Qt::Key_Dollar:
+        eNode.m_keyType = EventNode::KeyType::key_Dollar;
+        break;
+    case Qt::Key_Percent:
+        eNode.m_keyType = EventNode::KeyType::key_Percent;
+        break;
+    case Qt::Key_AsciiCircum:
+        eNode.m_keyType = EventNode::KeyType::key_AsciiCircum;
+        break;
+    case Qt::Key_Ampersand:
+        eNode.m_keyType = EventNode::KeyType::key_Ampersand;
+        break;
+    case Qt::Key_Asterisk:
+        eNode.m_keyType = EventNode::KeyType::key_Asterisk;
+        break;
+    case Qt::Key_ParenLeft:
+        eNode.m_keyType = EventNode::KeyType::key_ParenLeft;
+        break;
+    case Qt::Key_ParenRight:
+        eNode.m_keyType = EventNode::KeyType::key_ParenRight;
+        break;
+    case Qt::Key_AsciiCircum:
+        eNode.m_keyType = EventNode::KeyType::key_AsciiCircum;
+        break;
+    case Qt::Key_Underscore:
+        eNode.m_keyType = EventNode::KeyType::key_Underscore;
+        break;
+    case Qt::Key_Plus:
+        eNode.m_keyType = EventNode::KeyType::key_Plus;
+        break;
+    case Qt::Key_BraceLeft:
+        eNode.m_keyType = EventNode::KeyType::key_BraceLeft;
+        break;
+    case Qt::Key_BraceRight:
+        eNode.m_keyType = EventNode::KeyType::key_BraceLeft;
+        break;
+    case Qt::Key_Bar:
+        eNode.m_keyType = EventNode::KeyType::key_Bar;
+        break;
+    case Qt::Key_Colon:
+        eNode.m_keyType = EventNode::KeyType::key_Colon;
+        break;
+    case Qt::Key_QuoteDbl:
+        eNode.m_keyType = EventNode::KeyType::key_QuoteDbl;
+        break;
+    case Qt::Key_Less:
+        eNode.m_keyType = EventNode::KeyType::key_Less;
+        break;
+    case Qt::Key_Greater:
+        eNode.m_keyType = EventNode::KeyType::key_Greater;
+        break;
+    case Qt::Key_Question:
+        eNode.m_keyType = EventNode::KeyType::key_Question;
+        break;
 
     default:
         flag = true;
@@ -345,6 +412,7 @@ void View::keyPressEvent(QKeyEvent *event) {
      if (_vctrl->_session->status() == CSession::SocketStatus::Err)
          return;
     EventNode eNode(0, 0, 0, 0, EventNode::Type::keyPress, 0);
+    qDebug() << "按下了";
 
     if (getKetType(eNode, event->key())) {
         return;
@@ -355,8 +423,7 @@ void View::keyReleaseEvent(QKeyEvent *event) {
     if (_vctrl->_session->status() == CSession::SocketStatus::Err)
         return;
     EventNode eNode(0, 0, 0, 0, EventNode::Type::keyRelease, 0);
-
-    int keyType = event->key();
+    qDebug() << "松开了";
     if (getKetType(eNode, event->key())) {
         return;
     }

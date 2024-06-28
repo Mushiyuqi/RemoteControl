@@ -80,7 +80,7 @@ public:
                ] 键对应于 Qt::Key_BracketRight
                \ 键对应于 Qt::Key_Backslash*/
         key_BracketLeft,
-        key_BracketRgiht,
+        key_BracketRight,
         key_Backslash,
         key_Enter,
         key_Tab,
@@ -137,31 +137,27 @@ public:
         key_Down,
         key_Left,
         key_Right,
-        //         /*
-        // 数字键盘加号 (+): Qt::Key_NumpadPlus
-        // 数字键盘减号 (-): Qt::Key_NumpadMinus
-        // 数字键盘乘号 (*): Qt::Key_NumpadMul
-        // 数字键盘除号 (/): Qt::Key_NumpadDiv
-        // 数字键盘点号 (.) 或小数点: Qt::Key_NumpadDecimal
-        // 数字键盘Enter键: Qt::Key_NumpadEnter
-        // */
-        //         key_NumLock,
-        //         key_NumPadDiv,
-        //         key_NumpadMul,
-        //         key_NumpadMinus,
-        //         key_NumpadPlus,
-        //         key_NumPadDecimal,
-        //         key_NumpadEnter,
-        //         key_num_0,
-        //         key_num_1,
-        //         key_num_2,
-        //         key_num_3,
-        //         key_num_4,
-        //         key_num_5,
-        //         key_num_6,
-        //         key_num_7,
-        //         key_num_8,
-        //         key_num_9
+
+        key_Exclam,
+        key_At,
+        key_NumberSign,
+        key_Dollar,
+        key_Percent,
+        key_AsciiCircum,
+        key_Ampersand,
+        key_Asterisk,
+        key_ParenLeft,
+        key_ParenRight,
+        key_Underscore,
+        key_Plus,
+        key_BraceLeft,
+        key_BraceRight,
+        key_Bar,
+        key_Colon,
+        key_QuoteDbl,
+        key_Less,
+        key_Greater,
+        key_Question
 
     };
 
