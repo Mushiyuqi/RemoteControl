@@ -760,20 +760,7 @@ bool PEvent::keyBoardToDo(EventNode &eNode)
         m_process.waitForFinished();
         return true;
     }
-    //~
-    case EventNode::KeyType::key_AsciiTilde: {
-        if (eNode.m_type == EventNode::Type::keyPress) {
-            m_process.start("xdotool",
-                            QStringList() << "keydown"
-                                          << "quoteleft");
-        } else if (eNode.m_type == EventNode::Type::keyRelease) {
-            m_process.start("xdotool",
-                            QStringList() << "keyup"
-                                          << "quoteright");
-        }
-        m_process.waitForFinished();
-        return true;
-    }
+
     case EventNode::KeyType::key_Exclam: {
         if (eNode.m_type == EventNode::Type::keyPress) {
             m_process.start("xdotool",

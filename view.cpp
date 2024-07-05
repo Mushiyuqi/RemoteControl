@@ -302,10 +302,7 @@ bool View::getKetType(EventNode &eNode, int keyType)
     case Qt::Key_Right:
         eNode.m_keyType = EventNode::KeyType::key_Right;
         break;
-    case Qt::Key_AsciiTilde:
-        eNode.m_keyType = EventNode::KeyType::key_AsciiTilde;
-        qDebug() << "type = 波浪号";
-        break;
+
     case Qt::Key_Exclam:
         eNode.m_keyType = EventNode::KeyType::key_Exclam;
         break;

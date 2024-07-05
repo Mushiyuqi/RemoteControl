@@ -117,8 +117,7 @@ public:
         key_Left,
         key_Right,
 
-        //~!@#$%^&*(_+
-        key_AsciiTilde,
+        //!@#$%^&*(_+
         key_Exclam,
         key_At,
         key_NumberSign,
