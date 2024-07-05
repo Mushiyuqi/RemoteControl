@@ -82,7 +82,7 @@ public:
         key_BracketLeft,
         key_BracketRight,
         key_Backslash,
-        key_Enter,
+        key_Return,
         key_Tab,
         key_CapsLock,
         key_Shift,
@@ -102,28 +102,7 @@ public:
         key_Period,
         key_Slash,
         key_Esc,
-        //Scroll Lock (   Qt::Key_ScrollLock
-        //Print (  Qt::Key_Print
-        //Pause Break    (  Qt::Key_Pause
-        //Insert  (  Qt::Key_Insert
-        //Home  (  Qt::Key_Home
-        //PageUp  (  Qt::Key_PageUp
-        //PageDown  ( Qt::key_PageDown
-        //Delete  (  Qt::key_Delete
-        //End  (  Qt::Key_End
-        //up down left right
-        key_F1,
-        key_F2,
-        key_F3,
-        key_F4,
-        key_F5,
-        key_F6,
-        key_F7,
-        key_F8,
-        key_F9,
-        key_F10,
-        key_F11,
-        key_F12,
+
         key_Print,
         key_ScrollLock,
         key_PauseBreak,
@@ -138,6 +117,8 @@ public:
         key_Left,
         key_Right,
 
+        //~!@#$%^&*(_+
+        key_AsciiTilde,
         key_Exclam,
         key_At,
         key_NumberSign,

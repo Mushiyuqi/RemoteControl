@@ -217,8 +217,9 @@ bool View::getKetType(EventNode &eNode, int keyType)
     case Qt::Key_Backslash:
         eNode.m_keyType = EventNode::KeyType::key_Backslash;
         break;
-    case Qt::Key_Enter:
-        eNode.m_keyType = EventNode::KeyType::key_Enter;
+    case Qt::Key_Return:
+        eNode.m_keyType = EventNode::KeyType::key_Return;
+        qDebug() << "type = enter";
         break;
     case Qt::Key_Tab:
         eNode.m_keyType = EventNode::KeyType::key_Tab;
@@ -228,11 +229,11 @@ bool View::getKetType(EventNode &eNode, int keyType)
         break;
     case Qt::Key_Shift:
         eNode.m_keyType = EventNode::KeyType::key_Shift;
-        qDebug() << "shift键";
+        qDebug() << "type = shift";
         break;
     case Qt::Key_Control:
         eNode.m_keyType = EventNode::KeyType::key_Ctrl;
-        qDebug() << "control键";
+        qDebug() << "type = control";
         break;
     case Qt::Key_Meta:
         eNode.m_keyType = EventNode::KeyType::key_Meta;
@@ -261,41 +262,6 @@ bool View::getKetType(EventNode &eNode, int keyType)
     case Qt::Key_Escape:
         eNode.m_keyType = EventNode::KeyType::key_Esc;
         break;
-    case Qt::Key_F1:
-        eNode.m_keyType = EventNode::KeyType::key_F1;
-        break;
-    case Qt::Key_F2:
-        eNode.m_keyType = EventNode::KeyType::key_F2;
-        break;
-    case Qt::Key_F3:
-        eNode.m_keyType = EventNode::KeyType::key_F3;
-        break;
-    case Qt::Key_F4:
-        eNode.m_keyType = EventNode::KeyType::key_F4;
-        break;
-    case Qt::Key_F5:
-        eNode.m_keyType = EventNode::KeyType::key_F5;
-        break;
-    case Qt::Key_F6:
-        eNode.m_keyType = EventNode::KeyType::key_F6;
-        break;
-    case Qt::Key_F7:
-        eNode.m_keyType = EventNode::KeyType::key_F7;
-        break;
-    case Qt::Key_F8:
-        eNode.m_keyType = EventNode::KeyType::key_F8;
-        break;
-    case Qt::Key_F9:
-        eNode.m_keyType = EventNode::KeyType::key_F9;
-        break;
-    case Qt::Key_F10:
-        eNode.m_keyType = EventNode::KeyType::key_F10;
-        break;
-    case Qt::Key_F11:
-        eNode.m_keyType = EventNode::KeyType::key_F11;
-        break;
-    case Qt::Key_F12:
-        eNode.m_keyType = EventNode::KeyType::key_F12;
         break;
     case Qt::Key_ScrollLock:
         eNode.m_keyType = EventNode::KeyType::key_ScrollLock;
@@ -336,6 +302,10 @@ bool View::getKetType(EventNode &eNode, int keyType)
     case Qt::Key_Right:
         eNode.m_keyType = EventNode::KeyType::key_Right;
         break;
+    case Qt::Key_AsciiTilde:
+        eNode.m_keyType = EventNode::KeyType::key_AsciiTilde;
+        qDebug() << "type = 波浪号";
+        break;
     case Qt::Key_Exclam:
         eNode.m_keyType = EventNode::KeyType::key_Exclam;
         break;
@@ -366,8 +336,6 @@ bool View::getKetType(EventNode &eNode, int keyType)
     case Qt::Key_ParenRight:
         eNode.m_keyType = EventNode::KeyType::key_ParenRight;
         break;
-    case Qt::Key_AsciiCircum:
-        eNode.m_keyType = EventNode::KeyType::key_AsciiCircum;
         break;
     case Qt::Key_Underscore:
         eNode.m_keyType = EventNode::KeyType::key_Underscore;
@@ -412,8 +380,6 @@ void View::keyPressEvent(QKeyEvent *event) {
      if (_vctrl->_session->status() == CSession::SocketStatus::Err)
          return;
     EventNode eNode(0, 0, 0, 0, EventNode::Type::keyPress, 0);
-    qDebug() << "按下了";
-
     if (getKetType(eNode, event->key())) {
         return;
     }
@@ -423,7 +389,6 @@ void View::keyReleaseEvent(QKeyEvent *event) {
     if (_vctrl->_session->status() == CSession::SocketStatus::Err)
         return;
     EventNode eNode(0, 0, 0, 0, EventNode::Type::keyRelease, 0);
-    qDebug() << "松开了";
     if (getKetType(eNode, event->key())) {
         return;
     }
