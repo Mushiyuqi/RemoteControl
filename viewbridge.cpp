@@ -68,34 +68,35 @@ void ViewBridge::handlerShare()
     _cctrl->sharePc();
 }
 
-void ViewBridge::mouseLeftReleaseEvent(int x, int y, int width, int height)
+void ViewBridge::mouseTappedEvent(
+    const int x, const int y, const int width, const int height, const int type)
 {
     if (_vctrl == nullptr)
         return;
-    PositionNode pNode(x,
-                       y,
-                       (double) x / width,
-                       (double) y / height,
-                       PositionNode::Type::mouseLeftRelease);
-    _vctrl->mouseClickedAcction(pNode);
+
+    //设置eventNode类型
+    EventNode pNode(x, y, (double) x / width, (double) y / height);
+    switch (type) {
+    case Qt::LeftButton:
+        pNode.m_type = EventNode::Type::mouseLeftClick;
+        break;
+    case Qt::RightButton:
+        pNode.m_type = EventNode::Type::mouseRightClick;
+        break;
+    }
+
+    //设置执行事件
+    _vctrl->eventAction(pNode);
 }
 
-void ViewBridge::mouseRightReleaseEvent(int x, int y, int width, int height)
+void ViewBridge::mouseMoveEvent(const int x, const int y, const int width, const int height)
 {
     if (_vctrl == nullptr)
         return;
-    PositionNode pNode(x,
-                       y,
-                       (double) x / width,
-                       (double) y / height,
-                       PositionNode::Type::mouseRightRelease);
-    _vctrl->mouseClickedAcction(pNode);
-}
 
-void ViewBridge::mouseMoveEvent(int x, int y, int width, int height)
-{
-    if (_vctrl == nullptr)
-        return;
-    PositionNode pNode(x, y, (double) x / width, (double) y / height, PositionNode::Type::mouseMove);
-    _vctrl->mouseMoveAcction(pNode);
+    //设置eventNode类型
+    EventNode pNode(x, y, (double) x / width, (double) y / height, EventNode::Type::mouseMove);
+
+    //设置执行事件
+    _vctrl->eventAction(pNode);
 }

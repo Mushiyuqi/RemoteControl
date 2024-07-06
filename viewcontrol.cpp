@@ -68,11 +68,10 @@ void ViewControl::run()
     quit();
 }
 
-
-void ViewControl::eventAction(EventNode eNode) {
+void ViewControl::eventAction(EventNode eNode)
+{
     //转换为json字符串
     QJsonDocument jsonDocument(eNode.toJson());
     QString jsonString = jsonDocument.toJson(QJsonDocument::Compact);
     this->_session->send(jsonString.toStdString().data(), jsonString.length());
 }
-

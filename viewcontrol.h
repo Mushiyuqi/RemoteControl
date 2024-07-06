@@ -14,14 +14,13 @@ class ViewControl : public QThread
 {
     Q_OBJECT
     friend CenterControl;
+    friend ViewBridge;
 
 public:
     ViewControl(std::shared_ptr<CSession> session, CenterControl *cctrl, ViewBridge *viewBridge);
     ~ViewControl() noexcept;
     //本端关闭
     void closeConnect();
-
-    void eventAcction(EventNode p);
 
     enum TStatus { Ok = 0, Err = -1 };
 signals:
@@ -47,6 +46,7 @@ private:
     std::shared_ptr<Data> _data;        //用于做数据处理
 
     void eventAction(EventNode eNode);
+
 protected:
     //接收图片用来改变view
     virtual void run() override;

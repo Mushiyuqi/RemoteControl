@@ -40,7 +40,7 @@ public slots:
     void handleClientClose();
 
     //鼠标事件
-    void mouseLeftReleaseEvent(int x, int y, int width, int height);
-    void mouseRightReleaseEvent(int x, int y, int width, int height);
-    void mouseMoveEvent(int x, int y, int width, int height);
+    void mouseTappedEvent(
+        const int x, const int y, const int width, const int height, const int type);
+    void mouseMoveEvent(const int x, const int y, const int width, const int height);
 };
