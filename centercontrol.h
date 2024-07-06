@@ -7,18 +7,18 @@
 
 class CSession;
 class CManagement;
-class Widget;
+class ViewBridge;
 class ViewControl;
 class PEvent;
 class CenterControl : public QThread
 {
     Q_OBJECT
-    friend Widget;
     friend ViewControl;
+    friend ViewBridge;
 
 public:
     static CenterControl &instance();
-    void show();
+    ViewBridge *viewBridge();
 
 signals:
     void connectOver();
@@ -26,15 +26,13 @@ signals:
 private:
     explicit CenterControl(QObject *parent = nullptr);
     ~CenterControl();
-    void linkPc(QString &ip, unsigned short port);
+    bool linkPc(QString &ip, unsigned short port);
     void sharePc();
     void closeSharePc();
-    //此函数返回一个 StandardButton 值
-    int messageBox(QString title = "", QString text = "");
 
 private:
-    Widget *_widget;
-    ViewControl* _viewControl;
+    ViewBridge *_viewBridge;
+    ViewControl *_viewControl;
     CManagement *_cmg;
     std::shared_ptr<CSession> _session;
     std::shared_ptr<ViewControl> _vctrl;

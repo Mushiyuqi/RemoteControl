@@ -2,11 +2,14 @@
 
 #include <QMutex>
 #include <QThread>
+#include <QTimer>
 #include <QWaitCondition>
 #include "msgnode.h"
 #include <boost/asio.hpp>
+
 #define SEND_QUEUE_LEN 5                //长度必须大于等于2
 #define SOCKET_BUF_SIZE 1024 * 1024 * 2 //socket内部的buf
+#define CONNECT_WAIT 8                  //connet连接的等待时间
 
 class Data;
 class CManagement;
@@ -45,6 +48,7 @@ private:
                      size_t byt_transferred,
                      std::shared_ptr<CSession> &_selfShared);
 
+    void handleConnect(const boost::system::error_code &ec, std::shared_ptr<CSession> &_selfShared);
     // 作为接收了完整数据之后的操作
     void handleData();
 
@@ -52,6 +56,7 @@ private:
     boost::asio::io_context &_ioc;             //处理异步事件
     std::shared_ptr<Data> _data;               //处理数据
     std::shared_ptr<std::thread> m_sendThread; //服务器循环发送线程
+    bool m_sendThreadJoined = false;           //控制join次数 只能join一次
 
     //连接数据结构
     QString m_ip;          //对端的ip
@@ -66,6 +71,7 @@ private:
     QMutex m_socketSatusLock;              //管理socket状态的改变
     int m_socketStatus = Err;              //为Err时就不能发送数据了
     boost::asio::ip::tcp::socket m_socket; // 自己管理的socket
+    QWaitCondition m_connect_waiter;       //等待连接返回
 
     //发送数据结构
     //发送数据队列不由io线程管理需要自己管理线程互斥

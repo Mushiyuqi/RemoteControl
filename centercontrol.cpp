@@ -5,16 +5,14 @@
 #include "cmanagement.h"
 #include "csession.h"
 #include "pevent.h"
+#include "viewbridge.h"
 #include "viewcontrol.h"
-#include "viewwindow.h"
-#include "widget.h"
-#include <QDebug>
 #include <iostream>
 
 CenterControl::CenterControl(QObject *parent)
     : QThread{parent}
 {
-    _widget = new Widget(this);   //这里没用对象树
+    _viewBridge = new ViewBridge(this);
     _cmg = new CManagement(this); //用了对象树
 
     //接收连接请求成功
@@ -31,10 +29,10 @@ CenterControl::CenterControl(QObject *parent)
                 m_connectSuccess = true;
                 //开启接收事件信息
                 start();
-                messageBox("SUCCESS", "连接成功.");
+                emit _viewBridge->acceptInfo(true);
             } else {
                 m_connectSuccess = false;
-                messageBox("ERROR", "连接失败.");
+                emit _viewBridge->acceptInfo(false);
             }
         },
         Qt::QueuedConnection);
@@ -45,8 +43,8 @@ CenterControl::CenterControl(QObject *parent)
         &CenterControl::connectOver,
         this,
         [this]() {
-            messageBox("MESSAGE", "连接断开.");
-            _widget->initialBtn();
+            m_connectSuccess = false;
+            emit _viewBridge->connectSeverOver();
         },
         Qt::QueuedConnection);
 }
@@ -56,11 +54,10 @@ CenterControl::~CenterControl()
     //关闭session
     if (_session != nullptr) {
         if (m_connectSuccess) {
-            _session->socket().close();
+            _session->close();
         } else {
             _session = nullptr;
             _cmg->cancelAccept();
-            _widget->initialBtn();
         }
     }
     wait();
@@ -74,46 +71,34 @@ CenterControl &CenterControl::instance()
     return cctrl;
 }
 
-void CenterControl::show()
+ViewBridge *CenterControl::viewBridge()
 {
-    _widget->show();
+    return _viewBridge;
 }
 
-int CenterControl::messageBox(QString title, QString text)
-{
-    QMessageBox errMsg;
-    errMsg.setWindowTitle(title);
-    errMsg.setText(text);
-    errMsg.setStandardButtons(QMessageBox::Ok);
-    errMsg.setDefaultButton(QMessageBox::Ok);
-    return errMsg.exec();
-}
-
-void CenterControl::linkPc(QString &ip, unsigned short port)
+bool CenterControl::linkPc(QString &ip, unsigned short port)
 {
     std::shared_ptr<CSession> session = _cmg->startConnect(ip, port);
-    _vctrl = std::make_shared<ViewControl>(session, this);
 
     //连接失败
-    if (session->status() == CSession::SocketStatus::Err) {
-        messageBox("ERROR", "Connect Error !\n 请重试.");
-        _vctrl = nullptr;
-        return;
+    if (session == nullptr) {
+        return false;
     }
     //连接成功
+    _vctrl = std::make_shared<ViewControl>(session, this, _viewBridge);
+    _viewBridge->setViewControl(_vctrl.get());
     //连接断开
     connect(
         _vctrl.get(),
         &ViewControl::connectOver,
         this,
         [this]() {
+            _viewBridge->setViewControl(nullptr);
             _vctrl = nullptr;
-            _widget->setEnabled(true);
-            messageBox("MESSAGE", "Connect Error !\n 连接以断开.");
+            emit _viewBridge->connectClientOver();
         },
         Qt::QueuedConnection);
-    _widget->setEnabled(false);
-    _vctrl->_viewWindow->show();
+    return true;
 }
 
 void CenterControl::sharePc()
@@ -125,13 +110,12 @@ void CenterControl::sharePc()
 void CenterControl::closeSharePc()
 {
     if (m_connectSuccess) {
-        //之所以直接关闭socket是因为run里会阻塞直到有client数据发送过来才有机会获得线程状态的锁，不然就一直阻塞
-        _session->socket().close();
+        _session->close();
     } else {
         _session = nullptr;
         _cmg->cancelAccept();
-        _widget->initialBtn();
     }
+    m_connectSuccess = false;
 }
 
 void CenterControl::run()
@@ -139,11 +123,6 @@ void CenterControl::run()
     //创建事件处理器 确保start创建的线程和pEvent在一起
     PEvent pEvent;
     while (1) {
-        QMutexLocker<QMutex> lockerThis(&m_mutex);
-        //本端关闭
-        if (m_threadStatus == TStatus::Err)
-            break;
-
         QMutexLocker<QMutex> lockerSession(&(_session->m_recvDataLock));
         _session->m_waiter.wait(&(_session->m_recvDataLock));
 
