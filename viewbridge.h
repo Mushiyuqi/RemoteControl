@@ -3,6 +3,7 @@
 #include <QMouseEvent>
 #include <QObject>
 #include <QPixmap>
+#include "pevent.h"
 class CenterControl;
 class ImageProvider;
 class ViewControl;
@@ -45,4 +46,7 @@ public slots:
     void mouseMoveEvent(const int x, const int y, const int width, const int height);
     void mouseDoubleTappedEvent(const int x, const int y, const int width, const int height);
     void mouseWheelEvent(const int x, const int y, const int width, const int height, int roolLength);
+    void keyPressEvent(int keyType);
+    void keyReleaseEvnet(int keyType);
+    bool getKetType(EventNode &eNode, int keyType);
 };

@@ -5,6 +5,7 @@ Item {
     anchors.fill: parent
     property alias image: _image
     signal upDateSize
+    focus: true
     Image {
         id: _image
         anchors.fill: parent
@@ -38,8 +39,17 @@ Item {
     }
     WheelHandler {
         onWheel: (wheel) => {
-            viewbridge.mouseWheelEvent(eventPoint.position.x, eventPoint.position.y, root.width, root.height, wheel.angleDelta.y);
+            viewbridge.mouseWheelEvent(wheel.position.x, wheel.position.y, root.width, root.height, wheel.angleDelta.y);
         }
     }
+    // 键盘事件处理器
+    Keys.onPressed: (event) => {
+        viewbridge.keyPressEvent(event.key);
+    }
+
+    Keys.onReleased: (event) => {
+        viewbridge.keyReleaseEvent(event.key);
+    }
+
 
 }
