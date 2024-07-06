@@ -21,8 +21,7 @@ public:
     //本端关闭
     void closeConnect();
 
-    void mouseMoveAcction(PositionNode p);
-    void mouseClickedAcction(PositionNode p);
+    void eventAcction(EventNode p);
 
     enum TStatus { Ok = 0, Err = -1 };
 signals:
