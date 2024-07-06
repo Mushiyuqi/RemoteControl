@@ -75,28 +75,49 @@ void ViewBridge::mouseTappedEvent(
         return;
 
     //设置eventNode类型
-    EventNode pNode(x, y, (double) x / width, (double) y / height);
+    EventNode eNode(x, y, (double) x / width, (double) y / height);
     switch (type) {
     case Qt::LeftButton:
-        pNode.m_type = EventNode::Type::mouseLeftClick;
+        eNode.m_type = EventNode::Type::mouseLeftClick;
         break;
     case Qt::RightButton:
-        pNode.m_type = EventNode::Type::mouseRightClick;
+        eNode.m_type = EventNode::Type::mouseRightClick;
         break;
     }
 
     //设置执行事件
-    _vctrl->eventAction(pNode);
+    _vctrl->eventAction(eNode);
 }
+void ViewBridge::mouseDoubleTappedEvent(const int x, const int y, const int width, const int height)
+{
+    if (_vctrl == nullptr)
+        return;
 
+    //设置eventNode类型
+    EventNode eNode(x, y, (double) x / width, (double) y / height, EventNode::Type::mouseDouble);
+
+    _vctrl->eventAction(eNode);
+}
 void ViewBridge::mouseMoveEvent(const int x, const int y, const int width, const int height)
 {
     if (_vctrl == nullptr)
         return;
 
     //设置eventNode类型
-    EventNode pNode(x, y, (double) x / width, (double) y / height, EventNode::Type::mouseMove);
+    EventNode eNode(x, y, (double) x / width, (double) y / height, EventNode::Type::mouseMove);
 
     //设置执行事件
-    _vctrl->eventAction(pNode);
+    _vctrl->eventAction(eNode);
+}
+void ViewBridge::mouseWheelEvent(
+    const int x, const int y, const int width, const int height, int roolLength)
+{
+    if (_vctrl == nullptr)
+        return;
+
+    EventNode eNode(x, y, (double) x / width, (double) y / height);
+    //负值向上
+    eNode.m_type == rool < 0 ? EventNode::Type::mouseScrollUp : EventNode::Type::mouseScrollDown;
+
+    _vctrl->eventAction(eNode);
 }

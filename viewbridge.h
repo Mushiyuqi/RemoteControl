@@ -43,4 +43,6 @@ public slots:
     void mouseTappedEvent(
         const int x, const int y, const int width, const int height, const int type);
     void mouseMoveEvent(const int x, const int y, const int width, const int height);
+    void mouseDoubleTappedEvent(const int x, const int y, const int width, const int height);
+    void mouseWheelEvent(const int x, const int y, const int width, const int height, int roolLength);
 };
