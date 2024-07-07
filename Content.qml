@@ -26,17 +26,19 @@ Item {
     //鼠标
     TapHandler{
         onTapped: (eventPoint, button)=>{
+                        console.log("mouse on tapped")
                         viewbridge.mouseTappedEvent(eventPoint.position.x, eventPoint.position.y, root.width, root.height, button)
                     }
         onDoubleTapped: (eventPoint)=>{
+                        console.log("mouse on double tapped")
                         viewbridge.mouseDoubleTappedEvent(eventPoint.position.x, eventPoint.position.y, root.width, root.height)
                     }
     }
-    HoverHandler{
-        onPointChanged: {
-            viewbridge.mouseMoveEvent(point.position.x, point.position.y, root.width, root.height)
-        }
-    }
+    // HoverHandler{
+    //     onPointChanged: {
+    //         viewbridge.mouseMoveEvent(point.position.x, point.position.y, root.width, root.height)
+    //     }
+    // }
     WheelHandler {
         onWheel: (wheel) => {
             viewbridge.mouseWheelEvent(wheel.position.x, wheel.position.y, root.width, root.height, wheel.angleDelta.y);
@@ -44,12 +46,13 @@ Item {
     }
     // 键盘事件处理器
     Keys.onPressed: (event) => {
+        console.log("Keys onPressed")
         viewbridge.keyPressEvent(event.key);
     }
 
     Keys.onReleased: (event) => {
+        console.log("Keys onReleased")
         viewbridge.keyReleaseEvent(event.key);
     }
-
 
 }

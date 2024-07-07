@@ -6,6 +6,7 @@
 ImageProvider::ImageProvider()
     : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
+    //获取一张初始化的纯黑图片
     QScreen *screen = QApplication::primaryScreen();
     QPixmap pixmap = screen->grabWindow(0);
     pixmap.fill(Qt::black);

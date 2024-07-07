@@ -47,6 +47,6 @@ public slots:
     void mouseDoubleTappedEvent(const int x, const int y, const int width, const int height);
     void mouseWheelEvent(const int x, const int y, const int width, const int height, int roolLength);
     void keyPressEvent(int keyType);
-    void keyReleaseEvnet(int keyType);
+    void keyReleaseEvent(int keyType);
     bool getKetType(EventNode &eNode, int keyType);
 };

@@ -34,8 +34,9 @@ int ViewBridge::getImgHeight()
 //更新图片源
 void ViewBridge::updatePixmap(QPixmap pixmap)
 {
-    // pixmap = pixmap.scaled(400, 300);
     m_imageprovider->setPixmap(pixmap);
+    m_imageprovider->m_width = pixmap.width();
+    m_imageprovider->m_height = pixmap.height();
     emit needUpdate();
 }
 
@@ -126,13 +127,15 @@ void ViewBridge::keyPressEvent(int keyType)
     if (_vctrl == nullptr)
         return;
 
+    qDebug() << "ViewBridge::keyPressEvent: is pressed";
+
     EventNode eNode(0, 0, 0, 0, EventNode::Type::keyPress);
     if (!getKetType(eNode, keyType)) {
         return;
     }
     _vctrl->eventAction(eNode);
 }
-void ViewBridge::keyReleaseEvnet(int keyType)
+void ViewBridge::keyReleaseEvent(int keyType)
 {
     if (_vctrl == nullptr)
         return;
