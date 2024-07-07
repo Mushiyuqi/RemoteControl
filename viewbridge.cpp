@@ -117,9 +117,10 @@ void ViewBridge::mouseWheelEvent(
 
     EventNode eNode(x, y, (double) x / width, (double) y / height);
     //负值向上
-    eNode.m_type == roolLength < 0 ? EventNode::Type::mouseScrollUp
-                                   : EventNode::Type::mouseScrollDown;
+    eNode.m_type = roolLength < 0 ? EventNode::Type::mouseScrollUp
+                                  : EventNode::Type::mouseScrollDown;
 
+    qDebug() << "roolLength: " << roolLength;
     _vctrl->eventAction(eNode);
 }
 void ViewBridge::keyPressEvent(int keyType)
@@ -127,13 +128,15 @@ void ViewBridge::keyPressEvent(int keyType)
     if (_vctrl == nullptr)
         return;
 
-    qDebug() << "ViewBridge::keyPressEvent: is pressed";
+    //qDebug() << "ViewBridge::keyPressEvent: is pressed";
 
     EventNode eNode(0, 0, 0, 0, EventNode::Type::keyPress);
     if (!getKetType(eNode, keyType)) {
         return;
     }
+
     _vctrl->eventAction(eNode);
+    //qDebug() << "eventAction is used";
 }
 void ViewBridge::keyReleaseEvent(int keyType)
 {
@@ -148,7 +151,7 @@ void ViewBridge::keyReleaseEvent(int keyType)
 }
 bool ViewBridge::getKetType(EventNode &eNode, int keyType)
 {
-    bool flag;
+    bool flag = true;
     switch (keyType) {
     case Qt::Key_A:
         eNode.m_keyType = EventNode::KeyType::key_A;
@@ -389,7 +392,6 @@ bool ViewBridge::getKetType(EventNode &eNode, int keyType)
         break;
     case Qt::Key_ParenRight:
         eNode.m_keyType = EventNode::KeyType::key_ParenRight;
-        break;
         break;
     case Qt::Key_Underscore:
         eNode.m_keyType = EventNode::KeyType::key_Underscore;

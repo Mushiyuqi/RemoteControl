@@ -25,6 +25,8 @@ Item {
 
     //鼠标
     TapHandler{
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+
         onTapped: (eventPoint, button)=>{
                         console.log("mouse on tapped")
                         viewbridge.mouseTappedEvent(eventPoint.position.x, eventPoint.position.y, root.width, root.height, button)
@@ -34,14 +36,14 @@ Item {
                         viewbridge.mouseDoubleTappedEvent(eventPoint.position.x, eventPoint.position.y, root.width, root.height)
                     }
     }
-    // HoverHandler{
-    //     onPointChanged: {
-    //         viewbridge.mouseMoveEvent(point.position.x, point.position.y, root.width, root.height)
-    //     }
-    // }
+    HoverHandler{
+        onPointChanged: {
+            viewbridge.mouseMoveEvent(point.position.x, point.position.y, root.width, root.height)
+        }
+    }
     WheelHandler {
         onWheel: (wheel) => {
-            viewbridge.mouseWheelEvent(wheel.position.x, wheel.position.y, root.width, root.height, wheel.angleDelta.y);
+            viewbridge.mouseWheelEvent(wheel.x, wheel.y, root.width, root.height, wheel.angleDelta.y);
         }
     }
     // 键盘事件处理器

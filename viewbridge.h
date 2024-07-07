@@ -48,5 +48,7 @@ public slots:
     void mouseWheelEvent(const int x, const int y, const int width, const int height, int roolLength);
     void keyPressEvent(int keyType);
     void keyReleaseEvent(int keyType);
+
+private:
     bool getKetType(EventNode &eNode, int keyType);
 };
